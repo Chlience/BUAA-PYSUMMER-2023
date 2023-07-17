@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="111">
+    <file>chi.png</file>
+  </qresource>
+</RCC>
