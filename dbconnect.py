@@ -7,7 +7,7 @@ global cnx
 
 def searchtest():
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     # 建立数据库连接
     # 创建游标对象
     cursor = cnx.cursor()
@@ -27,7 +27,7 @@ def searchtest():
 
 def findFood(house_name, count_name, food_name):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 执行 SQL 查询
     query = "SELECT * FROM 学二 WHERE 食堂 = 'house_name' AND 档口 = 'count_name' AND 菜名 = 'food_name';"
@@ -41,7 +41,7 @@ def findFood(house_name, count_name, food_name):
 
 def findAllFood():
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 执行 SQL 查询
     query = "SELECT * FROM 学二 "
@@ -59,7 +59,7 @@ def findAllFood():
 
 def eatchange(house_name, count_name, food_name):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 更新记录
     update_query = "UPDATE 学二 SET times = times + 1 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s;"
@@ -75,7 +75,7 @@ def eatchange(house_name, count_name, food_name):
 
 def loadcomment(house_name, count_name, food_name):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 选择数据库
     sql_query = "SELECT comments FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
@@ -100,7 +100,7 @@ def savecomments(house_name, count_name, food_name, comments):
 
     # 连接到数据库
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 更新数据库中对应项的评论列
@@ -118,7 +118,7 @@ def savecomments(house_name, count_name, food_name, comments):
 def getkindfood(kind):
     # 连接到数据库
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 查询符合条件的食物数据
     print(kind)
@@ -142,7 +142,7 @@ def getkindfood(kind):
 def getplacefood(place):
     # 连接到数据库
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 查询符合条件的食物数据
     print(place)
@@ -165,7 +165,7 @@ def getplacefood(place):
 
 def delafood(name):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 删除记录
     delete_query = "DELETE FROM 学二 WHERE 菜名 = %s;"
@@ -181,7 +181,7 @@ def delafood(name):
 
 def deldang(tang, dang):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 删除记录
     delete_query = "DELETE FROM 学二 WHERE 食堂 = %s AND 档口 = %s;"
@@ -196,7 +196,7 @@ def deldang(tang, dang):
 
 def gaidang(yuan, xian, tang):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 更新记录
@@ -213,7 +213,7 @@ def gaidang(yuan, xian, tang):
 
 def hasthis(cai, dang, tang):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
@@ -233,7 +233,7 @@ def hasthis(cai, dang, tang):
 
 def gaicai(name, dang, tang, price, cate, time):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 更新记录
     update_query = "UPDATE 学二 SET 价格 = %s ,类别 = %s, 时间 = %s WHERE 菜名 = %s AND 档口 = %s AND 食堂 = %s;"
@@ -247,7 +247,7 @@ def gaicai(name, dang, tang, price, cate, time):
 
 def jiacai(dict_data):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 插入记录
@@ -267,7 +267,7 @@ def jiacai(dict_data):
 
 def zhuce(dict_data):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 插入记录
@@ -286,7 +286,7 @@ def zhuce(dict_data):
 
 def hasuser(user):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
@@ -306,7 +306,7 @@ def hasuser(user):
 
 def getuserdata(name):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
@@ -337,7 +337,7 @@ def getuserdata(name):
 
 def addstar(name, food):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
@@ -374,7 +374,7 @@ def addstar(name, food):
 
 def addcost(name, cost):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
@@ -407,7 +407,7 @@ def addcost(name, cost):
 
 def lastchange(name, kind):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
@@ -444,7 +444,7 @@ def lastchange(name, kind):
 
 def getlast(name):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
@@ -462,7 +462,7 @@ def getlast(name):
 
 def getstar(name):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
@@ -484,7 +484,7 @@ def getstar(name):
 
 def changemi(user, newmi):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 更新记录
@@ -522,7 +522,7 @@ def changemi(user, newmi):
 
 def changename(name, newname):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 更新记录
@@ -560,7 +560,7 @@ def changename(name, newname):
 
 def changestar(name, star):
     cnx = mysql.connector.connect(user='root', password='123456',
-                                  host='localhost', database='hangeat')
+                                  host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 更新记录
