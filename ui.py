@@ -2,7 +2,6 @@
 import json
 import random
 import sys
-from time import sleep
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect,
                             QSize, Qt, QRectF, QTimer)
@@ -189,7 +188,8 @@ class MyWidget(QWidget, Ui_Form):
                 from sub1 import sub1
                 self.sub1 = sub1(name, self)
                 pass
-                QTimer.singleShot(1200, self.sub1.show or self.hide)
+                QTimer.singleShot(1200, self.sub1.show)
+                QTimer.singleShot(1200, self.close)
             else:
                 self.textBrowser.setText("密码错误\U0001F613")
         else:

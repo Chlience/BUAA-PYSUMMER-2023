@@ -62,8 +62,35 @@ class sub2(QWidget, Ui_eating):
         self.label.setText("食品列表")
         self.setWindowTitle(neme + "吃点什么好呢")
         self.food = []
-        dishes = []
+
         self.ope()
+        self.load(count)
+        self.listWidget.itemClicked.connect(
+            lambda item: self.open_new_window(item.text(), item.text().split()[0],
+                                              item.text().split()[2].split('￥')[1], item.text().split()[4]))
+        self.layout = QVBoxLayout(self)
+        spacer_item = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.layout.addSpacerItem(spacer_item)
+        # 创建输入框
+        self.input_edit = QLineEdit(self)
+        self.input_edit.setPlaceholderText("输入关键词就能查找啦\U0001F600")
+        self.layout.addWidget(self.input_edit)
+        # 创建按钮
+        self.button1 = QPushButton("查找", self)
+        self.button1.clicked.connect(self.sortByKeyword)
+        self.layout.addWidget(self.button1, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
+        self.button2 = QPushButton("价格排序", self)
+        self.button2.clicked.connect(self.sortByCost)
+        self.layout.addWidget(self.button2, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
+        self.button3 = QPushButton("返回", self)
+        self.button3.clicked.connect(self.close)
+        self.layout.addWidget(self.button3, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
+        self.setLayout(self.layout)
+        self.count = 0
+        self.show()
+
+    def load(self, count):
+        dishes = []
         for dish in self.data:
             name = dish['name']
             price = dish['price']
@@ -86,29 +113,6 @@ class sub2(QWidget, Ui_eating):
                 })
         for dish in dishes:
             self.listWidget.addItem("{} - ￥{} - {}".format(dish['name'], dish['price'], dish['category']))
-        self.listWidget.itemClicked.connect(
-            lambda item: self.open_new_window(item.text(), item.text().split()[0],
-                                              item.text().split()[2].split('￥')[1], item.text().split()[4]))
-        self.layout = QVBoxLayout(self)
-        spacer_item = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.layout.addSpacerItem(spacer_item)
-        # 创建输入框
-        self.input_edit = QLineEdit(self)
-        self.input_edit.setPlaceholderText("输入关键词就能查找啦\U0001F600")
-        self.layout.addWidget(self.input_edit)
-        # 创建按钮
-        self.button = QPushButton("查找", self)
-        self.button.clicked.connect(self.sortByKeyword)
-        self.layout.addWidget(self.button, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
-        self.button = QPushButton("价格排序", self)
-        self.button.clicked.connect(self.sortByCost)
-        self.layout.addWidget(self.button, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
-        self.button = QPushButton("返回", self)
-        self.button.clicked.connect(self.close)
-        self.layout.addWidget(self.button, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
-        self.setLayout(self.layout)
-        self.count = 0
-        self.show()
 
     def ope(self):
         self.data = global1.Data2
@@ -192,16 +196,63 @@ class sub22(sub2):
         ran = choice(['大酬宾', '促销', '正在营业'])
         if ran != '正在营业':
             self.count = True
-        dic = {0: '学二', 3: '合一', 5: '新北', 2: '美食苑', 4: '大运村'}
+        dic = {0: '学二', 3: '合一', 5: '新北', 2: '美食苑', 4: 'wings'}
         self.uname = uname
         self.tName = dic[tName]
         super().__init__(parent, uname, False)
         self.label.setText(self.tName + '食堂' + ran)
         self.setWindowTitle(uname + "走了20min路终于到" + self.tName + "食堂了。。吃点什么好呢")
         self.parent = parent
+        self.resize(532, 780)
+        self.button4 = QPushButton("切换视图", self)
+        self.button4.clicked.connect(self.inin)
+        self.layout.addWidget(self.button4, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
 
     def ope(self):
         self.data = [q for q in global1.Data2 if q['place'] == self.tName]
+
+    def inin(self):
+        from subdang import subdang
+        self.subdang = subdang(parent=self, tname=self.tName, uname=self.uname, dataspe=self.data)
+        self.subdang.show()
+        self.hide()
+
+
+class sub23(sub2):
+    def __init__(self, parent, uname, category):
+        self.uname = uname
+        self.kind = []
+        if category == '蛋白质':
+            self.kind = ["猪肉", "牛肉", "豆腐", "鱼肉", "鸭肉"]
+        self.kind.append(category)
+        super().__init__(parent, uname, False)
+        self.label.setText(category + '类 菜单')
+        self.setWindowTitle(uname + "想看看" + category + "种类的食物")
+        self.parent = parent
+
+    def ope(self):
+        self.data = [q for q in global1.Data2 if q['category'] in self.kind]
+
+
+class sub24(sub2):
+    def __init__(self, uname, data, dangname):
+        self.data = data
+        self.uname = uname
+        super().__init__(None, uname)
+        self.setWindowTitle(dangname)
+        self.button3.hide()
+
+    def ope(self):
+        pass
+
+    def closeEvent(self, event):
+        event.accept()
+
+    def reload(self, data, dang):
+        self.listWidget.clear()
+        self.data = data
+        self.load(True)
+        self.setWindowTitle(dang)
 
 
 class NewWindow(QWidget):

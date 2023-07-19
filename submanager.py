@@ -9,7 +9,7 @@
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect,
                             )
 from PySide6.QtGui import QFont, QPainter, QColor
-from PySide6.QtWidgets import (QLabel, QPushButton, QVBoxLayout, QWidget, QPlainTextEdit, QHBoxLayout, QApplication)
+from PySide6.QtWidgets import (QLabel, QPushButton, QVBoxLayout, QWidget, QPlainTextEdit, QHBoxLayout)
 
 import global1
 
@@ -38,21 +38,20 @@ class Ui_Form(object):
         font1.setFamilies([u"\u9ed1\u4f53"])
         font1.setPointSize(12)
         self.shanhao.setFont(font1)
-        self.shanhao.clicked.connect(self.func1)
+
         self.verticalLayout.addWidget(self.shanhao)
 
         self.jiacai = QPushButton(self.layoutWidget)
         self.jiacai.setObjectName(u"jiacai")
         self.jiacai.setFont(font1)
-        self.jiacai.clicked.connect(lambda: self.process_info(1))
         self.verticalLayout.addWidget(self.jiacai)
         self.shancai = QPushButton(self.layoutWidget)
         self.shancai.setObjectName(u"shancai")
         self.shancai.setFont(font1)
-        self.shancai.clicked.connect(self.delcai)
+
         self.verticalLayout.addWidget(self.shancai)
         self.gaicai = QPushButton(self.layoutWidget)
-        self.gaicai.clicked.connect(lambda: self.process_info(0))
+
         self.gaicai.setObjectName(u"gaicai")
         font2 = QFont()
         font2.setFamilies([u"\u9ed1\u4f53"])
@@ -60,10 +59,15 @@ class Ui_Form(object):
         font2.setBold(False)
         self.gaicai.setFont(font2)
         self.verticalLayout.addWidget(self.gaicai)
-        self.yonghu = QPushButton(self.layoutWidget)
-        self.yonghu.setObjectName(u"yonghu")
-        self.yonghu.setFont(font1)
-        self.verticalLayout.addWidget(self.yonghu)
+        self.gaidang = QPushButton(self.layoutWidget)
+        self.gaidang.setObjectName(u"yonghu")
+        self.gaidang.setFont(font1)
+        self.verticalLayout.addWidget(self.gaidang)
+        self.shandang = QPushButton(self.layoutWidget)
+        self.shandang.setObjectName(u"yonghu")
+        self.shandang.setFont(font1)
+        self.verticalLayout.addWidget(self.shandang)
+        self.shandang.setText("删除档口")
         self.plainTextEdit = QPlainTextEdit(Form)
         self.plainTextEdit.setObjectName(u"plainTextEdit")
         self.plainTextEdit.setGeometry(QRect(163, 110, 201, 71))
@@ -74,80 +78,6 @@ class Ui_Form(object):
         self.retranslateUi(Form)
         QMetaObject.connectSlotsByName(Form)
 
-    def func1(self):
-        global1.Data = {}
-        self.plainTextEdit.setPlainText('成功删除普通账号')
-
-    def delcai(self):
-        info = self.plainTextEdit.toPlainText().strip()
-        food_info_list = global1.Data2
-        if any(item.get('name') == info for item in food_info_list):
-            food_info_list = [item for item in food_info_list if item.get('name') != info]
-            self.plainTextEdit.setPlainText(f'您以后吃不到{info}了\U0001F613')
-            global1.Data2 = food_info_list
-        else:
-            self.plainTextEdit.setPlainText(f'没有这道菜\U0001F613')
-
-    def process_info(self, type):
-        times = 0
-        from ui import is_all_chinese
-        info = self.plainTextEdit.toPlainText().strip().split(" ")
-        self.plainTextEdit.setPlaceholderText("例如： 饭 0.5 主食 全天 新北")
-        food_info_list = global1.Data2
-        if len(info) == 5:
-            food_name = info[0]
-            price = info[1]
-            category = info[2]
-            meal_time = info[3]
-            place = info[4]
-            if not is_all_chinese(place) or not is_all_chinese(food_name[-1]):
-                self.plainTextEdit.setPlainText("你需要输入更多的中文")
-                return
-            if not ('.' in str(price)):
-                self.plainTextEdit.setPlainText("价格必须是一位小数")
-                return
-            else:
-                price = str(round(float(price), 1))
-            if meal_time not in ["早餐", "午餐", "晚餐", "全天", "午餐晚餐"]:
-                self.plainTextEdit.setPlainText("建议用餐时间只能为早/中/晚餐")
-                return
-            # 检查JSON文件中是否已经存在相同食物名的信息
-            if any(item.get('name') == food_name for item in food_info_list):
-                if type:
-                    self.plainTextEdit.setPlainText("已经有这种食物了，你是否在寻找“修改食物信息”功能？")
-                    return
-                else:
-                    try:
-                        x = [item for item in food_info_list if item.get('name') == food_name]
-                        times = x[0]['times']
-                    except:
-                        times = 0
-                    food_info_list = [item for item in food_info_list if item.get('name') != food_name]
-
-            else:
-                if type == 0:
-                    self.plainTextEdit.setPlainText("不能修改没有的东西")
-                    return
-            if type:
-                times = 0
-            dict = {
-                "name": food_name,
-                "price": price,
-                "category": category,
-                "time": meal_time,
-                "place": place,
-                "times": times
-            }
-            food_info_list.append(dict)
-        else:
-            self.plainTextEdit.setPlainText("信息格式不正确\n必须是名字 钱 种类 时间 食堂名字")
-            return
-        global1.Data2 = food_info_list
-        if type:
-            self.plainTextEdit.setPlainText(f"北航的同学有福了！\n可以品尝{food_name}了！")
-        else:
-            self.plainTextEdit.setPlainText(f"{food_name}的信息被修改了")
-
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"\u7ba1\u7406\u5458\u754c\u9762", None))
         self.label.setText(
@@ -156,13 +86,20 @@ class Ui_Form(object):
         self.jiacai.setText(QCoreApplication.translate("Form", u"\u6dfb\u52a0\u83dc\u54c1", None))
         self.shancai.setText(QCoreApplication.translate("Form", u"\u5220\u9664\u83dc\u54c1", None))
         self.gaicai.setText(QCoreApplication.translate("Form", u"\u4fee\u6539\u83dc\u54c1", None))
-        self.yonghu.setText(QCoreApplication.translate("Form", u"\u7528\u6237\u4e2d\u5fc3", None))
+        self.gaidang.setText("修改档口")
 
 
 class submanger(Ui_Form, QWidget):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.jiacai.clicked.connect(lambda: self.process_info(1))
+        self.shanhao.clicked.connect(self.func1)
+        self.shancai.clicked.connect(self.delcai)
+        self.gaicai.clicked.connect(lambda: self.process_info(0))
+        self.shandang.clicked.connect(self.shandan)
+        self.gaidang.clicked.connect(self.gaidan)
+        self.food_info_list = global1.Data2
         self.setWindowTitle('管理中心')
         button = QPushButton('退出', self)
         button.clicked.connect(self.close)
@@ -190,3 +127,119 @@ class submanger(Ui_Form, QWidget):
         painter = QPainter(self)
         painter.setBrush(QColor("lightblue"))
         painter.drawRect(self.rect())
+
+    def shandan(self):
+        info = self.plainTextEdit.toPlainText().strip().split(" ")
+
+        if len(info) != 2:
+            self.plainTextEdit.setPlainText('请输入 食堂+窗口名字')
+        if (info[0] not in global1.sett):
+            self.plainTextEdit.setPlainText('食堂在' + str(global1.sett) + '中')
+            return
+        to_remove = []
+        for dic in self.food_info_list:
+            if dic['place'] == info[0] and dic['count'] == info[1]:
+                to_remove.append(dic)
+        for dic in to_remove:
+            self.food_info_list.remove(dic)
+        self.plainTextEdit.setPlainText('已经没有这个档口了')
+
+    def gaidan(self):
+        info = self.plainTextEdit.toPlainText().strip().split(" ")
+        if len(info) != 3:
+            self.plainTextEdit.setPlainText('请输入 食堂名字+原档口名字+新档口名字')
+        if (info[0] not in global1.sett):
+            self.plainTextEdit.setPlainText('食堂在' + str(global1.sett) + '中')
+            return
+        for i in range(len(self.food_info_list)):
+            dic = self.food_info_list[i]
+            print(dic['place']+str(dic['count']))
+            if dic['place'] == info[0] and str(dic['count']) == info[1]:
+                print(dic['place']+str(dic['count']))
+                self.food_info_list[i]['count'] = info[2]
+                print(2)
+        self.plainTextEdit.setPlainText('已修改')
+
+
+    def func1(self):
+        global1.Data = {}
+        self.plainTextEdit.setPlainText('成功删除普通账号')
+
+    def delcai(self):
+        info = self.plainTextEdit.toPlainText().strip()
+        food_info_list = global1.Data2
+        if any(item.get('name') == info for item in food_info_list):
+            food_info_list = [item for item in food_info_list if item.get('name') != info]
+            self.plainTextEdit.setPlainText(f'您以后吃不到{info}了\U0001F613')
+            global1.Data2 = food_info_list
+        else:
+            self.plainTextEdit.setPlainText(f'没有这道菜\U0001F613')
+        pass
+
+    def process_info(self, type):
+        times = 0
+        info = self.plainTextEdit.toPlainText().strip().split(" ")
+        self.plainTextEdit.setPlaceholderText("例如： 饭 0.5 主食 全天 新北 一楼基本伙")
+        if len(info) == 6:
+            food_name = info[0]
+            price = info[1]
+            category = info[2]
+            meal_time = info[3]
+            place = info[4]
+            count = str(info[5])
+            from global1 import arr, sett
+            if not ('.' in str(price)):
+                self.plainTextEdit.setPlainText("价格必须是一位小数")
+                return
+            else:
+                price = str(round(float(price), 1))
+            if meal_time not in ["早餐", "午餐", "晚餐", "全天", "午餐晚餐"]:
+                self.plainTextEdit.setPlainText("建议用餐时间只能为早/中/晚餐")
+                return
+            if category not in arr.values():
+                self.plainTextEdit.setPlainText("种类可以是" + arr.values())
+                return
+            if place not in sett:
+                self.plainTextEdit.setPlainText("地点只能是" + sett)
+                return
+
+            # 检查JSON文件中是否已经存在相同食物名的信息食物 0.1 主食 午餐 wings 北区店
+            if any(item.get('name') == food_name for item in self.food_info_list):
+                if type:
+                    self.plainTextEdit.setPlainText("已经有这种食物了，你是否在寻找“修改食物信息”功能？")
+                    return
+                else:
+                    try:
+                        x = [item for item in self.food_info_list if item.get('name') == food_name]
+                        times = x[0]['times']
+                    except:
+                        times = 0
+                    food_info_list = [item for item in self.food_info_list if item.get('name') != food_name]
+
+            else:
+                if type == 0:
+                    self.plainTextEdit.setPlainText("不能修改没有的东西")
+                    return
+            if type:
+                times = 0
+            dict = {
+                "name": food_name,
+                "price": price,
+                "category": category,
+                "time": meal_time,
+                "place": place,
+                "times": times,
+                "count": count
+            }
+            self.food_info_list.append(dict)
+        else:
+            self.plainTextEdit.setPlainText("信息格式不正确\n必须是名字 钱 种类 时间 食堂名字 窗口")
+            return
+        if type:
+            self.plainTextEdit.setPlainText(f"北航的同学有福了！\n可以品尝{food_name}了！")
+        else:
+            self.plainTextEdit.setPlainText(f"{food_name}的信息被修改了")
+
+    def close(self):
+        global1.Data2 = self.food_info_list
+        super().close()

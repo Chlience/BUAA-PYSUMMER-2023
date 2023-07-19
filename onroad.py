@@ -8,15 +8,10 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect,
-                            QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-                           QFont, QFontDatabase, QGradient, QIcon,
-                           QImage, QKeySequence, QLinearGradient, QPainter,
-                           QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QLabel, QPushButton, QSizePolicy,
-                               QToolButton, QVBoxLayout, QWidget)
+from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect,
+                            Qt)
+from PySide6.QtGui import (QPixmap)
+from PySide6.QtWidgets import (QLabel, QPushButton, QToolButton, QVBoxLayout, QWidget)
 
 
 class Ui_Form(object):
@@ -85,9 +80,9 @@ class Ui_Form(object):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"\u53bb\u98df\u5802\u7684\u8def\u4e0a", None))
         self.pushButton_0.setText(QCoreApplication.translate("Form", u"\u5b66\u4e8c\u98df\u5802", None))
         self.pushButton_3.setText(QCoreApplication.translate("Form", u"\u5408\u4e00\u98df\u5802", None))
-        self.pushButton_5.setText(QCoreApplication.translate("Form", u"\u65b0\u5317\u98df\u5802", None))
+        self.pushButton_5.setText("新北食堂")
         self.pushButton_2.setText(QCoreApplication.translate("Form", u"\u7f8e\u98df\u82d1", None))
-        self.pushButton_4.setText(QCoreApplication.translate("Form", u"\u5927\u8fd0\u6751\u697c\u4e0b", None))
+        self.pushButton_4.setText("wings")
         self.label.setText(QCoreApplication.translate("Form",
                                                       u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:700;\">\u4eca\u5929\u53bb\u54ea\u91cc\u5403\uff1f</span></p></body></html>",
                                                       None))
