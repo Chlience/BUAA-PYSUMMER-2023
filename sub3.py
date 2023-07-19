@@ -66,10 +66,10 @@ class sub3(QWidget, Ui_Form):
         now = datetime.datetime.now()
         self.timer.start(1000)  # 每秒触发一次 timeout 事件
         self.timer.timeout.connect(self.update_time)
-        food_data = global1.Data2
-        if 'last' not in global1.Data[self.name]:
-            global1.Data[self.name]['last'] = []
-        parray = global1.Data[self.name]['last']
+        from dbconnect import findAllFood
+        food_data = findAllFood()
+        from dbconnect import getlast
+        parray = getlast(self.name)
         strr = global1.get_most_frequent(parray)
         recommendation = "考虑到您最近喜欢" + strr + "\n" if strr != -100 else "考虑到您最近没来食堂吃饭\n"
         filtered_food = []
@@ -78,7 +78,7 @@ class sub3(QWidget, Ui_Form):
                 filtered_food.append(food)
             elif now.hour >= 10 and now.hour < 15 and "午餐" in food["time"]:
                 filtered_food.append(food)
-            elif (now.hour >= 15 and now.hour <= 24 or now.hour in range(0, 2)) and "晚餐" in food["time"]:
+            elif (now.hour >= 15 and now.hour <= 24 or now.hour in range(0, 2)) and "晚餐" in food['时间']:
                 filtered_food.append(food)
         # 随机选择一道菜品
         dicc = {'鸡肉': '高蛋白，低脂肪，营养丰富。',
@@ -97,8 +97,8 @@ class sub3(QWidget, Ui_Form):
                 }
         if len(filtered_food) > 0:
             chosen_food = random.choice(filtered_food)
-            recommendation += f"推荐您现在吃<br> \\\\ <b>{chosen_food['name']}</b> //<br>"
-            recommendation += "因为这种食品" + dicc.get(chosen_food['category'],
+            recommendation += f"推荐您现在吃<br> \\\\ <b>{chosen_food['菜名']}</b> //<br>"
+            recommendation += "因为这种食品" + dicc.get(chosen_food['类别'],
                                                         "很适合这个时间点吃哦\U0001F604") + '<br>'
             if now.hour >= 3 and now.hour < 10:
                 recommendation += '而且现在是早上，早餐是一天中的第一餐，为身体提供所需的能量，帮助启动<b>新的一天</b>哦。'
@@ -107,8 +107,8 @@ class sub3(QWidget, Ui_Form):
             elif (now.hour >= 15 and now.hour <= 24 or now.hour in range(0, 2)):
                 recommendation += '而且现在是晚上，晚餐可以帮助身体进行<b>恢复和修复</b>，为夜间的休息提供所需的营养和能量。'
             for info in filtered_food:
-                if info['name'] == chosen_food['name']:
-                    additional_info = f"价格：{info['price']}元<br>类别：{info['category']}"
+                if info['菜名'] == chosen_food['菜名']:
+                    additional_info = f"价格：{info['价格']}元<br>类别：{info['类别']}"
                     recommendation += "<br>" + additional_info
                     break
 

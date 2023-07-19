@@ -99,7 +99,6 @@ class submanger(Ui_Form, QWidget):
         self.gaicai.clicked.connect(lambda: self.process_info(0))
         self.shandang.clicked.connect(self.shandan)
         self.gaidang.clicked.connect(self.gaidan)
-        self.food_info_list = global1.Data2
         self.setWindowTitle('管理中心')
         button = QPushButton('退出', self)
         button.clicked.connect(self.close)
@@ -136,12 +135,8 @@ class submanger(Ui_Form, QWidget):
         if (info[0] not in global1.sett):
             self.plainTextEdit.setPlainText('食堂在' + str(global1.sett) + '中')
             return
-        to_remove = []
-        for dic in self.food_info_list:
-            if dic['place'] == info[0] and dic['count'] == info[1]:
-                to_remove.append(dic)
-        for dic in to_remove:
-            self.food_info_list.remove(dic)
+        from dbconnect import deldang
+        deldang(info[0], info[1])
         self.plainTextEdit.setPlainText('已经没有这个档口了')
 
     def gaidan(self):
@@ -151,13 +146,8 @@ class submanger(Ui_Form, QWidget):
         if (info[0] not in global1.sett):
             self.plainTextEdit.setPlainText('食堂在' + str(global1.sett) + '中')
             return
-        for i in range(len(self.food_info_list)):
-            dic = self.food_info_list[i]
-            print(dic['place']+str(dic['count']))
-            if dic['place'] == info[0] and str(dic['count']) == info[1]:
-                print(dic['place']+str(dic['count']))
-                self.food_info_list[i]['count'] = info[2]
-                print(2)
+        from dbconnect import gaidang
+        gaidang(info[1], info[2], info[0])
         self.plainTextEdit.setPlainText('已修改')
 
 
@@ -167,11 +157,10 @@ class submanger(Ui_Form, QWidget):
 
     def delcai(self):
         info = self.plainTextEdit.toPlainText().strip()
-        food_info_list = global1.Data2
-        if any(item.get('name') == info for item in food_info_list):
-            food_info_list = [item for item in food_info_list if item.get('name') != info]
+        from dbconnect import delafood
+        ret = delafood(info)
+        if ret:
             self.plainTextEdit.setPlainText(f'您以后吃不到{info}了\U0001F613')
-            global1.Data2 = food_info_list
         else:
             self.plainTextEdit.setPlainText(f'没有这道菜\U0001F613')
         pass
@@ -197,24 +186,20 @@ class submanger(Ui_Form, QWidget):
                 self.plainTextEdit.setPlainText("建议用餐时间只能为早/中/晚餐")
                 return
             if category not in arr.values():
-                self.plainTextEdit.setPlainText("种类可以是" + arr.values())
+                self.plainTextEdit.setPlainText("种类可以是" + str(arr.values()))
                 return
             if place not in sett:
                 self.plainTextEdit.setPlainText("地点只能是" + sett)
                 return
-
+            from dbconnect import hasthis
             # 检查JSON文件中是否已经存在相同食物名的信息食物 0.1 主食 午餐 wings 北区店
-            if any(item.get('name') == food_name for item in self.food_info_list):
+            if hasthis(food_name, count, place):
                 if type:
                     self.plainTextEdit.setPlainText("已经有这种食物了，你是否在寻找“修改食物信息”功能？")
                     return
                 else:
-                    try:
-                        x = [item for item in self.food_info_list if item.get('name') == food_name]
-                        times = x[0]['times']
-                    except:
-                        times = 0
-                    food_info_list = [item for item in self.food_info_list if item.get('name') != food_name]
+                    from dbconnect import gaicai
+                    gaicai(food_name, count, place, price, category, meal_time)
 
             else:
                 if type == 0:
@@ -222,16 +207,18 @@ class submanger(Ui_Form, QWidget):
                     return
             if type:
                 times = 0
-            dict = {
-                "name": food_name,
-                "price": price,
-                "category": category,
-                "time": meal_time,
-                "place": place,
-                "times": times,
-                "count": count
-            }
-            self.food_info_list.append(dict)
+                dict = {
+                    "name": food_name,
+                    "price": price,
+                    "category": category,
+                    "time": meal_time,
+                    "place": place,
+                    "times": times,
+                    "count": count,
+                    "comment":[]
+                }
+                from dbconnect import jiacai
+                jiacai(dict)
         else:
             self.plainTextEdit.setPlainText("信息格式不正确\n必须是名字 钱 种类 时间 食堂名字 窗口")
             return
@@ -239,7 +226,3 @@ class submanger(Ui_Form, QWidget):
             self.plainTextEdit.setPlainText(f"北航的同学有福了！\n可以品尝{food_name}了！")
         else:
             self.plainTextEdit.setPlainText(f"{food_name}的信息被修改了")
-
-    def close(self):
-        global1.Data2 = self.food_info_list
-        super().close()

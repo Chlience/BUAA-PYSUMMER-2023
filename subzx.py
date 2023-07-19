@@ -178,13 +178,15 @@ class Ui_Form(object):
                 if txt == '123456' or global1.has_chinese_characters(txt):
                     self.text_input.setText("这个密码安全度不够")
                     return
-                global1.Data[self.name]['mi'] = txt
+                from dbconnect import changemi
+                changemi(self.name, txt)
             else:
+                from dbconnect import hasuser, changename
                 if self.name == '老王':
                     self.text_input.setText("老王作为默认角色不能被修改")
                     QTimer.singleShot(2000, self.close)
                     return
-                if txt in global1.Data:
+                if hasuser(txt):
                     self.text_input.setText("这个用户名已经被占用了， 重新想一个吧。。")
                     return
                 if not global1.is_all_chinese(txt):
@@ -193,17 +195,10 @@ class Ui_Form(object):
                 if len(txt) < 2 or len(txt) > 7:
                     self.text_input.setText("用户名太短/长，修改失败！")
                     return
-                dic = {txt: global1.Data[self.name]}
-                global1.Data.pop(self.name)
-                self.name = txt
-                global1.Data.update(dic)
+                changename(self.name, txt)
                 print(self.name)
                 self.text_input.setText("修改成功，请重新登录。")
                 QTimer.singleShot(2000, self.close)
-                with open("resources/data.json", "w", encoding='utf-8') as file:
-                    json.dump(global1.Data, file)
-                with open("resources/food.json", "w", encoding='utf-8') as file:
-                    json.dump(global1.Data2, file)
                 sys.exit()
             self.close()
 
@@ -220,10 +215,10 @@ class subzx(Ui_Form, QWidget):
         self.setupUi(self)
         self.name = name
         self.setWindowTitle('个人中心')
-        self.data = global1.Data
-        me = self.data[name].get('star', [])
-        n = self.data[name]
-        pstr = global1.get_most_frequent(self.data[name]['last'])
+        from dbconnect import getuserdata
+        n = getuserdata(name)
+        me = n['star']
+        pstr = global1.get_most_frequent(n['last'])
         print(type(pstr))
         self.plainTextEdit.setPlainText('姓名：' + str(name) + '\n' +
                                         '共消费 ' + str(
@@ -235,12 +230,13 @@ class subzx(Ui_Form, QWidget):
             self.listWidget.addItem(entry)
 
     def close(self):
-        self.data[self.name]['star'] = []
+        stt = []
         for i in range(self.listWidget.count()):
             item = self.listWidget.item(i)
             print(item.text())
-            self.data[self.name]['star'].append(item.text())
-        global1.Data = self.data
+            stt.append(item.text())
+        from dbconnect import changestar
+        changestar(self.name, stt)
         self.parent.show()
         super().close()
 

@@ -9,12 +9,14 @@ import global1
 
 
 class wid(QWidget):
-    def __init__(self, name="老王", food="？"):
+    def __init__(self, name="老王", food="？", count="", house=""):
         super().__init__()
         self.food = food
+        self.count = count
+        self.house = house
         self.setWindowTitle("评论窗口")
         self.t = False
-        self.load_comments_from_file()  # 从文件加载评论
+        self.load_comments()  # 加载评论
 
         self.comment_textedit = QTextEdit()
         self.submit_button = QPushButton("提交评论")
@@ -38,7 +40,6 @@ class wid(QWidget):
         # 设置comment_textedit的高度为comment_list的一半
         vlayout.setStretchFactor(self.comment_textedit, 1)
         vlayout.setStretchFactor(self.comment_list, 2)
-
         self.setLayout(vlayout)
         self.update_comments()  # 更新评论列表显示
 
@@ -78,20 +79,19 @@ class wid(QWidget):
         for comment in self.comments:
             self.comment_list.addItem(comment)
 
-    def load_comments_from_file(self):
-        for i in global1.Data2:
-            if i['name'] == self.food:
-                self.comments = i.get('comment', [])
+    def load_comments(self):
+        from dbconnect import loadcomment
+        self.comments = loadcomment(self.house, self.count, self.food)
 
-    def save_comments_to_file(self):
+    def save_comments(self):
         my_list = []
         for i in range(self.comment_list.count()):
             item = self.comment_list.item(i)
             my_list.append(item.text())
         self.comments = my_list
-        for i in range(len(global1.Data2)):
-            if global1.Data2[i]['name'] == self.food:
-                global1.Data2[i]['comment'] = self.comments
+        from dbconnect import savecomments
+        print(self.comments)
+        savecomments(self.house, self.count, self.food, self.comments)
 
     def create_actions(self):
         self.action_modify = QAction("修改", self)
@@ -127,3 +127,7 @@ class wid(QWidget):
         row = self.comment_list.row(item)
         self.comment_list.takeItem(row)
         # 处理删除项的逻辑
+
+    def close(self):
+        self.save_comments()
+        super().close()

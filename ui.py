@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import json
 import random
 import sys
 
@@ -125,7 +124,6 @@ class MyWidget(QWidget, Ui_Form):
         super().__init__()
         self.setupUi(self)
         self.data = {}
-        self.load_data()
         self.setWindowTitle('登录器')
         self.subman = submanger()
         self.lineEdit.setText('老王')
@@ -167,6 +165,7 @@ class MyWidget(QWidget, Ui_Form):
         username = self.lineEdit.text()
         password = self.lineEdit_2.text()
         # 利用text Browser控件对象setText()函数设置界面显示
+        from dbconnect import hasuser, getuserdata
         if username == "admin" and password == '123456':
             self.subman.show()
         elif username == 'admin':
@@ -179,43 +178,29 @@ class MyWidget(QWidget, Ui_Form):
             self.textBrowser.setText("密码太简单了吧\U0001F609")
         elif len(password) < 6:
             self.textBrowser.setText("密码不安全，试试其他密码吧！")
-        elif username in self.data:
-            if self.data[username]['mi'] == password:
+        elif hasuser(username):
+            data = getuserdata(username)
+            print(data['mi'])
+            print(password)
+            if str(data['mi']) == password:
                 self.textBrowser.setText("登录成功!\n" + "用户名是: " + username)
                 if username == '老王':
                     self.textBrowser.append("\U0001F613")
                 name = username
                 from sub1 import sub1
                 self.sub1 = sub1(name, self)
-                pass
                 QTimer.singleShot(1200, self.sub1.show)
                 QTimer.singleShot(1200, self.close)
             else:
                 self.textBrowser.setText("密码错误\U0001F613")
         else:
             self.textBrowser.setText(f"注册成功\U0001F613\n您好！{username}\n密码是 {password}")
-            if username not in self.data:
-                self.data[username] = {}
-            self.data[username]['mi'] = password
-            self.data[username]['cost'] = 0.0
-            self.data[username]['star'] = []
-            self.data[username]['last'] = []
-            self.save_data()
+            dic = {'name': username, 'mi': password, 'cost': 0.0, 'star': [], 'last': []}
+            from dbconnect import zhuce
+            zhuce(dic)
 
-    def load_data(self):
-        self.data = global1.Data
-
-    def save_data(self):
-        global1.Data = self.data
-
-
-import global1
 
 if __name__ == '__main__':
-    with open("resources/data.json", "r", encoding='utf-8') as file:
-        global1.Data = json.load(file)
-    with open("resources/food.json", "r", encoding='utf-8') as file:
-        global1.Data2 = json.load(file)
     app = QApplication([])
     font = QFont("Times Roman", 12)  # 设置字体为 "Times Roman"，字号为 12
     app.setFont(font)
@@ -225,8 +210,4 @@ if __name__ == '__main__':
     widget = MyWidget()
     widget.show()
     app.exec()
-    with open("resources/data.json", "w", encoding='utf-8') as file:
-        json.dump(global1.Data, file)
-    with open("resources/food.json", "w", encoding='utf-8') as file:
-        json.dump(global1.Data2, file)
     sys.exit()
