@@ -9,7 +9,7 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect, Qt, QRectF)
-from PySide6.QtGui import (QFont, QPainter, QColor, QPaintEvent, QPen, QBrush)
+from PySide6.QtGui import (QFont, QPainter, QColor, QPaintEvent, QPen)
 from PySide6.QtWidgets import (QGridLayout, QLabel, QPushButton,
                                QWidget)
 
@@ -94,12 +94,13 @@ class sub1(Ui_Look, QWidget):
         QMetaObject.connectSlotsByName(self)
         self.setWindowTitle('HangEat')
         self.setStyleSheet("QPushButton {"
-                          "border-radius: 10px;"
-                          "background-color: white;"
-                          "}"
-                          "QPushButton:hover {"
-                          "background-color: lightGray;"
-                          "}")
+                           "border-radius: 10px;"
+                           "background-color: white;"
+                           "}"
+                           "QPushButton:hover {"
+                           "background-color: lightGray;"
+                           "}")
+
     def display(self):
         from sub2 import sub2
         self.sub = sub2(self, self.name)
@@ -129,7 +130,7 @@ class sub1(Ui_Look, QWidget):
         self.subChi = subChi(self.name, self)
         self.subChi.show()
         self.hide()
-        #self.subChi.set()
+        # self.subChi.set()
 
     def ghew(self):
         from subzx import subzx

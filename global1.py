@@ -1,8 +1,5 @@
 import re
 
-global Data, Data2
-
-
 def get_most_frequent(xx):
     if len(xx) == 0:
         return "未知"

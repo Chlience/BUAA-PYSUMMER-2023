@@ -62,12 +62,12 @@ class sub2(QWidget, Ui_eating):
         self.label.setText("食品列表")
         self.setWindowTitle(neme + "吃点什么好呢")
         self.food = []
-
         self.ope()
-        self.load(count)
+        self.load()
         self.listWidget.itemClicked.connect(
             lambda item: self.open_new_window(item.text(), item.text().split()[0],
-                                              item.text().split()[2].split('￥')[1], item.text().split()[4]))
+                                              item.text().split()[2].split('￥')[1], item.text().split()[4],
+                                              item.text().split()[6], item.text().split()[8]))
         self.layout = QVBoxLayout(self)
         spacer_item = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.layout.addSpacerItem(spacer_item)
@@ -89,40 +89,21 @@ class sub2(QWidget, Ui_eating):
         self.count = 0
         self.show()
 
-    def load(self, count):
-        dishes = []
-        for dish in self.data:
-            name = dish['name']
-            price = dish['price']
-            time = dish['time']
-            category = dish['category']
-            yes = choice([1, 1, 1, 0.8, 0.9])
-            if count:
-                dishes.append({
-                    'name': name,
-                    'price': price,
-                    'time': time,
-                    'category': category
-                })
-            else:
-                dishes.append({
-                    'name': name,
-                    'price': str(round(float(price) * yes, 2)),
-                    'time': time,
-                    'category': category
-                })
-        for dish in dishes:
-            self.listWidget.addItem("{} - ￥{} - {}".format(dish['name'], dish['price'], dish['category']))
+    def load(self):
+        for da in self.data:
+            self.listWidget.addItem(
+                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口']))
 
     def ope(self):
-        self.data = global1.Data2
+        import dbconnect
+        self.data = dbconnect.findAllFood()
 
     def sortByCost(self):
-        sorted_items = sorted(self.data, key=lambda x: float(x['price']), reverse=bool(self.count & 1))
+        sorted_items = sorted(self.data, key=lambda x: float(x['价格']), reverse=bool(self.count & 1))
         self.listWidget.clear()
         # 根据排序结果重新创建标签
         for dish in sorted_items:
-            label = "{} - ￥{} - {}".format(dish['name'], dish['price'], dish['category'])
+            label = "{} - ￥{} - {}".format(dish['菜名'], dish['价格'], dish['类别'])
             self.listWidget.addItem(label)
         self.count += 1
 
@@ -132,38 +113,39 @@ class sub2(QWidget, Ui_eating):
         scores = {}
         for item in self.data:
             score = self.calculateScore(item, keyword)
-            scores[item['name']] = score
+            scores[item['菜名']] = score
 
         # 根据相关度对条目排序
-        sorted_items = sorted(self.data, key=lambda x: scores[x['name']], reverse=True)
+        sorted_items = sorted(self.data, key=lambda x: scores[x['菜名']], reverse=True)
         self.listWidget.clear()
         # 根据排序结果重新创建标签
         for dish in sorted_items:
-            label = "{} - ￥{} - {}".format(dish['name'], dish['price'], dish['category'])
+            label = "{} - ￥{} - {}".format(dish['菜名'], dish['价格'], dish['类别'])
             self.listWidget.addItem(label)
 
     def calculateScore(self, item, keyword):
         # 实现自定义的相关度计算逻辑
         # 这里可以使用各种方法来计算关键词和条目之间的相关度得分
         # 返回得分值，得分越高表示相关度越高
-        pric = float(item['price'])
-        if keyword in item['place']:
+        pric = float(item['价格'])
+        if keyword in item['档口'] or keyword in item['食堂']:
             return 20 + pric
-        if keyword in item['name']:
+        if keyword in item['菜名']:
             return 15 + pric
-        elif keyword in item['category']:
+        elif keyword in item['类别']:
             return 12 + pric
-        elif keyword in item['time']:
+        elif keyword in item['时间']:
             return 20 + pric
-        elif keyword in str(item['price']):
+        elif keyword in str(item['价格']):
             return 10
         else:
-            l1 = self.longest_common_substring(keyword, item['name'])
-            l2 = self.longest_common_substring(keyword, item['category'])
-            l3 = self.longest_common_substring(keyword, str(item['price']))
-            l4 = self.longest_common_substring(keyword, item['time'])
-            l5 = self.longest_common_substring(keyword, item['place'])
-            return max(l1, l2, l3, l4, l5)
+            l1 = self.longest_common_substring(keyword, item['菜名'])
+            l2 = self.longest_common_substring(keyword, item['类别'])
+            l3 = self.longest_common_substring(keyword, str(item['价格']))
+            l4 = self.longest_common_substring(keyword, item['时间'])
+            l5 = self.longest_common_substring(keyword, item['档口'])
+            l6 = self.longest_common_substring(keyword, item['食堂'])
+            return max(l1, l2, l3, l4, l5, l6)
 
     def longest_common_substring(self, str1, str2):
         # 创建一个二维数组来记录最长公共子串的长度
@@ -178,12 +160,12 @@ class sub2(QWidget, Ui_eating):
 
         return max_length
 
-    def open_new_window(self, item, food, cost, kind):
+    def open_new_window(self, item, food, cost, kind, count, house):
         # 获取所选项的文本
         selected_item_text = item
         global new_window
         # 创建新窗口并显示
-        new_window = NewWindow(selected_item_text, food, cost, self.neme, kind)
+        new_window = NewWindow(selected_item_text, food, cost, self.neme, kind, count, house)
         new_window.show()
 
     def closeEvent(self, event):
@@ -209,7 +191,8 @@ class sub22(sub2):
         self.layout.addWidget(self.button4, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
 
     def ope(self):
-        self.data = [q for q in global1.Data2 if q['place'] == self.tName]
+        from dbconnect import getplacefood
+        self.data = getplacefood(self.tName)
 
     def inin(self):
         from subdang import subdang
@@ -221,17 +204,15 @@ class sub22(sub2):
 class sub23(sub2):
     def __init__(self, parent, uname, category):
         self.uname = uname
-        self.kind = []
-        if category == '蛋白质':
-            self.kind = ["猪肉", "牛肉", "豆腐", "鱼肉", "鸭肉"]
-        self.kind.append(category)
+        self.kind = category
         super().__init__(parent, uname, False)
         self.label.setText(category + '类 菜单')
         self.setWindowTitle(uname + "想看看" + category + "种类的食物")
         self.parent = parent
 
     def ope(self):
-        self.data = [q for q in global1.Data2 if q['category'] in self.kind]
+        from dbconnect import getkindfood
+        self.data = getkindfood(self.kind)
 
 
 class sub24(sub2):
@@ -251,22 +232,25 @@ class sub24(sub2):
     def reload(self, data, dang):
         self.listWidget.clear()
         self.data = data
-        self.load(True)
+        self.load()
         self.setWindowTitle(dang)
 
 
 class NewWindow(QWidget):
-    def __init__(self, item_text, food, cost, neme, kind):
+    def __init__(self, item_text, foodname, cost, username, kind, housename, countname):
         self.kind = kind
-        self.neme = neme
-        self.now = food
+        self.username = username
+        self.foodname = foodname
+        self.countname = countname
+        self.housename = housename
         self.cost = cost
         font = QFont()
         font.setBold(True)  # 设置字体为粗体
         font.setPointSize(12)  # 设置字体大小
         super().__init__()
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint)
         self.setWindowTitle("真的好吃的")
-        self.setGeometry(700, 300, 300, 600)
+        self.setGeometry(700, 170, 300, 600)
         layout = QVBoxLayout()
         label = QLabel(item_text)
         layout.addWidget(label)
@@ -282,39 +266,25 @@ class NewWindow(QWidget):
         self.back_button.setFont(font)  # 设置按钮字体
         self.back_button.clicked.connect(self.close)
         layout.addWidget(self.back_button)
-        self.data = global1.Data
-        self.data2 = global1.Data2
         from submit import wid
-        self.subwid = wid(neme, food)
+        self.subwid = wid(username, foodname, countname, housename)
         self.subwid.setFont(font)
         layout.addWidget(self.subwid)
         self.setLayout(layout)
 
     def star(self):
-        name = self.neme
-        if 'star' not in self.data[name]:
-            self.data[name]['star'] = []
-        if self.now not in self.data[name]['star']:
-            self.data[name]['star'].append(self.now)
+        name = self.username
+        from dbconnect import addstar
+        addstar(name, self.foodname)
 
     def eat(self):
-        name = self.neme
-        if 'cost' not in self.data[name]:
-            self.data[name]['cost'] = 0
-        self.data[name]['cost'] += float(self.cost)
-        for i in range(len(self.data2)):
-            if self.data2[i]['name'] == self.now:
-                self.data2[i]['times'] += 1
-                break
-        if 'last' not in self.data[name]:
-            self.data[name]['last'] = []
-        self.data[name]['last'].append(self.kind)
-        if len(self.data[name]['last']) > 5:
-            self.data[name]['last'] = self.data[name]['last'][1:]
-        pass
+        name = self.username
+        from dbconnect import eatchange, addcost
+        eatchange(self.housename, self.countname, self.foodname)
+        addcost(name, self.cost)
+        from dbconnect import lastchange
+        lastchange(name, self.kind)
 
     def close(self):
-        global1.Data = self.data
-        global1.Data2 = self.data2
-        self.subwid.save_comments_to_file()
+        self.subwid.save_comments()
         super().close()

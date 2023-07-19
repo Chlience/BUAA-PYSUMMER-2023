@@ -108,15 +108,16 @@ class subbc(Ui_Form, QWidget):
         self.setWindowTitle(name + '的必吃')
         self.listWidget.clear()
         self.listView.clear()
-        data = global1.Data
-        me = data[name].get('star', [])
+        from dbconnect import getstar
+        me = getstar(name)
         for entry in me:
             self.listWidget.addItem(entry)
-        data = global1.Data2
+        from dbconnect import findAllFood
+        data = findAllFood()
         star_data = [(item, item['times']) for item in data if item["times"] > 0]
         star_data = sorted(star_data, key=lambda x: x[1], reverse=True)
         for i in star_data:
-            self.listView.addItem(i[0]['name'] + "   被购买" + str(i[1]) + '次\n')
+            self.listView.addItem(i[0]['菜名'] + "   被购买" + str(i[1]) + '次\n')
 
     def closeEvent(self, event):
         self.parent.show()  # 关闭子窗口时显示母窗口
