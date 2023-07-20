@@ -74,9 +74,9 @@ class sub3(QWidget, Ui_Form):
         recommendation = "考虑到您最近喜欢" + strr + "\n" if strr != -100 else "考虑到您最近没来食堂吃饭\n"
         filtered_food = []
         for food in food_data:
-            if now.hour >= 3 and now.hour < 10 and "早餐" in food["time"]:
+            if now.hour >= 3 and now.hour < 10 and "早餐" in food["时间"]:
                 filtered_food.append(food)
-            elif now.hour >= 10 and now.hour < 15 and "午餐" in food["time"]:
+            elif now.hour >= 10 and now.hour < 15 and "午餐" in food["时间"]:
                 filtered_food.append(food)
             elif (now.hour >= 15 and now.hour <= 24 or now.hour in range(0, 2)) and "晚餐" in food['时间']:
                 filtered_food.append(food)
