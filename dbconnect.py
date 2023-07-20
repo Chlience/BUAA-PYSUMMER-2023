@@ -1,12 +1,12 @@
 import json
 
-import mysql.connector
+import pymysql
 
 global cnx
 
 
 def searchtest():
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     # 建立数据库连接
     # 创建游标对象
@@ -26,7 +26,7 @@ def searchtest():
 
 
 def findFood(house_name, count_name, food_name):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 执行 SQL 查询
@@ -40,7 +40,7 @@ def findFood(house_name, count_name, food_name):
 
 
 def findAllFood():
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 执行 SQL 查询
@@ -58,7 +58,7 @@ def findAllFood():
 
 
 def eatchange(house_name, count_name, food_name):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 更新记录
@@ -74,7 +74,7 @@ def eatchange(house_name, count_name, food_name):
 
 
 def loadcomment(house_name, count_name, food_name):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 选择数据库
@@ -99,7 +99,7 @@ def savecomments(house_name, count_name, food_name, comments):
     comments_json = json.dumps(comments)
 
     # 连接到数据库
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -117,7 +117,7 @@ def savecomments(house_name, count_name, food_name, comments):
 
 def getkindfood(kind):
     # 连接到数据库
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 查询符合条件的食物数据
@@ -141,7 +141,7 @@ def getkindfood(kind):
 
 def getplacefood(place):
     # 连接到数据库
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 查询符合条件的食物数据
@@ -164,7 +164,7 @@ def getplacefood(place):
 
 
 def delafood(name):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 删除记录
@@ -180,7 +180,7 @@ def delafood(name):
 
 
 def deldang(tang, dang):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 删除记录
@@ -195,7 +195,7 @@ def deldang(tang, dang):
 
 
 def gaidang(yuan, xian, tang):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -212,7 +212,7 @@ def gaidang(yuan, xian, tang):
 
 
 def hasthis(cai, dang, tang):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -232,7 +232,7 @@ def hasthis(cai, dang, tang):
 
 
 def gaicai(name, dang, tang, price, cate, time):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 更新记录
@@ -246,7 +246,7 @@ def gaicai(name, dang, tang, price, cate, time):
 
 
 def jiacai(dict_data):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -266,7 +266,7 @@ def jiacai(dict_data):
 
 
 def zhuce(dict_data):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -285,7 +285,7 @@ def zhuce(dict_data):
 
 
 def hasuser(user):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -305,7 +305,7 @@ def hasuser(user):
 
 
 def getuserdata(name):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -314,7 +314,7 @@ def getuserdata(name):
     cursor.execute(select_query, (name,))
 
     # 获取查询结果的列名
-    column_names = cursor.column_names
+    column_names = [column[0] for column in cursor.description]
 
     # 获取查询结果
     records = cursor.fetchall()
@@ -336,7 +336,7 @@ def getuserdata(name):
 
 
 def addstar(name, food):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -373,7 +373,7 @@ def addstar(name, food):
 
 
 def addcost(name, cost):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -406,7 +406,7 @@ def addcost(name, cost):
 
 
 def lastchange(name, kind):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -443,7 +443,7 @@ def lastchange(name, kind):
 
 
 def getlast(name):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -461,7 +461,7 @@ def getlast(name):
 
 
 def getstar(name):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -483,7 +483,7 @@ def getstar(name):
         return []
 
 def changemi(user, newmi):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -521,7 +521,7 @@ def changemi(user, newmi):
         return None
 
 def changename(name, newname):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
@@ -559,7 +559,7 @@ def changename(name, newname):
         return None
 
 def changestar(name, star):
-    cnx = mysql.connector.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
