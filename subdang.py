@@ -78,9 +78,9 @@ class subdang(QWidget, Ui_Form):
         fendang = {}
         # 遍历字典数组中的每个字典
         for dic in self.data:
-            if str(dic["count"]) not in fendang:
-                fendang[str(dic["count"])] = []
-            fendang[str(dic["count"])].append(dic)
+            if str(dic["档口"]) not in fendang:
+                fendang[str(dic["档口"])] = []
+            fendang[str(dic["档口"])].append(dic)
         for item in fendang.keys():
             # 创建一个QListWidgetItem对象
             list_item = QListWidgetItem()
