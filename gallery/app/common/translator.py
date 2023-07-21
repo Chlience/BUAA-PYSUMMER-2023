@@ -7,7 +7,7 @@ class Translator(QObject):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.text = self.tr('Text')
-        self.view = self.tr('View')
+        self.view = self.tr('个人中心')
         self.menus = self.tr('Menus & toolbars')
         self.icons = self.tr('搜索')
         self.layout = self.tr('档口')

@@ -22,7 +22,7 @@ from .scroll_interface import ScrollInterface
 from .status_info_interface import StatusInfoInterface
 from .setting_interface import SettingInterface
 from .text_interface import TextInterface
-from .view_interface import ViewInterface
+from .self_center_holder import ViewInterface
 from ..common.config import SUPPORT_URL
 from ..common.icon import Icon
 from ..common.signal_bus import signalBus

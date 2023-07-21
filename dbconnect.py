@@ -652,3 +652,13 @@ def del_comment(canteen, stall, dish, comment_str):
     # 关闭数据库连接
     cursor.close()
     cnx.close()
+
+def delAll_user():
+    cnx = pymysql.connect(user='root', password='123456',
+                          host='chlience.cn', database='hangeat')
+    cursor = cnx.cursor()
+    sql_query = "GRANT DELETE ON hangeat.用户示例 TO 'root'@'chlience.cn';"
+    cursor.execute(sql_query)
+    cnx.commit()  # 提交事务
+    cursor.close()  # 关闭游标
+    cnx.close()  # 关闭数据库连接

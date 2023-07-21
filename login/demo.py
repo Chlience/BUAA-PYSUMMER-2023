@@ -53,6 +53,8 @@ class LoginWindow(AcrylicWindow, Ui_Form):
         # 在文本浏览器中展示名言警句
         self.textBrowser.setPlainText("    欢迎您使用美食系统😃😃😃😃😃\n    " + quote)
         self.lineEdit_3.setText("老王")
+        self.lineEdit_4.returnPressed.connect(self.display)
+        self.lineEdit_3.returnPressed.connect(self.lineEdit_4.setFocus)
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
@@ -69,7 +71,9 @@ class LoginWindow(AcrylicWindow, Ui_Form):
         # 利用text Browser控件对象setText()函数设置界面显示
         from dbconnect import hasuser, getuserdata
         if username == "admin" and password == '123456':
-            #self.subman.show()
+            from .submanager import submanger
+            self.manage = submanger()
+            self.manage.show()
             pass
         elif username == 'admin':
             self.textBrowser.setText("你的用户名不正确！")
