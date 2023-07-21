@@ -25,7 +25,7 @@ class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(523, 463)
+        Form.resize(823, 463)
         self.name = None
         self.sub_window = None
         self.mp = QLabel(Form)
@@ -106,12 +106,24 @@ class Ui_Form(object):
         self.label_2.setContextMenuPolicy(Qt.PreventContextMenu)
         self.label_2.setAlignment(Qt.AlignCenter)
         self.retranslateUi(Form)
-        self.pushButton_5.clicked.connect(self.listWidget.clear)
-        self.pushButton_2.clicked.connect(lambda: self.listWidget.takeItem(self.listWidget.currentRow()))
+        self.pushButton_5.clicked.connect(self.clearAll)
+        self.pushButton_2.clicked.connect(self.clearOne)
         self.pushButton_6.clicked.connect(Form.close)
         self.pushButton_4.clicked.connect(self.mishow)  # mimaxiugai
         self.pushButton_3.clicked.connect(self.mashow)
         QMetaObject.connectSlotsByName(Form)
+
+    def clearAll(self):
+        for i in range(self.listWidget.count()):
+            text = self.listWidget.item(i).text()
+            from dbconnect import changestar
+            changestar(self.name, text)
+        self.listWidget.clear()
+
+    def clearOne(self):
+        from dbconnect import changestar
+        changestar(self.name, self.listWidget.currentItem().text())
+        self.listWidget.takeItem(self.listWidget.currentRow())
 
     # setupUi
     def mishow(self):
@@ -215,14 +227,12 @@ class subzx(Ui_Form, QWidget):
         self.setupUi(self)
         self.name = name
         self.setWindowTitle('个人中心')
-        self.refresh12()
 
     def refresh12(self):
         from dbconnect import getuserdata
         n = getuserdata(self.name)
         me = n['star']
         pstr = global_.get_most_frequent(n['last'])
-        print(type(pstr))
         self.plainTextEdit.setPlainText('姓名：' + str(self.name) + '\n' +
                                         '共消费 ' + str(
             n['cost']) + '元\n' + '爱吃' + pstr + '类食物\n')
@@ -231,16 +241,6 @@ class subzx(Ui_Form, QWidget):
         self.mp.setAlignment(Qt.AlignmentFlag.AlignCenter)
         for entry in me:
             self.listWidget.addItem(entry)
-    def close(self):
-        stt = []
-        for i in range(self.listWidget.count()):
-            item = self.listWidget.item(i)
-            print(item.text())
-            stt.append(item.text())
-        from dbconnect import changestar
-        changestar(self.name, stt)
-        self.parent.show()
-        super().close()
 
     def paintEvent(self, event):
         painter = QPainter(self)

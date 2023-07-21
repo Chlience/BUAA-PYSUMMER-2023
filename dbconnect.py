@@ -574,17 +574,13 @@ def changename(name, newname):
         cnx.close()
         return None
 
-def changestar(name, star):
+
+def changestar(name, star_item):
     cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
-    # 更新记录
-    update_query = "UPDATE 用户示例 SET star = %s WHERE name = %s;"
-    cursor.execute(update_query, (json.dumps(star), name))
-    cnx.commit()
-
-    # 获取更新后的数据
+    # 获取当前记录的星级数据
     select_query = "SELECT star, last, cost, mi FROM 用户示例 WHERE name = %s;"
     cursor.execute(select_query, (name,))
     result = cursor.fetchone()
@@ -594,6 +590,15 @@ def changestar(name, star):
         last = result[1]
         cost = result[2]
         mi = result[3]
+
+        # 从星级数据列表中删除指定项
+        if star_item in star_list:
+            star_list.remove(star_item)
+
+        # 更新记录
+        update_query = "UPDATE 用户示例 SET star = %s WHERE name = %s;"
+        cursor.execute(update_query, (json.dumps(star_list), name))
+        cnx.commit()
 
         # 关闭游标和连接
         cursor.close()
