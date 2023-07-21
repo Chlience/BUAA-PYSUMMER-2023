@@ -1,0 +1,20 @@
+{
+    "Material": {
+        "AcrylicBlurRadius": 35
+    },
+    "Update": {
+        "CheckUpdateAtStartUp": true
+    },
+    "Folders": {
+        "Download": "F:/PycharmProjects/BUAA-PYSUMMER-2023/gallery/app",
+        "LocalMusic": []
+    },
+    "MainWindow": {
+        "DpiScale": "Auto",
+        "Language": "Auto"
+    },
+    "QFluentWidgets": {
+        "ThemeColor": "#ff009faa",
+        "ThemeMode": "Auto"
+    }
+}
