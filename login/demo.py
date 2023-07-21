@@ -52,7 +52,7 @@ class LoginWindow(AcrylicWindow, Ui_Form):
         ]
         quote = random.choice(quotes)
         # 在文本浏览器中展示名言警句
-        self.textBrowser.setPlainText("    欢迎您使用美食系\n统😃😃😃😃😃\n    " + quote)
+        self.textBrowser.setPlainText("    欢迎您使用美食系统😃😃😃😃😃\n    " + quote)
         self.lineEdit_3.setText("老王")
 
     def resizeEvent(self, e):

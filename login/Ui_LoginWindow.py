@@ -69,7 +69,7 @@ class Ui_Form(object):
         self.textBrowser = QTextBrowser()
         self.textBrowser.setStyleSheet("font-family: Times Roman; font-size:17px; border: 0px; outline: none;")
         self.textBrowser.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.gridLayout.addWidget(self.textBrowser, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.textBrowser, 0, 0, 2, 2)
         self.gridLayout.setColumnStretch(0, 1)
 
         # self.lineEdit = LineEdit(self.widget)

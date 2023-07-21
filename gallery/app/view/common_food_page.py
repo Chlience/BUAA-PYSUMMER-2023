@@ -70,7 +70,7 @@ class food_list_view(QWidget, Ui_eating):
         self.hLayout.addLayout(self.layout)
         self.hLayout.addLayout(v2layout)
         self.setLayout(self.hLayout)
-        self.count = 0
+        self.count_times = 0
 
     def put_items(self):
         import dbconnect
@@ -80,13 +80,13 @@ class food_list_view(QWidget, Ui_eating):
                 "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口']))
 
     def sortByCost(self):
-        sorted_items = sorted(self.data, key=lambda x: float(x['价格']), reverse=bool(self.count & 1))
+        sorted_items = sorted(self.data, key=lambda x: float(x['价格']), reverse=bool(self.count_times & 1))
         self.listWidget.clear()
         # 根据排序结果重新创建标签
         for da in sorted_items:
             label = "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口'])
             self.listWidget.addItem(label)
-        self.count += 1
+        self.count_times += 1
 
     def sortByKeyword(self):
         keyword = self.input_edit.text()
@@ -100,8 +100,8 @@ class food_list_view(QWidget, Ui_eating):
         sorted_items = sorted(self.data, key=lambda x: scores[x['菜名']], reverse=True)
         self.listWidget.clear()
         # 根据排序结果重新创建标签
-        for dish in sorted_items:
-            label = "{} - ￥{} - {}".format(dish['菜名'], dish['价格'], dish['类别'])
+        for da in sorted_items:
+            label = "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口'])
             self.listWidget.addItem(label)
 
     def calculateScore(self, item, keyword):
@@ -155,9 +155,6 @@ class canting_view(food_list_view):
         self.tName = tName
         super().__init__(uname)
         self.resize(532, 780)
-        # self.button4 = QPushButton("切换视图", self)
-        # self.button4.clicked.connect(self.inin)
-        # self.layout.addWidget(self.button4, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
 
     def put_items(self):
         from dbconnect import getplacefood
@@ -169,38 +166,36 @@ class canting_view(food_list_view):
 
 
 
-class sub23(food_list_view):
-    def __init__(self, parent, uname, category):
+class catagory_food(food_list_view):
+    def __init__(self, uname, category):
         self.uname = uname
         self.kind = category
-        super().__init__(parent, uname)
-        self.label.setText(category + '类 菜单')
+        super().__init__(uname)
         self.setWindowTitle(uname + "想看看" + category + "种类的食物")
-        self.parent = parent
 
-    def ope(self):
+    def put_items(self):
         from dbconnect import getkindfood
         self.data = getkindfood(self.kind)
 
 
-class sub24(food_list_view):
-    def __init__(self, uname, data, dangname):
+class count_list(food_list_view):
+    def __init__(self, uname, data, count_name):
         self.data = data
         self.uname = uname
-        super().__init__(None, uname)
-        self.setWindowTitle(dangname)
+        super().__init__(uname)
+        self.setWindowTitle(count_name)
 
-    def ope(self):
-        pass
-
-    def closeEvent(self, event):
-        event.accept()
-
-    def reload(self, data, dang):
+    def put_items(self):
         self.listWidget.clear()
+        for da in self.data:
+            self.listWidget.addItem(
+                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口']))
+
+    def reload(self, data, count_name):
+        self.listWidget.clear()
+        self.count = count_name
         self.data = data
         self.put_items()
-        self.setWindowTitle(dang)
 
 
 class NewWindow(QWidget):
