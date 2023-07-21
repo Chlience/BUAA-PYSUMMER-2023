@@ -386,6 +386,7 @@ def addstar(name, food):
 
 
 def addcost(name, cost):
+    print(name)
     cnx = pymysql.connect(user='root', password='123456',
                                   host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
@@ -398,6 +399,8 @@ def addcost(name, cost):
     # 更新成本属性
     if result:
         old_cost = result[0]
+        print(old_cost)
+        print(type(old_cost))
         new_cost = str(float(old_cost) + float(cost))
 
         # 更新记录

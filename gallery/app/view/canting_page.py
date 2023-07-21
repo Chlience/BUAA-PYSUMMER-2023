@@ -15,7 +15,7 @@ class DateTimeInterface(GalleryInterface):
         t = Translator()
         super().__init__(
             title='某食堂',
-            subtitle='',
+            subtitle='点击主页图标直达特定食堂',
             parent=parent
         )
         self.setObjectName('dateTimeInterface')

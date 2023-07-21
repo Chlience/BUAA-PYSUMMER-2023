@@ -23,6 +23,7 @@ class BannerWidget(QWidget):
         self.vBoxLayout = QVBoxLayout(self)
         self.galleryLabel = QLabel('Hang__Eat!!!', self)
         self.banner = QPixmap(':/gallery/images/chidanta.jpg')
+        self.banner = QPixmap(':/gallery/images/kunkun.png')
         self.linkCardView = LinkCardView(self)
 
         self.galleryLabel.setObjectName('galleryLabel')

@@ -1,15 +1,11 @@
 # coding:utf-8
-from PySide6.QtCore import Qt, QSize, QUrl
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QButtonGroup, QHBoxLayout, QGridLayout
-from qfluentwidgets import (Action, DropDownPushButton, DropDownToolButton, PushButton, ToolButton, PrimaryPushButton,
-                            HyperlinkButton, ComboBox, RadioButton, CheckBox, Slider, SwitchButton, EditableComboBox,
-                            ToggleButton, RoundMenu, FluentIcon, SplitPushButton, SplitToolButton, PrimarySplitToolButton,
-                            PrimarySplitPushButton, PrimaryDropDownPushButton, PrimaryToolButton, PrimaryDropDownToolButton,
-                            ToggleToolButton, TransparentDropDownPushButton, TransparentPushButton, TransparentToggleToolButton,
-                            TransparentTogglePushButton, TransparentDropDownToolButton, TransparentToolButton,
-                            PillPushButton, PillToolButton)
+from PySide6.QtCore import QEvent
+from PySide6.QtWidgets import QGridLayout
+from qfluentwidgets import (Action, RoundMenu)
 
 from .gallery_interface import GalleryInterface
+
+
 from ..common.translator import Translator
 
 
@@ -26,14 +22,16 @@ class BasicInputInterface(GalleryInterface):
         layout = QGridLayout(self)
         from .must_eat_page import must_eat_form
         from global_ import name
-        bottom_widget = must_eat_form(name)
-        layout.addWidget(bottom_widget, 1, 0)  # 放置在第 1 行，第 0 列
+        self.bottom_widget = must_eat_form(name)
+        layout.addWidget(self.bottom_widget, 1, 0)  # 放置在第 1 行，第 0 列
 
         # 设置行的伸展因子，让下方部件占据2/3的高度
         layout.setRowStretch(0, 1)
         layout.setRowStretch(1, 8)
 
-
+    def refresh11(self):
+        self.bottom_widget.refresh()
+        print('refresh!!!')
 
     def createStandMenu(self, button):
         menu = RoundMenu(parent=self)

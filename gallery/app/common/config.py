@@ -42,22 +42,21 @@ class Config(QConfig):
         "MainWindow", "Language", Language.AUTO, OptionsValidator(Language), LanguageSerializer(), restart=True)
 
     # Material
-    blurRadius  = RangeConfigItem("Material", "AcrylicBlurRadius", 15, RangeValidator(0, 40))
+    blurRadius = RangeConfigItem("Material", "AcrylicBlurRadius", 15, RangeValidator(0, 40))
 
     # software update
     checkUpdateAtStartUp = ConfigItem("Update", "CheckUpdateAtStartUp", True, BoolValidator())
 
 
 YEAR = 2023
-AUTHOR = "pyxiaozu"
+AUTHOR = "pyxiaozu and fluent_widget"
 VERSION = __version__
-HELP_URL = "https://pyqt-fluent-widgets.readthedocs.io/zh_CN/latest"
+HELP_URL = "https://www.buaa.edu.cn/"
 REPO_URL = "https://github.com/Chlience/BUAA-PYSUMMER-2023"
 EXAMPLE_URL = "https://www.buaa.edu.cn/index/xszx/szbh/st.htm"
 FEEDBACK_URL = "https://github.com/Chlience/BUAA-PYSUMMER-2023/issues"
-RELEASE_URL = "https://github.com/zhiyiYo/PyQt-Fluent-Widgets/releases/latest"
-SUPPORT_URL = "https://afdian.net/a/zhiyiYo"
-
+RELEASE_URL = "https://github.com/Chlience/BUAA-PYSUMMER-2023/releases"
+SUPPORT_URL = "https://www.buaa.edu.cn/"
 
 cfg = Config()
 qconfig.load()

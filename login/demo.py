@@ -16,12 +16,11 @@ class LoginWindow(AcrylicWindow, Ui_Form):
     def __init__(self, app):
         super().__init__()
         self.setupUi(self)
-        self.app = app
         # setTheme(Theme.DARK)
         setThemeColor('#28afe9')
         self.setTitleBar(SplitTitleBar(self))
         self.titleBar.raise_()
-
+        self.app = app
         self.label.setScaledContents(False)
         self.setWindowTitle('航味_吃在北航')
         self.setWindowIcon(QIcon(":/images/logo.png"))
@@ -101,14 +100,3 @@ class LoginWindow(AcrylicWindow, Ui_Form):
             dic = {'name': username, 'mi': password, 'cost': 0.0, 'star': [], 'last': []}
             from dbconnect import zhuce
             zhuce(dic)
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    # Internationalization
-    translator = FluentTranslator(QLocale())
-    app.installTranslator(translator)
-
-    w = LoginWindow()
-    w.show()
-    app.exec()
