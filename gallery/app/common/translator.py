@@ -11,7 +11,7 @@ class Translator(QObject):
         self.menus = self.tr('Menus & toolbars')
         self.icons = self.tr('搜索')
         self.layout = self.tr('档口')
-        self.dialogs = self.tr('Dialogs & flyouts')
+        self.dialogs = self.tr('推荐')
         self.scroll = self.tr('Scrolling')
         self.material = self.tr('Material')
         self.dateTime = self.tr('食堂')
