@@ -278,7 +278,7 @@ def jiacai(dict_data):
 
 
 def zhuce(dict_data):
-    cnx = pymysql.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
                           host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
