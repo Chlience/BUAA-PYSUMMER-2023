@@ -5,9 +5,9 @@ import pymysql
 global cnx
 
 
-def searchtest():
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+def search_test():
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     # 建立数据库连接
     # 创建游标对象
     cursor = cnx.cursor()
@@ -26,8 +26,8 @@ def searchtest():
 
 
 def findFood(house_name, count_name, food_name):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 执行 SQL 查询
     query = "SELECT * FROM 学二 WHERE 食堂 = 'house_name' AND 档口 = 'count_name' AND 菜名 = 'food_name';"
@@ -40,8 +40,8 @@ def findFood(house_name, count_name, food_name):
 
 
 def findAllFood():
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 执行 SQL 查询
     query = "SELECT * FROM 学二 "
@@ -58,8 +58,8 @@ def findAllFood():
 
 
 def eatchange(house_name, count_name, food_name):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 更新记录
     update_query = "UPDATE 学二 SET times = times + 1 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s;"
@@ -74,8 +74,8 @@ def eatchange(house_name, count_name, food_name):
 
 
 def loadcomment(house_name, count_name, food_name):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 选择数据库
     sql_query = "SELECT comments FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
@@ -99,8 +99,8 @@ def savecomments(house_name, count_name, food_name, comments):
     comments_json = json.dumps(comments)
 
     # 连接到数据库
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询数据库中对应项的评论列
@@ -127,11 +127,10 @@ def savecomments(house_name, count_name, food_name, comments):
     cnx.close()
 
 
-
 def getkindfood(kind):
     # 连接到数据库
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 查询符合条件的食物数据
     print(kind)
@@ -154,8 +153,8 @@ def getkindfood(kind):
 
 def getplacefood(place):
     # 连接到数据库
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 查询符合条件的食物数据
     print(place)
@@ -176,13 +175,13 @@ def getplacefood(place):
     return result
 
 
-def delafood(name):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+def delafood(username):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 删除记录
     delete_query = "DELETE FROM 学二 WHERE 菜名 = %s;"
-    cursor.execute(delete_query, (name,))
+    cursor.execute(delete_query, (username,))
     # 提交事务
     cnx.commit()
     # 关闭游标和连接
@@ -193,8 +192,8 @@ def delafood(name):
 
 
 def deldang(tang, dang):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 删除记录
     delete_query = "DELETE FROM 学二 WHERE 食堂 = %s AND 档口 = %s;"
@@ -208,8 +207,8 @@ def deldang(tang, dang):
 
 
 def gaidang(yuan, xian, tang):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 更新记录
@@ -225,8 +224,8 @@ def gaidang(yuan, xian, tang):
 
 
 def hasthis(cai, dang, tang):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
@@ -244,13 +243,13 @@ def hasthis(cai, dang, tang):
     return len(records) > 0
 
 
-def gaicai(name, dang, tang, price, cate, time):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+def gaicai(username, dang, tang, price, cate, time):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 更新记录
     update_query = "UPDATE 学二 SET 价格 = %s ,类别 = %s, 时间 = %s WHERE 菜名 = %s AND 档口 = %s AND 食堂 = %s;"
-    cursor.execute(update_query, (price, cate, time, name, dang, tang))
+    cursor.execute(update_query, (price, cate, time, username, dang, tang))
     # 提交更改
     cnx.commit()
     # 关闭游标和连接
@@ -259,13 +258,13 @@ def gaicai(name, dang, tang, price, cate, time):
 
 
 def jiacai(dict_data):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 插入记录
     insert_query = "INSERT INTO 学二 (菜名, 价格, 类别, 时间, 食堂, times, 档口, comments) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
-    data = (dict_data["name"], dict_data["price"], dict_data["category"],
+    data = (dict_data["username"], dict_data["price"], dict_data["category"],
             dict_data["time"], dict_data["place"], dict_data["times"], dict_data["count"],
             str(dict_data["comment"]))
     cursor.execute(insert_query, data)
@@ -280,12 +279,12 @@ def jiacai(dict_data):
 
 def zhuce(dict_data):
     cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 插入记录
-    insert_query = "INSERT INTO 用户示例 (name, mi, star, cost, last) VALUES (%s, %s, %s, %s, %s);"
-    data = (dict_data["name"], dict_data["mi"], str(dict_data["star"]),
+    insert_query = "INSERT INTO user (username, password, star, cost, last) VALUES (%s, %s, %s, %s, %s);"
+    data = (dict_data["username"], dict_data["password"], str(dict_data["star"]),
             dict_data["cost"], str(dict_data["last"]))
     cursor.execute(insert_query, data)
 
@@ -298,12 +297,12 @@ def zhuce(dict_data):
 
 
 def hasuser(user):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
-    select_query = "SELECT * FROM 用户示例 WHERE name = %s;"
+    select_query = "SELECT * FROM user WHERE username = %s;"
     cursor.execute(select_query, (user,))
 
     # 获取查询结果
@@ -317,17 +316,19 @@ def hasuser(user):
     return len(records) > 0
 
 
-def getuserdata(name):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+def getuserdata(username):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
-    select_query = "SELECT * FROM 用户示例 WHERE name = %s;"
-    cursor.execute(select_query, (name,))
+    select_query = "SELECT * FROM user WHERE username = %s;"
+    cursor.execute(select_query, (username,))
 
     # 获取查询结果的列名
     column_names = [column[0] for column in cursor.description]
+
+    print(column_names)
 
     # 获取查询结果
     records = cursor.fetchall()
@@ -348,14 +349,14 @@ def getuserdata(name):
     return user_data
 
 
-def addstar(name, food):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+def addstar(username, food):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
-    select_query = "SELECT star FROM 用户示例 WHERE name = %s;"
-    cursor.execute(select_query, (name,))
+    select_query = "SELECT star FROM user WHERE username = %s;"
+    cursor.execute(select_query, (username,))
     result = cursor.fetchall()
 
     # 将查询结果转换为列表形式
@@ -367,16 +368,16 @@ def addstar(name, food):
             updated_star = json.dumps(star_list)
 
             # 更新记录
-            update_query = "UPDATE 用户示例 SET star = %s WHERE name = %s;"
-            cursor.execute(update_query, (updated_star, name))
+            update_query = "UPDATE user SET star = %s WHERE username = %s;"
+            cursor.execute(update_query, (updated_star, username))
             cnx.commit()
     else:
         # 如果用户记录不存在，则创建新记录
         star_list = [food]
         updated_star = json.dumps(star_list)
 
-        insert_query = "INSERT INTO 用户示例 (name, star) VALUES (%s, %s);"
-        cursor.execute(insert_query, (name, updated_star))
+        insert_query = "INSERT INTO user (username, star) VALUES (%s, %s);"
+        cursor.execute(insert_query, (username, updated_star))
         cnx.commit()
 
     # 读取查询结果后关闭游标和连接
@@ -385,15 +386,15 @@ def addstar(name, food):
     cnx.close()
 
 
-def addcost(name, cost):
-    print(name)
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+def addcost(username, cost):
+    print(username)
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
-    select_query = "SELECT cost FROM 用户示例 WHERE name = %s;"
-    cursor.execute(select_query, (name,))
+    select_query = "SELECT cost FROM user WHERE username = %s;"
+    cursor.execute(select_query, (username,))
     result = cursor.fetchone()
 
     # 更新成本属性
@@ -404,13 +405,13 @@ def addcost(name, cost):
         new_cost = str(float(old_cost) + float(cost))
 
         # 更新记录
-        update_query = "UPDATE 用户示例 SET cost = %s WHERE name = %s;"
-        cursor.execute(update_query, (new_cost, name))
+        update_query = "UPDATE user SET cost = %s WHERE username = %s;"
+        cursor.execute(update_query, (new_cost, username))
         cnx.commit()
     else:
         # 如果用户记录不存在，则创建新记录
-        insert_query = "INSERT INTO 用户示例 (name, cost) VALUES (%s, %s);"
-        cursor.execute(insert_query, (name, cost))
+        insert_query = "INSERT INTO user (username, cost) VALUES (%s, %s);"
+        cursor.execute(insert_query, (username, cost))
         cnx.commit()
 
     # 处理所有结果
@@ -421,14 +422,14 @@ def addcost(name, cost):
     cnx.close()
 
 
-def lastchange(name, kind):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+def lastchange(username, kind):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
-    select_query = "SELECT last FROM 用户示例 WHERE name = %s;"
-    cursor.execute(select_query, (name,))
+    select_query = "SELECT last FROM user WHERE username = %s;"
+    cursor.execute(select_query, (username,))
     result = cursor.fetchone()
 
     # 更新 last 属性
@@ -441,13 +442,13 @@ def lastchange(name, kind):
             last_data = last_data[1:]
 
         # 更新记录
-        update_query = "UPDATE 用户示例 SET last = %s WHERE name = %s;"
-        cursor.execute(update_query, (json.dumps(last_data), name))
+        update_query = "UPDATE user SET last = %s WHERE username = %s;"
+        cursor.execute(update_query, (json.dumps(last_data), username))
         cnx.commit()
     else:
         # 如果用户记录不存在，则创建新记录
-        insert_query = "INSERT INTO 用户示例 (name, last) VALUES (%s, %s);"
-        cursor.execute(insert_query, (name, json.dumps([kind])))
+        insert_query = "INSERT INTO user (username, last) VALUES (%s, %s);"
+        cursor.execute(insert_query, (username, json.dumps([kind])))
         cnx.commit()
 
     # 处理所有结果
@@ -458,14 +459,14 @@ def lastchange(name, kind):
     cnx.close()
 
 
-def getlast(name):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+def getlast(username):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
-    select_query = "SELECT last FROM 用户示例 WHERE name = %s;"
-    cursor.execute(select_query, (name,))
+    select_query = "SELECT last FROM user WHERE username = %s;"
+    cursor.execute(select_query, (username,))
     result = cursor.fetchone()
     if result:
         json_list = json.loads(result[0])
@@ -476,14 +477,14 @@ def getlast(name):
     return json_list
 
 
-def getstar(name):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+def getstar(username):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询记录
-    select_query = "SELECT star FROM 用户示例 WHERE name = %s;"
-    cursor.execute(select_query, (name,))
+    select_query = "SELECT star FROM user WHERE username = %s;"
+    cursor.execute(select_query, (username,))
     result = cursor.fetchone()
 
     if result is not None:
@@ -498,18 +499,19 @@ def getstar(name):
         cnx.close()
         return []
 
+
 def changemi(user, newmi):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 更新记录
-    update_query = "UPDATE 用户示例 SET mi = %s WHERE name = %s;"
+    update_query = "UPDATE user SET password = %s WHERE username = %s;"
     cursor.execute(update_query, (newmi, user))
     cnx.commit()
 
     # 获取更新后的数据
-    select_query = "SELECT star, last, cost, mi FROM 用户示例 WHERE name = %s;"
+    select_query = "SELECT star, last, cost, password FROM user WHERE username = %s;"
     cursor.execute(select_query, (user,))
     result = cursor.fetchone()
 
@@ -517,7 +519,7 @@ def changemi(user, newmi):
         star_list = json.loads(result[0])
         last = result[1]
         cost = result[2]
-        mi = result[3]
+        password = result[3]
 
         # 关闭游标和连接
         cursor.close()
@@ -527,7 +529,7 @@ def changemi(user, newmi):
             'star': star_list,
             'last': last,
             'cost': cost,
-            'mi': mi
+            'password': password
         }
         return data
     else:
@@ -536,18 +538,19 @@ def changemi(user, newmi):
         cnx.close()
         return None
 
-def changename(name, newname):
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+
+def changename(username, newname):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 更新记录
-    update_query = "UPDATE 用户示例 SET name = %s WHERE name = %s;"
-    cursor.execute(update_query, (newname, name))
+    update_query = "UPDATE user SET username = %s WHERE username = %s;"
+    cursor.execute(update_query, (newname, username))
     cnx.commit()
 
     # 获取更新后的数据
-    select_query = "SELECT star, last, cost, mi FROM 用户示例 WHERE name = %s;"
+    select_query = "SELECT star, last, cost, password FROM user WHERE username = %s;"
     cursor.execute(select_query, (newname,))
     result = cursor.fetchone()
 
@@ -555,7 +558,7 @@ def changename(name, newname):
         star_list = json.loads(result[0])
         last = result[1]
         cost = result[2]
-        mi = result[3]
+        password = result[3]
 
         # 关闭游标和连接
         cursor.close()
@@ -565,7 +568,7 @@ def changename(name, newname):
             'star': star_list,
             'last': last,
             'cost': cost,
-            'mi': mi
+            'password': password
         }
         return data
     else:
@@ -575,29 +578,29 @@ def changename(name, newname):
         return None
 
 
-def changestar(name, star_item):
-    cnx = pymysql.connect(user='root', password='123456',
+def changestar(username, star_item):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
                           host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 获取当前记录的星级数据
-    select_query = "SELECT star, last, cost, mi FROM 用户示例 WHERE name = %s;"
-    cursor.execute(select_query, (name,))
+    select_query = "SELECT star, last, cost, password FROM user WHERE username = %s;"
+    cursor.execute(select_query, (username,))
     result = cursor.fetchone()
 
     if result is not None:
         star_list = json.loads(result[0])
         last = result[1]
         cost = result[2]
-        mi = result[3]
+        password = result[3]
 
         # 从星级数据列表中删除指定项
         if star_item in star_list:
             star_list.remove(star_item)
 
         # 更新记录
-        update_query = "UPDATE 用户示例 SET star = %s WHERE name = %s;"
-        cursor.execute(update_query, (json.dumps(star_list), name))
+        update_query = "UPDATE user SET star = %s WHERE username = %s;"
+        cursor.execute(update_query, (json.dumps(star_list), username))
         cnx.commit()
 
         # 关闭游标和连接
@@ -608,7 +611,7 @@ def changestar(name, star_item):
             'star': star_list,
             'last': last,
             'cost': cost,
-            'mi': mi
+            'password': password
         }
         return data
     else:
@@ -617,10 +620,11 @@ def changestar(name, star_item):
         cnx.close()
         return None
 
+
 def del_comment(canteen, stall, dish, comment_str):
     # 连接到数据库
-    cnx = pymysql.connect(user='root', password='123456',
-                                  host='chlience.cn', database='hangeat')
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
 
     # 查询要更新评论的评论项
@@ -658,11 +662,12 @@ def del_comment(canteen, stall, dish, comment_str):
     cursor.close()
     cnx.close()
 
+
 def delAll_user():
-    cnx = pymysql.connect(user='root', password='123456',
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
                           host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
-    sql_query = "GRANT DELETE ON hangeat.用户示例 TO 'root'@'chlience.cn';"
+    sql_query = "GRANT DELETE ON hangeat.user TO 'root'@'chlience.cn';"
     cursor.execute(sql_query)
     cnx.commit()  # 提交事务
     cursor.close()  # 关闭游标

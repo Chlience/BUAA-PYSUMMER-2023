@@ -17,6 +17,7 @@ def is_all_chinese(text):
     return bool(re.match(pattern, text))
 
 
+
 def has_chinese_characters(string):
     pattern = u'[\u4e00-\u9fa5]'
     return re.search(pattern, string) is not None
