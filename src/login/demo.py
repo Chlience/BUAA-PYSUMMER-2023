@@ -26,7 +26,7 @@ class LoginWindow(AcrylicWindow, Ui_Form):
         self.setWindowIcon(QIcon(":/images/logo.png"))
         self.resize(900, 650)
 
-        self.windowEffect.setMicaEffect(self.winId(), isDarkMode=False)
+        # self.windowEffect.setMicaEffect(self.winId(), isDarkMode=False)
         self.titleBar.titleLabel.setStyleSheet("""
             QLabel{
                 background: transparent;
