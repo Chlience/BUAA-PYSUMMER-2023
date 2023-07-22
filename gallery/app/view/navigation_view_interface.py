@@ -82,6 +82,7 @@ class PivotInterface(QWidget):
         qrouter.push(self.stackedWidget, widget.objectName())
 
 
+
 class SegmentedInterface(PivotInterface):
 
     Nav = SegmentedWidget

@@ -1,17 +1,18 @@
 # coding: utf-8
-from typing import List
+from typing import List, Union
 from PySide6.QtCore import Qt, Signal, QEasingCurve, QUrl, QSize
-from PySide6.QtGui import QIcon, QDesktopServices
+from PySide6.QtGui import QIcon, QDesktopServices, QPixmap
 from PySide6.QtWidgets import QApplication, QHBoxLayout, QFrame, QWidget
 
-from qfluentwidgets import NavigationAvatarWidget, NavigationItemPosition, MessageBox, FluentWindow, SplashScreen
+from qfluentwidgets import NavigationAvatarWidget, NavigationItemPosition, MessageBox, FluentWindow, SplashScreen, \
+    qrouter, FluentIconBase, NavigationTreeWidget
 from qfluentwidgets import FluentIcon as FIF
 
 from .gallery_interface import GalleryInterface
 from .home_page import HomeInterface
 from .must_eat_page_holder import BasicInputInterface
 from .canting_page import DateTimeInterface
-from .dialog_interface import DialogInterface
+from .groom_page import DialogInterface
 from .layout_interface import LayoutInterface
 from .search_food import IconInterface
 from .material_interface import MaterialInterface
@@ -21,7 +22,7 @@ from .scroll_interface import ScrollInterface
 from .status_info_interface import StatusInfoInterface
 from .setting_interface import SettingInterface
 from .text_interface import TextInterface
-from .view_interface import ViewInterface
+from .self_center_holder import ViewInterface
 from ..common.config import SUPPORT_URL
 from ..common.icon import Icon
 from ..common.signal_bus import signalBus
@@ -70,7 +71,6 @@ class MainWindow(FluentWindow):
         self.addSubInterface(self.homeInterface, FIF.HOME, self.tr('Home'))
         self.addSubInterface(self.iconInterface, Icon.EMOJI_TAB_SYMBOLS, t.icons)
         self.navigationInterface.addSeparator()
-
         pos = NavigationItemPosition.SCROLL
         self.addSubInterface(self.basicInputInterface, FIF.CHECKBOX, t.basicInput, pos)
         self.addSubInterface(self.dateTimeInterface, FIF.DATE_TIME, t.dateTime, pos)
@@ -83,21 +83,81 @@ class MainWindow(FluentWindow):
         self.addSubInterface(self.statusInfoInterface, FIF.CHAT, t.statusInfo, pos)
         self.addSubInterface(self.textInterface, Icon.TEXT, t.text, pos)
         self.addSubInterface(self.viewInterface, Icon.GRID, t.view, pos)
-
+        pixmap = QPixmap("gallery/app/resource/images/logoo.png")
+        if pixmap.isNull():
+            print("无法创建 QPixmap 对象")
+        else:
+            print("成功创建 QPixmap 对象")
         # add custom widget to bottom
         self.navigationInterface.addWidget(
             routeKey='avatar',
-            widget=NavigationAvatarWidget('zhiyiYo', ':/gallery/images/shoko.png'),
+            widget=NavigationAvatarWidget('', pixmap),
             onClick=self.onSupport,
             position=NavigationItemPosition.BOTTOM
         )
         self.addSubInterface(
             self.settingInterface, FIF.SETTING, self.tr('Settings'), NavigationItemPosition.BOTTOM)
 
+    def addSubInterface(self, interface: QWidget, icon: Union[FluentIconBase, QIcon, str], text: str,
+                        position=NavigationItemPosition.TOP, parent=None) -> NavigationTreeWidget:
+        """ add sub interface, the object name of `interface` should be set already
+        before calling this method
+
+        Parameters
+        ----------
+        interface: QWidget
+            the subinterface to be added
+
+        icon: FluentIconBase | QIcon | str
+            the icon of navigation item
+
+        text: str
+            the text of navigation item
+
+        position: NavigationItemPosition
+            the position of navigation item
+
+        parent: QWidget
+            the parent of navigation item
+        """
+        if not interface.objectName():
+            raise ValueError("The object name of `interface` can't be empty string.")
+        if parent and not parent.objectName():
+            raise ValueError("The object name of `parent` can't be empty string.")
+
+        self.stackedWidget.addWidget(interface)
+
+        # add navigation item
+        routeKey = interface.objectName()
+        item = self.navigationInterface.addItem(
+            routeKey=routeKey,
+            icon=icon,
+            text=text,
+            onClick=lambda: self.refresh12(interface),
+            position=position,
+            tooltip=text,
+            parentRouteKey=parent.objectName() if parent else None
+        )
+
+        # initialize selected item
+        if self.stackedWidget.count() == 1:
+            self.stackedWidget.currentChanged.connect(self._onCurrentInterfaceChanged)
+            self.navigationInterface.setCurrentItem(routeKey)
+            qrouter.setDefaultRouteKey(self.stackedWidget, routeKey)
+
+        return item
+
+    def refresh12(self, inter):
+        self.switchTo(inter)
+        print(12)
+        if hasattr(inter, 'refresh11') and callable(inter.refresh11):
+            inter.refresh11()
+            print(13)
+
     def initWindow(self):
         self.resize(960, 800)
         self.setMinimumWidth(760)
-        self.setWindowIcon(QIcon(':/gallery/images/logo.png'))
+        self.setWindowIcon(QIcon('gallery/app/resource/images/logoo.png'))
         self.setWindowTitle('航味__吃在北航')
 
         # create splash screen
@@ -113,12 +173,12 @@ class MainWindow(FluentWindow):
 
     def onSupport(self):
         w = MessageBox(
-            '🥰🥰🥰🥰🥰',
-            '🚀🚀🚀🚀🚀',
+            '喜欢我们航味系统吗',
+            '🚀🚀🚀🚀🚀🚀',
             self
         )
-        w.yesButton.setText('来啦老弟')
-        w.cancelButton.setText('下次一定')
+        w.yesButton.setText('喜欢捏')
+        w.cancelButton.setText('差不多得了')
         if w.exec():
             QDesktopServices.openUrl(QUrl(SUPPORT_URL))
 

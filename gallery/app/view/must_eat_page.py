@@ -99,20 +99,27 @@ class must_eat_form(Ui_Form, QWidget):
         self.setWindowTitle(name + '的必吃')
         self.listWidget.clear()
         self.listWidget_2.clear()
+        self.refresh()
+
+    def refresh(self):
+        self.listWidget.clear()
+        self.listWidget_2.clear()
         from dbconnect import getstar
-        me = getstar(name)
+        me = getstar(self.name)
         for entry in me:
             lm = QListWidgetItem(entry)
             lm.setFont("黑体")
             self.listWidget.addItem(lm)
         from dbconnect import findAllFood
         data = findAllFood()
+        print('reload')
         star_data = [(item, item['times']) for item in data if item["times"] > 0]
         star_data = sorted(star_data, key=lambda x: x[1], reverse=True)
         for i in star_data:
             lm = QListWidgetItem(i[0]['菜名'] + "   被购买" + str(i[1]) + '次\n')
             lm.setFont("黑体")
             self.listWidget_2.addItem(lm)
+
 
 
 

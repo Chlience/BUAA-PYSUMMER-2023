@@ -10,7 +10,6 @@ if __name__ == '__main__':
     # Internationalization
     translator = FluentTranslator(QLocale())
     app.installTranslator(translator)
-
     w = LoginWindow(app)
     w.show()
     app.exec()

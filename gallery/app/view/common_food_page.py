@@ -197,6 +197,9 @@ class count_list(food_list_view):
         self.data = data
         self.put_items()
 
+    def clear(self):
+        self.listWidget.clear()
+
 
 class NewWindow(QWidget):
     def __init__(self, item_text, foodname, cost, username, kind, housename, countname):

@@ -16,12 +16,11 @@ class LoginWindow(AcrylicWindow, Ui_Form):
     def __init__(self, app):
         super().__init__()
         self.setupUi(self)
-        self.app = app
         # setTheme(Theme.DARK)
         setThemeColor('#28afe9')
         self.setTitleBar(SplitTitleBar(self))
         self.titleBar.raise_()
-
+        self.app = app
         self.label.setScaledContents(False)
         self.setWindowTitle('航味_吃在北航')
         self.setWindowIcon(QIcon(":/images/logo.png"))
@@ -54,6 +53,8 @@ class LoginWindow(AcrylicWindow, Ui_Form):
         # 在文本浏览器中展示名言警句
         self.textBrowser.setPlainText("    欢迎您使用美食系统😃😃😃😃😃\n    " + quote)
         self.lineEdit_3.setText("老王")
+        self.lineEdit_4.returnPressed.connect(self.display)
+        self.lineEdit_3.returnPressed.connect(self.lineEdit_4.setFocus)
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
@@ -70,7 +71,9 @@ class LoginWindow(AcrylicWindow, Ui_Form):
         # 利用text Browser控件对象setText()函数设置界面显示
         from dbconnect import hasuser, getuserdata
         if username == "admin" and password == '123456':
-            #self.subman.show()
+            from .submanager import submanger
+            self.manage = submanger()
+            self.manage.show()
             pass
         elif username == 'admin':
             self.textBrowser.setText("你的用户名不正确！")
@@ -101,14 +104,3 @@ class LoginWindow(AcrylicWindow, Ui_Form):
             dic = {'name': username, 'mi': password, 'cost': 0.0, 'star': [], 'last': []}
             from dbconnect import zhuce
             zhuce(dic)
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    # Internationalization
-    translator = FluentTranslator(QLocale())
-    app.installTranslator(translator)
-
-    w = LoginWindow()
-    w.show()
-    app.exec()

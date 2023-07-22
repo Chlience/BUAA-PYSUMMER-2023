@@ -20,7 +20,7 @@ class LayoutInterface(GalleryInterface):
         self.layout = QGridLayout(self)
         from global_ import name
         from .counter_select_page import counter_list_holder
-        self.widget = counter_list_holder(name, "肯德基？")
+        self.widget = counter_list_holder("肯德基？", name)
         self.layout.addWidget(self.widget, 1, 0)
         self.layout.layout()
         self.layout.setRowStretch(0, 1)

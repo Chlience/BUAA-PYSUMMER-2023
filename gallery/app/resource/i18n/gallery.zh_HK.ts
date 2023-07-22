@@ -310,97 +310,97 @@
 <context>
     <name>DialogInterface</name>
     <message>
-        <location filename="../../view/dialog_interface.py" line="38"/>
+        <location filename="../../view/groom_page.py" line="38"/>
         <source>Show dialog</source>
         <translation>顯示對話框</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="24"/>
+        <location filename="../../view/groom_page.py" line="24"/>
         <source>A frameless message box</source>
         <translation>無邊框對話框</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="32"/>
+        <location filename="../../view/groom_page.py" line="32"/>
         <source>A message box with mask</source>
         <translation>帶遮罩的對話框</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="40"/>
+        <location filename="../../view/groom_page.py" line="40"/>
         <source>A color dialog</source>
         <translation>顏色對話框</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="79"/>
+        <location filename="../../view/groom_page.py" line="79"/>
         <source>This is a frameless message dialog</source>
         <translation>這是一個無邊框對話框</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="90"/>
+        <location filename="../../view/groom_page.py" line="90"/>
         <source>If the content of the message box is veeeeeeeeeeeeeeeeeeeeeeeeeery long, it will automatically wrap like this.</source>
         <translation>一生消えない傷でいいな，絆創膏の様にいつも包んでよ。貴方のそばでわがまま言いたいな，一分一秒刻み貴方を知り，あたしをあげる~</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="99"/>
+        <location filename="../../view/groom_page.py" line="99"/>
         <source>Choose color</source>
         <translation>選擇顏色</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="89"/>
+        <location filename="../../view/groom_page.py" line="89"/>
         <source>This is a message dialog with mask</source>
         <translation>這是一個帶遮罩的對話框</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="70"/>
+        <location filename="../../view/groom_page.py" line="70"/>
         <source>Show teaching tip</source>
         <translation>顯示氣泡彈窗</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="64"/>
+        <location filename="../../view/groom_page.py" line="64"/>
         <source>A teaching tip</source>
         <translation>氣泡彈窗</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="104"/>
+        <location filename="../../view/groom_page.py" line="104"/>
         <source>With respect, let&apos;s advance towards a new stage of the spin.</source>
         <translation>表達敬意吧，表達出敬意，然後邁向回旋的另一個全新階段！</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="117"/>
+        <location filename="../../view/groom_page.py" line="117"/>
         <source>The shortest shortcut is to take a detour.</source>
         <translation>最短的捷徑就是繞遠路，繞遠路才是我的最短捷徑。</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="72"/>
+        <location filename="../../view/groom_page.py" line="72"/>
         <source>A teaching tip with image and button</source>
         <translation>帶圖片和按鈕的氣泡彈窗</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="54"/>
+        <location filename="../../view/groom_page.py" line="54"/>
         <source>Show flyout</source>
         <translation>顯示浮出控件</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="48"/>
+        <location filename="../../view/groom_page.py" line="48"/>
         <source>A simple flyout</source>
         <translation>簡單的浮出控件</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="56"/>
+        <location filename="../../view/groom_page.py" line="56"/>
         <source>A flyout with image and button</source>
         <translation>帶圖片和按鈕的浮出控件</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="134"/>
+        <location filename="../../view/groom_page.py" line="134"/>
         <source>Believe in the spin, just keep believing!</source>
         <translation>相信回旋吧，隻管相信就是了！</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="143"/>
+        <location filename="../../view/groom_page.py" line="143"/>
         <source>Julius·Zeppeli</source>
         <translation>傑洛·齊貝林</translation>
     </message>
     <message>
-        <location filename="../../view/dialog_interface.py" line="143"/>
+        <location filename="../../view/groom_page.py" line="143"/>
         <source>Where the tennis ball will land when it touches the net, no one can predict.
 If that moment comes, I hope the &apos;goddess&apos; exists.
 In that case, I would accept it no matter which side the ball falls on.</source>
@@ -512,182 +512,182 @@ In that case, I would accept it no matter which side the ball falls on.</source>
 <context>
     <name>ListFrame</name>
     <message>
-        <location filename="../../view/view_interface.py" line="76"/>
+        <location filename="../../view/self_center_holder.py" line="76"/>
         <source>Star Platinum</source>
         <translation>白金之星</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="76"/>
+        <location filename="../../view/self_center_holder.py" line="76"/>
         <source>Hierophant Green</source>
         <translation>法皇之綠</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="77"/>
+        <location filename="../../view/self_center_holder.py" line="77"/>
         <source>Made in Haven</source>
         <translation>天堂製造</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="77"/>
+        <location filename="../../view/self_center_holder.py" line="77"/>
         <source>King Crimson</source>
         <translation>緋紅之王</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="78"/>
+        <location filename="../../view/self_center_holder.py" line="78"/>
         <source>Silver Chariot</source>
         <translation>銀色戰車</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="78"/>
+        <location filename="../../view/self_center_holder.py" line="78"/>
         <source>Crazy diamond</source>
         <translation>瘋狂鑽石</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="79"/>
+        <location filename="../../view/self_center_holder.py" line="79"/>
         <source>Metallica</source>
         <translation>金屬製品</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="79"/>
+        <location filename="../../view/self_center_holder.py" line="79"/>
         <source>Another One Bites The Dust</source>
         <translation>敗者食塵</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="80"/>
+        <location filename="../../view/self_center_holder.py" line="80"/>
         <source>Heaven&apos;s Door</source>
         <translation>黑蚊子多</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="81"/>
+        <location filename="../../view/self_center_holder.py" line="81"/>
         <source>The Grateful Dead</source>
         <translation>壯烈成仁</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="81"/>
+        <location filename="../../view/self_center_holder.py" line="81"/>
         <source>Stone Free</source>
         <translation>石之自由</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="82"/>
+        <location filename="../../view/self_center_holder.py" line="82"/>
         <source>The World</source>
         <translation>砸瓦魯多</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="82"/>
+        <location filename="../../view/self_center_holder.py" line="82"/>
         <source>Sticky Fingers</source>
         <translation>鋼鏈手指</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="83"/>
+        <location filename="../../view/self_center_holder.py" line="83"/>
         <source>Ozone Baby</source>
         <translation>臭氧寶寶</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="83"/>
+        <location filename="../../view/self_center_holder.py" line="83"/>
         <source>Love Love Deluxe</source>
         <translation>華麗摯愛</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="84"/>
+        <location filename="../../view/self_center_holder.py" line="84"/>
         <source>Hermit Purple</source>
         <translation>隱者之紫</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="84"/>
+        <location filename="../../view/self_center_holder.py" line="84"/>
         <source>Gold Experience</source>
         <translation>黃金體驗</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="85"/>
+        <location filename="../../view/self_center_holder.py" line="85"/>
         <source>King Nothing</source>
         <translation>虛無之王</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="85"/>
+        <location filename="../../view/self_center_holder.py" line="85"/>
         <source>Paper Moon King</source>
         <translation>紙月之王</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="86"/>
+        <location filename="../../view/self_center_holder.py" line="86"/>
         <source>Scary Monster</source>
         <translation>駭人噁獸</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="86"/>
+        <location filename="../../view/self_center_holder.py" line="86"/>
         <source>Mandom</source>
         <translation>男子領域</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="87"/>
+        <location filename="../../view/self_center_holder.py" line="87"/>
         <source>20th Century Boy</source>
         <translation>20世紀男孩</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="87"/>
+        <location filename="../../view/self_center_holder.py" line="87"/>
         <source>Tusk Act 4</source>
         <translation>牙 Act 4</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="88"/>
+        <location filename="../../view/self_center_holder.py" line="88"/>
         <source>Ball Breaker</source>
         <translation>鐵球破壞者</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="88"/>
+        <location filename="../../view/self_center_holder.py" line="88"/>
         <source>Sex Pistols</source>
         <translation>性感手槍</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="89"/>
+        <location filename="../../view/self_center_holder.py" line="89"/>
         <source>D4C • Love Train</source>
         <translation>D4C • 愛之列車</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="89"/>
+        <location filename="../../view/self_center_holder.py" line="89"/>
         <source>Born This Way</source>
         <translation>天生完美</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="90"/>
+        <location filename="../../view/self_center_holder.py" line="90"/>
         <source>SOFT &amp; WET</source>
         <translation>軟又溼</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="90"/>
+        <location filename="../../view/self_center_holder.py" line="90"/>
         <source>Paisley Park</source>
         <translation>佩斯利公園</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="91"/>
+        <location filename="../../view/self_center_holder.py" line="91"/>
         <source>Wonder of U</source>
         <translation>奇跡於你</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="91"/>
+        <location filename="../../view/self_center_holder.py" line="91"/>
         <source>Walking Heart</source>
         <translation>行走的心</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="92"/>
+        <location filename="../../view/self_center_holder.py" line="92"/>
         <source>Cream Starter</source>
         <translation>護霜旅行者</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="92"/>
+        <location filename="../../view/self_center_holder.py" line="92"/>
         <source>November Rain</source>
         <translation>十一月雨</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="93"/>
+        <location filename="../../view/self_center_holder.py" line="93"/>
         <source>Smooth Operators</source>
         <translation>調情聖手</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="93"/>
+        <location filename="../../view/self_center_holder.py" line="93"/>
         <source>The Matte Kudasai</source>
         <translation>片刻靜候</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="80"/>
+        <location filename="../../view/self_center_holder.py" line="80"/>
         <source>Killer Queen</source>
         <translation>殺手皇後💀</translation>
     </message>
@@ -1372,27 +1372,27 @@ In that case, I would accept it no matter which side the ball falls on.</source>
 <context>
     <name>TableFrame</name>
     <message>
-        <location filename="../../view/view_interface.py" line="149"/>
+        <location filename="../../view/self_center_holder.py" line="149"/>
         <source>Title</source>
         <translation>標題</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="149"/>
+        <location filename="../../view/self_center_holder.py" line="149"/>
         <source>Artist</source>
         <translation>歌手</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="149"/>
+        <location filename="../../view/self_center_holder.py" line="149"/>
         <source>Album</source>
         <translation>專輯</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="149"/>
+        <location filename="../../view/self_center_holder.py" line="149"/>
         <source>Year</source>
         <translation>年份</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="149"/>
+        <location filename="../../view/self_center_holder.py" line="149"/>
         <source>Duration</source>
         <translation>時長</translation>
     </message>
@@ -1544,32 +1544,32 @@ In that case, I would accept it no matter which side the ball falls on.</source>
 <context>
     <name>TreeFrame</name>
     <message>
-        <location filename="../../view/view_interface.py" line="108"/>
+        <location filename="../../view/self_center_holder.py" line="108"/>
         <source>JoJo 1 - Phantom Blood</source>
         <translation>JoJo 1 - 幻影之血</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="109"/>
+        <location filename="../../view/self_center_holder.py" line="109"/>
         <source>Jonathan Joestar</source>
         <translation>喬納森·喬斯達</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="109"/>
+        <location filename="../../view/self_center_holder.py" line="109"/>
         <source>Dio Brando</source>
         <translation>迪奧·佈蘭度</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="109"/>
+        <location filename="../../view/self_center_holder.py" line="109"/>
         <source>Will A. Zeppeli</source>
         <translation>威廉·A·齊貝林</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="116"/>
+        <location filename="../../view/self_center_holder.py" line="116"/>
         <source>JoJo 3 - Stardust Crusaders</source>
         <translation>JoJo3 - 星塵鬥士</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="117"/>
+        <location filename="../../view/self_center_holder.py" line="117"/>
         <source>Jotaro Kujo</source>
         <translation></translation>
     </message>
@@ -1577,22 +1577,22 @@ In that case, I would accept it no matter which side the ball falls on.</source>
 <context>
     <name>ViewInterface</name>
     <message>
-        <location filename="../../view/view_interface.py" line="40"/>
+        <location filename="../../view/self_center_holder.py" line="40"/>
         <source>A simple TreeView</source>
         <translation>簡單的樹狀組件</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="47"/>
+        <location filename="../../view/self_center_holder.py" line="47"/>
         <source>A TreeView with Multi-selection enabled</source>
         <translation>啟用複選框的樹狀組件</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="32"/>
+        <location filename="../../view/self_center_holder.py" line="32"/>
         <source>A simple TableView</source>
         <translation>簡單的表格組件</translation>
     </message>
     <message>
-        <location filename="../../view/view_interface.py" line="25"/>
+        <location filename="../../view/self_center_holder.py" line="25"/>
         <source>A simple ListView</source>
         <translation>簡單的列表組件</translation>
     </message>

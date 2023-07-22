@@ -63,13 +63,16 @@ class counter_list_holder(QWidget, Ui_Form):
         from dbconnect import getplacefood
         self.data = getplacefood(text)
         self.listWidget.clear()
-        fendang = {}
+        self.Widget_2.clear()
+        self.fendang = {}
+        print(111111)
+        print(self.fendang)
         for dic in self.data:
-            if str(dic["档口"]) not in fendang:
-                fendang[str(dic["档口"])] = []
-            fendang[str(dic["档口"])].append(dic)
-        print('fendang='+str(fendang))
-        for item in fendang.keys():
+            if str(dic["档口"]) not in self.fendang:
+                self.fendang[str(dic["档口"])] = []
+            self.fendang[str(dic["档口"])].append(dic)
+        print(self.fendang)
+        for item in self.fendang.keys():
             # 创建一个QListWidgetItem对象
             list_item = QListWidgetItem()
             # 设置该项的文本为数组中的元素
@@ -77,7 +80,10 @@ class counter_list_holder(QWidget, Ui_Form):
             # 将该项添加到QListWidget中
             self.listWidget.addItem(list_item)
         self.listWidget.itemClicked.connect(
-            lambda item: self.flush(fendang[str(item.text())], item.text()))
+            lambda item: self.flush(item.text()))
 
-    def flush(self, data, dang):
+    def flush(self, dang):
+        data = self.fendang[str(dang)]
+        print(type(data))
+        print('data='+str(data))
         self.Widget_2.reload(data, dang)
