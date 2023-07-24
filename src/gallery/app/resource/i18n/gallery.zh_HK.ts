@@ -708,7 +708,7 @@ In that case, I would accept it no matter which side the ball falls on.</source>
 <context>
     <name>MaterialInterface</name>
     <message>
-        <location filename="../../view/material_interface.py" line="30"/>
+        <location filename="../../view/food_item_page_holder.py" line="30"/>
         <source>Acrylic label</source>
         <translation>亞克力標籤</translation>
     </message>

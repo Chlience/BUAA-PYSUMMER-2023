@@ -30,10 +30,16 @@ def findFood(house_name, count_name, food_name):
                           host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 执行 SQL 查询
-    query = "SELECT * FROM 学二 WHERE 食堂 = 'house_name' AND 档口 = 'count_name' AND 菜名 = 'food_name';"
-    cursor.execute(query)
+    query = "SELECT * FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s;"
+    params = (house_name, count_name, food_name)
+    print(params)
+    cursor.execute(query, params)
+    columns = [column[0] for column in cursor.description]
+    rows = cursor.fetchall()
     # 获取查询结果
-    result = cursor.fetchall()
+    result = []
+    for row in rows:
+        result.append(dict(zip(columns, row)))
     cursor.close()
     cnx.close()
     return result
@@ -64,65 +70,9 @@ def eatchange(house_name, count_name, food_name):
     # 更新记录
     update_query = "UPDATE 学二 SET times = times + 1 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s;"
     update_params = (house_name, count_name, food_name)
-    print(update_params)
     cursor.execute(update_query, update_params)
     cnx.commit()
-    print(cursor.rowcount)
     # 关闭游标和连接
-    cursor.close()
-    cnx.close()
-
-
-def loadcomment(house_name, count_name, food_name):
-    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
-                          host='chlience.cn', database='hangeat')
-    cursor = cnx.cursor()
-    # 选择数据库
-    sql_query = "SELECT comments FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
-    values = (house_name, count_name, food_name)
-    print(values)
-    cursor.execute(sql_query, values)
-    result = cursor.fetchone()  # 获取查询结果
-    print(type(result))
-    cursor.close()
-    cnx.close()
-    if result is not None:
-        comments_json = result[0]
-        comments = json.loads(comments_json)  # 解析 JSON
-        return comments
-    else:
-        return None
-
-
-def savecomments(house_name, count_name, food_name, comments):
-    # 将评论列表转换为 JSON 字符串
-    comments_json = json.dumps(comments)
-
-    # 连接到数据库
-    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
-                          host='chlience.cn', database='hangeat')
-    cursor = cnx.cursor()
-
-    # 查询数据库中对应项的评论列
-    sql_query = "SELECT comments FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
-    values = (house_name, count_name, food_name)
-
-    cursor.execute(sql_query, values)
-    result = cursor.fetchone()
-
-    if result is not None and result[0] is not None:
-        existing_comments = json.loads(result[0])
-        existing_comments += comments
-        comments_json = json.dumps(existing_comments)
-
-    # 更新数据库中对应项的评论列
-    sql_update = "UPDATE 学二 SET comments = %s WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
-    update_values = (comments_json, house_name, count_name, food_name)
-
-    cursor.execute(sql_update, update_values)
-    cnx.commit()
-
-    # 关闭数据库连接
     cursor.close()
     cnx.close()
 
@@ -349,7 +299,7 @@ def getuserdata(username):
     return user_data
 
 
-def addstar(username, food):
+def addstar(username, food,count, house):
     cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
                           host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
@@ -358,13 +308,13 @@ def addstar(username, food):
     select_query = "SELECT star FROM user WHERE username = %s;"
     cursor.execute(select_query, (username,))
     result = cursor.fetchall()
-
+    info= house+'-'+count+'-'+food
     # 将查询结果转换为列表形式
     if result:
         star_list = json.loads(result[0][0])
         # 检查食物是否已存在于星级列表中
-        if food not in star_list:
-            star_list.append(food)
+        if info not in star_list:
+            star_list.append(info)
             updated_star = json.dumps(star_list)
 
             # 更新记录
@@ -373,7 +323,7 @@ def addstar(username, food):
             cnx.commit()
     else:
         # 如果用户记录不存在，则创建新记录
-        star_list = [food]
+        star_list = [info]
         updated_star = json.dumps(star_list)
 
         insert_query = "INSERT INTO user (username, star) VALUES (%s, %s);"
@@ -382,6 +332,10 @@ def addstar(username, food):
 
     # 读取查询结果后关闭游标和连接
     cursor.fetchall()
+    update_query = "UPDATE 学二 SET 收藏人数 = 收藏人数 + 1 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s;"
+    update_params = (house, count, food)
+    cursor.execute(update_query, update_params)
+    cnx.commit()
     cursor.close()
     cnx.close()
 
@@ -578,47 +532,42 @@ def changename(username, newname):
         return None
 
 
-def changestar(username, star_item):
+def changestar(username, food):
+    list = food.split('-')
+    food_name = list[0]
+    count_name = list[1]
+    house_name = list[2]
     cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
                           host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
-
+    rev_food = house_name+'-'+count_name+'-'+food_name
     # 获取当前记录的星级数据
-    select_query = "SELECT star, last, cost, password FROM user WHERE username = %s;"
+    select_query = "SELECT star FROM user WHERE username = %s;"
     cursor.execute(select_query, (username,))
     result = cursor.fetchone()
 
     if result is not None:
         star_list = json.loads(result[0])
-        last = result[1]
-        cost = result[2]
-        password = result[3]
-
+        print(star_list)
+        print(rev_food)
         # 从星级数据列表中删除指定项
-        if star_item in star_list:
-            star_list.remove(star_item)
+        if rev_food in star_list:
+            star_list.remove(rev_food)
 
         # 更新记录
         update_query = "UPDATE user SET star = %s WHERE username = %s;"
         cursor.execute(update_query, (json.dumps(star_list), username))
         cnx.commit()
-
+        update_query = "UPDATE 学二 SET 收藏人数 = 收藏人数 - 1 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s;"
+        update_params = (house_name, count_name, food_name)
+        cursor.execute(update_query, update_params)
+        cnx.commit()
         # 关闭游标和连接
-        cursor.close()
-        cnx.close()
+    cursor.close()
+    cnx.close()
 
-        data = {
-            'star': star_list,
-            'last': last,
-            'cost': cost,
-            'password': password
-        }
-        return data
-    else:
-        # 关闭游标和连接
-        cursor.close()
-        cnx.close()
-        return None
+
+
 
 
 def del_comment(canteen, stall, dish, comment_str):
@@ -672,3 +621,128 @@ def delAll_user():
     cnx.commit()  # 提交事务
     cursor.close()  # 关闭游标
     cnx.close()  # 关闭数据库连接
+
+def addrank(username, food,count, house, score):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
+    cursor = cnx.cursor()
+
+    # 查询记录
+    select_query = "SELECT 评分 FROM user WHERE username = %s"
+    cursor.execute(select_query, (username,))
+    result = cursor.fetchone()
+    info= house+'-'+count+'-'+food
+    score_dict = json.loads(result[0])
+    # print(type(score_dict))
+    # print(score_dict)
+    # print(info)
+    # last_score = score_dict.get(info, -1)
+    score_dict[info] = score
+    new_score_json = json.dumps(score_dict)
+    # 将查询结果转换为列表形式
+    update_query = f"UPDATE user SET 评分='{new_score_json}' WHERE username='{username}'"
+    cursor.execute(update_query)
+
+    select_query = "SELECT 评分人数, 评分 FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
+    cursor.execute(select_query, (house, count, food))
+    result = cursor.fetchone()
+    if result:
+        num_ratings = result[0]
+        ave_score = result[1]
+        ave_score = (ave_score*num_ratings + score) / (num_ratings+1)
+        num_ratings += 1
+        ave_score = round(ave_score, 2)
+        update_query = "UPDATE 学二 SET 评分人数 = %s, 评分 = %s WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
+        cursor.execute(update_query, (num_ratings, ave_score, house, count, food))
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+
+def getrank(user, food, count, house):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
+    cursor = cnx.cursor()
+    select_query = "SELECT 评分 FROM user WHERE username = %s"
+    cursor.execute(select_query, (user))
+    result = cursor.fetchone()
+    print(result)
+    info = house + '-' + count + '-' + food
+    score_dict = json.loads(result[0])
+    result = score_dict.get(info, -1)
+    cursor.close()
+    cnx.close()
+    return result
+
+def add_comment(text, house, count, food):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat', charset='utf8')
+    cursor = cnx.cursor()
+    print('nnn  '+text)
+    # 查询记录
+    select_query = "SELECT comments FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
+    cursor.execute(select_query, (house,count,food))
+    result = cursor.fetchone()
+    erl = result[0]
+    score_list = json.loads(erl)
+    score_list.insert(0, text)
+    comment_json = json.dumps(score_list)
+    # 将查询结果转换为列表形式
+    sql_update = "UPDATE 学二 SET comments = %s WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
+    update_values = (comment_json, house, count, food)
+    cursor.execute(sql_update, update_values)
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+
+def loadcomment(house_name, count_name, food_name):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat', charset='utf8')
+    cursor = cnx.cursor()
+    # 选择数据库
+    sql_query = "SELECT comments FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
+    values = (house_name, count_name, food_name)
+    print(values)
+    cursor.execute(sql_query, values)
+    result = cursor.fetchone()  # 获取查询结果
+    print(type(result))
+    cursor.close()
+    cnx.close()
+    if result is not None:
+        comments_json = result[0]
+        comments = json.loads(comments_json)  # 解析 JSON
+        return comments
+    else:
+        return None
+
+
+def savecomments(house_name, count_name, food_name, comments):
+    # 将评论列表转换为 JSON 字符串
+    comments_json = json.dumps(comments)
+
+    # 连接到数据库
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
+    cursor = cnx.cursor()
+
+    # 查询数据库中对应项的评论列
+    sql_query = "SELECT comments FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
+    values = (house_name, count_name, food_name)
+
+    cursor.execute(sql_query, values)
+    result = cursor.fetchone()
+
+    if result is not None and result[0] is not None:
+        existing_comments = json.loads(result[0])
+        existing_comments += comments
+        comments_json = json.dumps(existing_comments)
+
+    # 更新数据库中对应项的评论列
+    sql_update = "UPDATE 学二 SET comments = %s WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
+    update_values = (comments_json, house_name, count_name, food_name)
+
+    cursor.execute(sql_update, update_values)
+    cnx.commit()
+
+    # 关闭数据库连接
+    cursor.close()
+    cnx.close()
