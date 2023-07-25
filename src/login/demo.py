@@ -91,7 +91,7 @@ class LoginWindow(AcrylicWindow, Ui_Form):
                 from gallery import demo
                 global_.name = username
                 demo.mainLogic(username, self.app)
-                QTimer.singleShot(800, self.close)
+                self.close()
             else:
                 self.createErrorInfoBar("Login Error", "Username or password incorrect")
         else:
