@@ -11,6 +11,7 @@ class DateTimeInterface(GalleryInterface):
     """ Date time interface """
 
     def __init__(self, parent=None):
+        self.parent = parent
         self.title = ''
         t = Translator()
         super().__init__(
@@ -19,25 +20,25 @@ class DateTimeInterface(GalleryInterface):
             parent=parent
         )
         self.setObjectName('dateTimeInterface')
-        self.layout = QGridLayout(self)
-        from global_ import name
-        from .common_food_page import canting_view
-        self.widget = canting_view(name, "肯德基？")
-        self.layout.addWidget(self.widget, 1, 0)
-        self.layout.layout()
-        self.layout.setRowStretch(0, 1)
-        self.layout.setRowStretch(1, 5)
+        from .new_canting_page import canting_view
+        self.widget = canting_view('', self)
+        self.vBoxLayout.addWidget(self.widget)
 
     def change(self, canting_name):
         self.title = canting_name
         self.toolBar.changeTitle(canting_name)
-        self.layout.removeWidget(self.widget)
+        self.vBoxLayout.removeWidget(self.widget)
         self.widget.deleteLater()
-        from global_ import name
-        from .common_food_page import canting_view
-        self.widget = canting_view(name, canting_name)
-        self.layout.addWidget(self.widget)
-        self.layout.layout()
+        from .new_canting_page import canting_view
+        self.widget = canting_view(canting_name, self)
+        self.vBoxLayout.addWidget(self.widget)
+
+    def switch_to_food(self, food_name, count_name, house_name):
+        self.parent.switch_to_food(food_name, count_name, house_name)
+
+    def goto_sub(self, t):
+        self.parent.goto_sub(t)
+
 
 
 

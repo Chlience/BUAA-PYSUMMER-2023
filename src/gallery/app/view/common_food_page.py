@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 from random import choice
 
-from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect, Qt)
-from PySide6.QtGui import (QFont)
-from PySide6.QtWidgets import (QLabel, QListWidget, QWidget, QVBoxLayout, QLineEdit, QPushButton, QSpacerItem,
-                               QSizePolicy, QStackedWidget, QHBoxLayout, QListWidgetItem)
-from qfluentwidgets import ListWidget, PushButton, LineEdit
-from qfluentwidgets.window.stacked_widget import StackedWidget
+from PySide6.QtCore import (QMetaObject, Qt)
+from PySide6.QtGui import (QFont, QContextMenuEvent, QAction)
+from PySide6.QtWidgets import (QLabel, QWidget, QVBoxLayout, QHBoxLayout, QListWidgetItem)
+from qfluentwidgets import ListWidget, PushButton, LineEdit, DWMMenu
 
 
 ################################################################################
@@ -25,7 +23,7 @@ class Ui_eating(object):
         eating.resize(532, 695)
         self.listWidget = ListWidget(eating)
         self.listWidget.setObjectName(u"listWidget")
-        #self.listWidget.setGeometry(QRect(100, 100, 400, 250))
+        # self.listWidget.setGeometry(QRect(100, 100, 400, 250))
         font = QFont()
         font.setFamilies([u"\u5b8b\u4f53"])
         font.setBold(True)
@@ -49,7 +47,8 @@ class simple_search_view(QWidget, Ui_eating):
         self.input_edit = LineEdit(self)
         self.input_edit.setPlaceholderText("输入关键词就能查找啦\U0001F600")
         self.listWidget.itemClicked.connect(
-            lambda item: self.mother.switch_to_food(item.text().split()[0], item.text().split()[8],item.text().split()[6]))
+            lambda item: self.mother.switch_to_food(item.text().split()[0], item.text().split()[8],
+                                                    item.text().split()[6]))
         self.layout.addWidget(self.input_edit)
         self.layout.addWidget(self.listWidget)
         # 创建按钮
@@ -62,6 +61,7 @@ class simple_search_view(QWidget, Ui_eating):
         self.count_times = 0
         self.layout.setContentsMargins(200, 50, 200, 30)
         self.setLayout(self.layout)
+
     def put_items(self):
         import dbconnect
         self.data = dbconnect.findAllFood()
@@ -141,14 +141,13 @@ class simple_search_view(QWidget, Ui_eating):
         return max_length
 
 
-
 class food_list_view(QWidget, Ui_eating):
     def __init__(self, user):
         super().__init__()
         self.setupUi(self)
         self.user = user
         self.stack = NewWindow('', '', 0, 0, 0, 0, 0)
-        #self.stack.setGeometry(500, 0, 400, 250)
+        # self.stack.setGeometry(500, 0, 400, 250)
         self.food = []
         self.put_items()
         self.listWidget.itemClicked.connect(
@@ -158,6 +157,9 @@ class food_list_view(QWidget, Ui_eating):
         self.layout = QVBoxLayout()
         self.input_edit = LineEdit(self)
         self.input_edit.setPlaceholderText("输入关键词就能查找啦\U0001F600")
+        wid = QWidget()
+        wid.setFixedHeight(22)
+        self.layout.addWidget(wid)
         self.layout.addWidget(self.input_edit)
         self.layout.addWidget(self.listWidget)
         # 创建按钮
@@ -168,10 +170,8 @@ class food_list_view(QWidget, Ui_eating):
         self.button2.clicked.connect(self.sortByCost)
         self.layout.addWidget(self.button2, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
         self.hLayout = QHBoxLayout()
-        v2layout = QVBoxLayout()
-        v2layout.addWidget(self.stack)
         self.hLayout.addLayout(self.layout)
-        self.hLayout.addLayout(v2layout)
+        self.hLayout.addWidget(self.stack)
         self.setLayout(self.hLayout)
         self.count_times = 0
 
@@ -179,16 +179,22 @@ class food_list_view(QWidget, Ui_eating):
         import dbconnect
         self.data = dbconnect.findAllFood()
         for da in self.data:
-            self.listWidget.addItem(
-                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口']))
+            item = QListWidgetItem(
+                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口'])
+            )
+            item.setFont(self.font)
+            self.listWidget.addItem(item)
 
     def sortByCost(self):
         sorted_items = sorted(self.data, key=lambda x: float(x['价格']), reverse=bool(self.count_times & 1))
         self.listWidget.clear()
         # 根据排序结果重新创建标签
         for da in sorted_items:
-            label = "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口'])
-            self.listWidget.addItem(label)
+            item = QListWidgetItem(
+                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口'])
+            )
+            item.setFont(self.font)
+            self.listWidget.addItem(item)
         self.count_times += 1
 
     def sortByKeyword(self):
@@ -204,8 +210,11 @@ class food_list_view(QWidget, Ui_eating):
         self.listWidget.clear()
         # 根据排序结果重新创建标签
         for da in sorted_items:
-            label = "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口'])
-            self.listWidget.addItem(label)
+            item = QListWidgetItem(
+                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口'])
+            )
+            item.setFont(self.font)
+            self.listWidget.addItem(item)
 
     def calculateScore(self, item, keyword):
         # 实现自定义的相关度计算逻辑
@@ -263,9 +272,11 @@ class canting_view(food_list_view):
         from dbconnect import getplacefood
         self.data = getplacefood(self.tName)
         for da in self.data:
-            self.listWidget.addItem(
-                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口']))
-
+            item = QListWidgetItem(
+                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口'])
+            )
+            item.setFont(self.font)
+            self.listWidget.addItem(item)
 
 
 class catagory_food(food_list_view):
@@ -281,17 +292,47 @@ class catagory_food(food_list_view):
 
 
 class count_list(food_list_view):
-    def __init__(self, uname, data, count_name):
+    def __init__(self, uname, data, count_name, mother):
         self.data = data
         self.uname = uname
+        self.mother = mother
+        self.font = QFont('宋体', 12)
         super().__init__(uname)
         self.setWindowTitle(count_name)
+        self.listWidget.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.listWidget.customContextMenuRequested.connect(self.show_menu)
+        self.create_actions()
+        self.create_menu()
+        self.input_edit.setPlaceholderText("输入关键词就能查找啦\U0001F600 / 右键进入特定菜品")
+
+    def create_actions(self):
+        self.action_delete = QAction("", self)
+        if self.listWidget.currentItem():
+            item_text = self.listWidget.currentItem().text()
+            self.action_delete.triggered.connect(
+                self.mother.switch_to_food(item_text.split()[0], item_text.split()[8],
+                                                        item_text.split()[6]))
+
+    def create_menu(self):
+        self.context_menu = DWMMenu(self)
+        self.context_menu.hide()
+        self.context_menu.addAction(self.action_delete)
+
+    def show_menu(self, position):
+        index = self.listWidget.indexAt(position)
+        if index.isValid():
+            self.create_actions()
+
+
 
     def put_items(self):
         self.listWidget.clear()
         for da in self.data:
-            self.listWidget.addItem(
-                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口']))
+            item = QListWidgetItem(
+                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口'])
+            )
+            item.setFont(self.font)
+            self.listWidget.addItem(item)
 
     def reload(self, data, count_name):
         self.listWidget.clear()
@@ -315,8 +356,6 @@ class NewWindow(QWidget):
         font = QFont()
         font.setBold(True)  # 设置字体为粗体
         font.setPointSize(12)  # 设置字体大小
-        self.setWindowTitle("真的好吃的")
-        #self.setGeometry(500, 100, 400, 250)
         self.layout = QVBoxLayout()
         label = QLabel(item_text)
         self.layout.addWidget(label)
@@ -349,7 +388,7 @@ class NewWindow(QWidget):
         print('star' + self.food_name)
         name = self.username
         from dbconnect import addstar
-        addstar(name, self.food_name, self.count_name,self.house_name)
+        addstar(name, self.food_name, self.count_name, self.house_name)
 
     def eat(self):
         if self.food_name == '':

@@ -32,7 +32,6 @@ class comment_window(QWidget):
         vlayout = QVBoxLayout()
         vlayout.addWidget(self.comment_textedit)
         vlayout.addWidget(self.submit_button)
-        self.submit_button.setFixedWidth(0.4*self.width())
         vlayout.addWidget(self.comment_list)
         vlayout.addLayout(vlayout)
         vlayout.setStretchFactor(self.comment_textedit, 1)

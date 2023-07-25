@@ -14,6 +14,7 @@ class ViewInterface(GalleryInterface):
             subtitle="fix yourself",
             parent=parent
         )
+        self.mother = parent
         self.setObjectName('viewInterface')
         from .self_center import self_manage_center
         from global_ import name
@@ -23,3 +24,6 @@ class ViewInterface(GalleryInterface):
 
     def refresh11(self):
         self.center.refresh12()
+
+    def switch_to_food(self, t,d,f):
+        self.mother.switch_to_food(f,d,t)

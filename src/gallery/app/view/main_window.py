@@ -11,10 +11,10 @@ from qfluentwidgets import FluentIcon as FIF
 from .gallery_interface import GalleryInterface
 from .home_page import HomeInterface
 from .must_eat_page_holder import BasicInputInterface
-from .canting_page import DateTimeInterface
+from .canting_page_holder import DateTimeInterface
 from .groom_page import DialogInterface
 from .layout_interface import LayoutInterface
-from .search_food import IconInterface
+from .search_food_holder import IconInterface
 from .food_item_page_holder import MaterialInterface
 from .menu_interface import MenuInterface
 from .navigation_view_interface import NavigationViewInterface
@@ -127,15 +127,21 @@ class MainWindow(FluentWindow):
 
         # add navigation item
         routeKey = interface.objectName()
-        item = self.navigationInterface.addItem(
-            routeKey=routeKey,
-            icon=icon,
-            text=text,
-            onClick=lambda: self.refresh12(interface),
-            position=position,
-            tooltip=text,
-            parentRouteKey=parent.objectName() if parent else None
-        )
+        item = None
+        if interface != self.materialInterface and interface != \
+                self.dateTimeInterface and self.menuInterface != interface and self.scrollInterface != interface and \
+                self.navigationViewInterface != interface and interface != self.statusInfoInterface:
+            from global_ import name
+            if not (interface == self.textInterface and name != 'admin'):
+                item = self.navigationInterface.addItem(
+                    routeKey=routeKey,
+                    icon=icon,
+                    text=text,
+                    onClick=lambda: self.refresh12(interface),
+                    position=position,
+                    tooltip=text,
+                    parentRouteKey=parent.objectName() if parent else None
+                )
 
         # initialize selected item
         if self.stackedWidget.count() == 1:
@@ -194,4 +200,11 @@ class MainWindow(FluentWindow):
             if w.objectName() == "materialInterface":
                 self.stackedWidget.setCurrentWidget(w, False)
                 w.change(food_name, count_name, house_name)
-                #self.parent.switch_to_food(food_name, count_name, house_name)
+                # self.parent.switch_to_food(food_name, count_name, house_name)
+
+    def goto_sub(self, t):
+        interfaces = self.findChildren(GalleryInterface)
+        for w in interfaces:
+            if w.objectName() == "layoutInterface":
+                self.stackedWidget.setCurrentWidget(w, False)
+                w.set_t(t)
