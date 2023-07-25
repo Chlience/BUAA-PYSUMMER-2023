@@ -6,6 +6,7 @@
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
+import re
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt)
 from PySide6.QtGui import (QFont)
@@ -42,7 +43,7 @@ class Ui_Form(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.setObjectName(u"comboBox")
-        self.comboBox.setMinimumSize(QSize(90, 60))
+        self.comboBox.setMinimumSize(QSize(150, 60))
         font = QFont()
         font.setFamilies([u"\u534e\u6587\u4e2d\u5b8b"])
         font.setPointSize(16)
@@ -66,7 +67,6 @@ class Ui_Form(object):
         self.make_comment_pushButton.setIconSize(QSize(16, 20))
 
         self.horizontalLayout.addWidget(self.make_comment_pushButton)
-
 
         self.gridLayout.addLayout(self.horizontalLayout, 7, 4, 1, 1)
 
@@ -154,17 +154,17 @@ class Ui_Form(object):
 
         self.gridLayout.addWidget(self.label, 0, 1, 1, 4)
 
-
         self.verticalLayout.addLayout(self.gridLayout)
-
 
         self.retranslateUi(Form)
 
         QMetaObject.connectSlotsByName(Form)
+
     # setupUi
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
+        self.comboBox.setItemText(0, QCoreApplication.translate("Form", u"None", None))
         self.comboBox.setItemText(0, QCoreApplication.translate("Form", u"1", None))
         self.comboBox.setItemText(1, QCoreApplication.translate("Form", u"2", None))
         self.comboBox.setItemText(2, QCoreApplication.translate("Form", u"3", None))
@@ -180,8 +180,6 @@ class Ui_Form(object):
         self.level_label.setText(QCoreApplication.translate("Form", u"\u8bc4\u5206", None))
         self.label.setText(QCoreApplication.translate("Form", u"\u83dc\u540d", None))
         self.buy_pushButton.setText('购买')
-
-
 
 
 class food_item(Ui_Form, QWidget):
@@ -202,22 +200,22 @@ class food_item(Ui_Form, QWidget):
             self.make_comment_pushButton.clicked.connect(self.cm_show)
             self.buy_pushButton.clicked.connect(self.buyOne)
             self.comboBox.currentIndexChanged.connect(self.handle_combo_box_changed)
-        self.cost_label.setText('价格：'+str(info_dic['价格']))
-        self.position_label.setText('位置：'+info_dic['食堂'])
-        self.label.setText(info_dic['菜名']+'('+info_dic['档口']+'档口'+')')
-        self.level_label.setText('评分：'+str(info_dic['评分']))
-        self.star_num_label.setText('收藏人数：'+str(info_dic['收藏人数']))
+        self.cost_label.setText('价格：' + str(info_dic['价格']))
+        self.position_label.setText('位置：' + info_dic['食堂'])
+        self.label.setText(info_dic['菜名'] + '(' + info_dic['档口'] + '档口' + ')')
+        self.level_label.setText('评分：' + str(info_dic['评分']))
+        self.star_num_label.setText('收藏人数：' + str(info_dic['收藏人数']))
         self.info = info_dic
         from dbconnect import getrank
         score = getrank(self.user, self.info['菜名'], self.info['档口'], self.info['食堂'])
-        if score!= -1:
-            self.comboBox.setCurrentIndex(score-1)
+        if score != "None":
+            self.comboBox.setPlaceholderText("我的评分：" + str(score - 1))
         else:
             self.comboBox.setPlaceholderText("评分")
         from dbconnect import getstar
         star_list = getstar(self.user)
-        if str(self.info['食堂']+'-'+self.info['档口']+'-'+self.info['菜名']) in star_list:
-            print('已收藏'+self.info['菜名'])
+        if str(self.info['食堂'] + '-' + self.info['档口'] + '-' + self.info['菜名']) in star_list:
+            print('已收藏' + self.info['菜名'])
             self.star_pushButton.setText('已收藏')
             self.star_pushButton.setStyleSheet("background-color: yellow;")
         else:
@@ -230,20 +228,23 @@ class food_item(Ui_Form, QWidget):
             font = QFont("宋体", 12)
             item.setFont(font)
             self.comments_listWidget.addItem(item)
+
     def select_comment(self):
         if self.focu == True:
             self.comments_listWidget.setCurrentItem(None)
             self.focu = False
         else:
             self.focu = True
+
     def cm_show(self):
         selected_item = self.comments_listWidget.currentItem()
         tip = (self.info['食堂'], self.info['档口'], self.info['菜名'])
         if selected_item == None:
-            self.subwindow = SubWindow(0,'', self.user, self,tip)
+            self.subwindow = SubWindow(0, '', self.user, self, tip)
         else:
-            self.subwindow = SubWindow(1,selected_item.text(), self.user, self,tip)
+            self.subwindow = SubWindow(1, selected_item.text(), self.user, self, tip)
         self.subwindow.exec_()
+
     def star_move(self):
         if self.star_pushButton.text() == '收藏':
             print('进行收藏')
@@ -258,22 +259,25 @@ class food_item(Ui_Form, QWidget):
             self.star_num_label.setText('收藏人数：' + str(int(self.star_num_label.text().split('：')[1]) - 1))
             self.star_pushButton.setStyleSheet("background-color: white;")
             from dbconnect import changestar
-            changestar(self.user,self.info['菜名']+'-'+self.info['档口']+'-'+self.info['食堂'])
+            changestar(self.user, self.info['菜名'] + '-' + self.info['档口'] + '-' + self.info['食堂'])
 
     def handle_combo_box_changed(self, index):
         selected_text = self.comboBox.currentText()
         selected_index = index
         print(f"选择项改变：{selected_text} (索引：{selected_index})")
         from dbconnect import addrank
-        addrank(self.user, self.info['菜名'], self.info['档口'], self.info['食堂'], index+1)
+        addrank(self.user, self.info['菜名'], self.info['档口'], self.info['食堂'], index + 1)
 
     def buyOne(self):
-        from dbconnect import eatchange, lastchange,addcost
-        eatchange(self.info['食堂'], self.info['档口'],self.info['菜名'])
+        from dbconnect import eatchange, lastchange, addcost
+        eatchange(self.info['食堂'], self.info['档口'], self.info['菜名'])
         lastchange(self.user, self.info['类别'])
         addcost(self.user, self.info['价格'])
 
+
 from datetime import datetime
+
+
 class SubWindow(QDialog):
     def __init__(self, type, text, name, mother, tup):
         super().__init__()
@@ -300,27 +304,28 @@ class SubWindow(QDialog):
         self.setWindowFlags(self.windowFlags() | Qt.Tool)
         self.text_edit.setFocus()
 
-
     def button_clicked(self):
         # 按钮的槽函数
         make_text = self.text_edit.text()
-        print("按钮被点击，文本框内容为:", make_text)
         comment = make_text.replace("\t", " ")
+        print("按钮被点击，文本框内容为:", make_text)
+
         if self.type == 1:
             selected_comment = self.text
-            index = selected_comment.index("\a")
-            andex = selected_comment.index(":")
-            username = selected_comment[andex:index]
+            reply_comment_pattern = re.compile("\[[0-9]*-[0-9]* [0-9]*:[0-9]*] (.*) 回复 (.*): (.*)")
+            single_comment_pattern = re.compile("\[[0-9]*-[0-9]* [0-9]*:[0-9]*] (.*): (.*)")
 
-            current_time = datetime.now().strftime("(%m-%d)%Hh%Mm")  # 获取当前时间
-            trimmed_string = selected_comment.strip()
-            last_space_index = trimmed_string.rfind(":")
-            cas = trimmed_string[last_space_index + 1:]
-            cas = cas[:min(len(trimmed_string) - 1, 5)] + "..."
-            full_comment = f"{current_time}\a{self.name}回复{username} {cas}:{comment}"
+            comment_match = re.match(reply_comment_pattern, selected_comment)
+            if comment_match is None:
+                comment_match = re.match(single_comment_pattern, selected_comment)
+                name = comment_match.group(1)
+            else:
+                name = comment_match.group(1)
+            current_time = datetime.now().strftime("%m-%d %H:%M")  # 获取当前时间
+            full_comment = f"[{current_time}] {self.name} 回复 {name}: {comment}"
         else:
-            comment.replace("\a", "")
-            full_comment = f"{datetime.now().strftime('(%m-%d)%Hh%Mm')}\a{self.name}:{comment}"  # 整体评论内容，包含时间
+            current_time = datetime.now().strftime("%m-%d %H:%M")  # 获取当前时间
+            full_comment = f"[{current_time}] {self.name}: {comment}"
         print("提交评论:", full_comment)
         item = QListWidgetItem(full_comment)
         font = QFont("宋体", 12)

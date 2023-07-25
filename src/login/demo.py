@@ -45,6 +45,8 @@ class LoginWindow(AcrylicWindow, Ui_Form):
 
         self.loginButton.clicked.connect(self.login)
         self.registerButton.clicked.connect(self.register)
+        self.usernameInput.setText("admin")
+        self.passwordInput.setText("123456789")
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
@@ -86,8 +88,7 @@ class LoginWindow(AcrylicWindow, Ui_Form):
             self.createErrorInfoBar("Login Error", user_check.password_error_message())
         elif hasuser(username):
             data = getuserdata(username)
-            print(password)
-            if str(data['password']) == password:
+            if data['password'] == password:
                 from gallery import demo
                 global_.name = username
                 demo.mainLogic(username, self.app)
