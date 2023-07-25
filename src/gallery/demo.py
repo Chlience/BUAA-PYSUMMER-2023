@@ -25,7 +25,6 @@ def mainLogic(name, app):
     app.installTranslator(translator)
     app.installTranslator(galleryTranslator)
     # create main window
-    print(name)
     w = MainWindow(name)
     w.show()
     app.exec()

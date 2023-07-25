@@ -60,7 +60,6 @@ class groom_page(QWidget, Ui_Form):
         layout = QGridLayout()
         self.setLayout(layout)
         self.timer = QTimer(self)
-        now = datetime.datetime.now()
         self.timer.start(1000)  # 每秒触发一次 timeout 事件
         self.timer.timeout.connect(self.update_time)
         self.refresh12()
@@ -74,20 +73,19 @@ class groom_page(QWidget, Ui_Form):
     def refresh12(self):
         self.TextEdit.clear()
         now = datetime.datetime.now()
-        from dbconnect import findAllFood
-        food_data = findAllFood()
+        from dbconnect import findTimeFood
         from dbconnect import getlast
         parray = getlast(self.name)
         strr = global_.get_most_frequent(parray)
         recommendation = "考虑到您最近喜欢" + strr + "\n" if strr != -100 else "考虑到您最近没来食堂吃饭\n"
         filtered_food = []
-        for food in food_data:
-            if now.hour >= 3 and now.hour < 10 and "早餐" in food["时间"]:
-                filtered_food.append(food)
-            elif now.hour >= 10 and now.hour < 15 and "午餐" in food["时间"]:
-                filtered_food.append(food)
-            elif (now.hour >= 15 and now.hour <= 24 or now.hour in range(0, 2)) and "晚餐" in food['时间']:
-                filtered_food.append(food)
+
+        if now.hour >= 3 and now.hour < 10:
+            filtered_food= findTimeFood('早餐')
+        elif now.hour >= 10 and now.hour < 15:
+            filtered_food= findTimeFood('午餐')
+        elif (now.hour >= 15 and now.hour <= 24 or now.hour in range(0, 2)):
+            filtered_food= findTimeFood('晚餐')
         # 随机选择一道菜品
         dicc = {'鸡肉': '高蛋白，低脂肪，营养丰富。',
                 '猪肉': '丰富营养，口感鲜美。',

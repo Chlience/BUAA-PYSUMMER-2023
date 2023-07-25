@@ -262,7 +262,6 @@ class canting_view(food_list_view):
     def put_items(self):
         from dbconnect import getplacefood
         self.data = getplacefood(self.tName)
-        print(self.tName)
         for da in self.data:
             self.listWidget.addItem(
                 "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口']))

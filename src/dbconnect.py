@@ -2,29 +2,6 @@ import json
 
 import pymysql
 
-global cnx
-
-
-def search_test():
-    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
-                          host='chlience.cn', database='hangeat')
-    # 建立数据库连接
-    # 创建游标对象
-    cursor = cnx.cursor()
-    # 执行 SQL 查询
-    query = "SELECT * FROM 学二"
-    cursor.execute(query)
-    # 获取查询结果
-    result = cursor.fetchall()
-    # 遍历结果并进行处理
-    for row in result:
-        # 对每一行数据进行操作
-        print(type(row))
-    # 关闭游标和连接
-    cursor.close()
-    cnx.close()
-
-
 def findFood(house_name, count_name, food_name):
     cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
                           host='chlience.cn', database='hangeat')
@@ -32,8 +9,24 @@ def findFood(house_name, count_name, food_name):
     # 执行 SQL 查询
     query = "SELECT * FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s;"
     params = (house_name, count_name, food_name)
-    print(params)
     cursor.execute(query, params)
+    columns = [column[0] for column in cursor.description]
+    rows = cursor.fetchall()
+    # 获取查询结果
+    result = []
+    for row in rows:
+        result.append(dict(zip(columns, row)))
+    cursor.close()
+    cnx.close()
+    return result
+
+def findTimeFood(time):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
+    cursor = cnx.cursor()
+    # 执行 SQL 查询
+    query = "SELECT * FROM 学二 WHERE 时间 = %s "
+    cursor.execute(query, time)
     columns = [column[0] for column in cursor.description]
     rows = cursor.fetchall()
     # 获取查询结果
@@ -83,7 +76,6 @@ def getkindfood(kind):
                           host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 查询符合条件的食物数据
-    print(kind)
     sql_query = "SELECT * FROM 学二 WHERE 类别 = %s"
     values = (kind,)
     cursor.execute(sql_query, values)
@@ -93,7 +85,6 @@ def getkindfood(kind):
     result = []
     for row in rows:
         result.append(dict(zip(columns, row)))
-    print(result)
     # 关闭数据库连接
     cursor.close()
     cnx.close()
@@ -107,7 +98,6 @@ def getplacefood(place):
                           host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 查询符合条件的食物数据
-    print(place)
     sql_query = "SELECT * FROM 学二 WHERE 食堂 = %s"
     values = (place,)
     cursor.execute(sql_query, values)
@@ -117,7 +107,6 @@ def getplacefood(place):
     result = []
     for row in rows:
         result.append(dict(zip(columns, row)))
-    print(result)
     # 关闭数据库连接
     cursor.close()
     cnx.close()
@@ -125,13 +114,13 @@ def getplacefood(place):
     return result
 
 
-def delafood(username):
+def delafood(food, count, house):
     cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
                           host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 删除记录
-    delete_query = "DELETE FROM 学二 WHERE 菜名 = %s;"
-    cursor.execute(delete_query, (username,))
+    delete_query = "DELETE FROM 学二 WHERE 菜名 = %s AND 档口 = %s AND 食堂 = %s;"
+    cursor.execute(delete_query, (food, count, house))
     # 提交事务
     cnx.commit()
     # 关闭游标和连接
@@ -184,11 +173,9 @@ def hasthis(cai, dang, tang):
 
     # 获取查询结果
     records = cursor.fetchall()
-    print(records)
     # 关闭游标和连接
     cursor.close()
     cnx.close()
-    print(len(records))
     # 返回记录是否存在
     return len(records) > 0
 
@@ -233,9 +220,9 @@ def zhuce(dict_data):
     cursor = cnx.cursor()
 
     # 插入记录
-    insert_query = "INSERT INTO user (username, password, star, cost, last) VALUES (%s, %s, %s, %s, %s);"
+    insert_query = "INSERT INTO user (username, password, star, cost, last, 评分) VALUES (%s, %s, %s, %s, %s, %s);"
     data = (dict_data["username"], dict_data["password"], str(dict_data["star"]),
-            dict_data["cost"], str(dict_data["last"]))
+            dict_data["cost"], str(dict_data["last"]), '{}')
     cursor.execute(insert_query, data)
 
     # 提交更改
@@ -257,11 +244,9 @@ def hasuser(user):
 
     # 获取查询结果
     records = cursor.fetchall()
-    print(records)
     # 关闭游标和连接
     cursor.close()
     cnx.close()
-    print(len(records))
     # 返回记录是否存在
     return len(records) > 0
 
@@ -277,8 +262,6 @@ def getuserdata(username):
 
     # 获取查询结果的列名
     column_names = [column[0] for column in cursor.description]
-
-    print(column_names)
 
     # 获取查询结果
     records = cursor.fetchall()
@@ -341,7 +324,6 @@ def addstar(username, food,count, house):
 
 
 def addcost(username, cost):
-    print(username)
     cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
                           host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
@@ -354,8 +336,6 @@ def addcost(username, cost):
     # 更新成本属性
     if result:
         old_cost = result[0]
-        print(old_cost)
-        print(type(old_cost))
         new_cost = str(float(old_cost) + float(cost))
 
         # 更新记录
@@ -548,8 +528,6 @@ def changestar(username, food):
 
     if result is not None:
         star_list = json.loads(result[0])
-        print(star_list)
-        print(rev_food)
         # 从星级数据列表中删除指定项
         if rev_food in star_list:
             star_list.remove(rev_food)
@@ -624,7 +602,7 @@ def delAll_user():
 
 def addrank(username, food,count, house, score):
     cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
-                          host='chlience.cn', database='hangeat')
+                          host='chlience.cn', database='hangeat', charset='utf8')
     cursor = cnx.cursor()
 
     # 查询记录
@@ -640,8 +618,8 @@ def addrank(username, food,count, house, score):
     score_dict[info] = score
     new_score_json = json.dumps(score_dict)
     # 将查询结果转换为列表形式
-    update_query = f"UPDATE user SET 评分='{new_score_json}' WHERE username='{username}'"
-    cursor.execute(update_query)
+    update_query = "UPDATE user SET 评分=%s WHERE username=%s"
+    cursor.execute(update_query, (new_score_json, username))
 
     select_query = "SELECT 评分人数, 评分 FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
     cursor.execute(select_query, (house, count, food))
@@ -665,7 +643,6 @@ def getrank(user, food, count, house):
     select_query = "SELECT 评分 FROM user WHERE username = %s"
     cursor.execute(select_query, (user))
     result = cursor.fetchone()
-    print(result)
     info = house + '-' + count + '-' + food
     score_dict = json.loads(result[0])
     result = score_dict.get(info, -1)
@@ -677,13 +654,11 @@ def add_comment(text, house, count, food):
     cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
                           host='chlience.cn', database='hangeat', charset='utf8')
     cursor = cnx.cursor()
-    print('nnn  '+text)
     # 查询记录
     select_query = "SELECT comments FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
     cursor.execute(select_query, (house,count,food))
     result = cursor.fetchone()
-    erl = result[0]
-    score_list = json.loads(erl)
+    score_list = json.loads(result[0])
     score_list.insert(0, text)
     comment_json = json.dumps(score_list)
     # 将查询结果转换为列表形式
@@ -701,10 +676,8 @@ def loadcomment(house_name, count_name, food_name):
     # 选择数据库
     sql_query = "SELECT comments FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
     values = (house_name, count_name, food_name)
-    print(values)
     cursor.execute(sql_query, values)
     result = cursor.fetchone()  # 获取查询结果
-    print(type(result))
     cursor.close()
     cnx.close()
     if result is not None:
@@ -746,3 +719,22 @@ def savecomments(house_name, count_name, food_name, comments):
     # 关闭数据库连接
     cursor.close()
     cnx.close()
+
+def get_top_scores(user):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
+    cursor = cnx.cursor()
+
+    select_query = "SELECT 评分 FROM user WHERE username = %s"
+    cursor.execute(select_query, (user))
+    result = cursor.fetchone()
+    st = result[0]
+    score_dict = json.loads(result[0])
+    scores = list(zip(score_dict.keys(), score_dict.values()))
+    sorted_scores = sorted(scores, key=lambda x: x[1], reverse=True)
+    top_scores = sorted_scores[:20]
+
+    cursor.close()
+    cnx.close()
+
+    return top_scores

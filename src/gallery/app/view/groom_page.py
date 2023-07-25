@@ -15,7 +15,7 @@ class DialogInterface(GalleryInterface):
         t = Translator()
         super().__init__(
             title='智能推荐',
-            subtitle='快来试试吧',
+            subtitle=' 快来试试吧',
             parent=parent
         )
         self.setObjectName('dialogInterface')

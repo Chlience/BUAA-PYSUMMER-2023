@@ -27,8 +27,6 @@ class MaterialInterface(GalleryInterface):
     def change(self, food_name, count_name, house_name):
         from dbconnect import findFood
         result = findFood(house_name, count_name, food_name)
-        print(type(result))
-        print(result)
         self.food_page.set_food(result[0])
 
 
