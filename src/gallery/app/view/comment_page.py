@@ -46,7 +46,7 @@ class comment_window(QWidget):
         selected_item = self.comment_list.currentItem()
         if selected_item is not None:
             selected_comment = selected_item.text()
-            index = selected_comment.index("\x1d")
+            index = selected_comment.index("\a")
             andex = selected_comment.index(":")
             username = selected_comment[andex:index]
             current_time = datetime.now().strftime("(%m-%d)%Hh%Mm")  # 获取当前时间
@@ -54,10 +54,10 @@ class comment_window(QWidget):
             last_space_index = trimmed_string.rfind(":")
             cas = trimmed_string[last_space_index + 1:]
             cas = cas[:min(len(trimmed_string) - 1, 5)] + "..."
-            full_comment = f"{current_time}\x1d{self.name}回复{username} {cas}:{comment}"
+            full_comment = f"{current_time}\a{self.name}回复{username} {cas}:{comment}"
         else:
-            comment.replace("\x1d", "")
-            full_comment = f"{datetime.now().strftime('(%m-%d)%Hh%Mm')}\x1d{self.name}:{comment}"  # 整体评论内容，包含时间
+            comment.replace("\a", "")
+            full_comment = f"{datetime.now().strftime('(%m-%d)%Hh%Mm')}\a{self.name}:{comment}"  # 整体评论内容，包含时间
         print("提交评论:", full_comment)
         self.comments.insert(0, full_comment)  # 在列表开头添加新评论
         self.comment_list.addItem(full_comment)

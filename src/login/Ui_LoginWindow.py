@@ -9,8 +9,6 @@
 
 
 from PySide6 import QtCore, QtGui, QtWidgets
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QTextBrowser, QLineEdit
 
 
 class Ui_Form(object):
@@ -103,7 +101,7 @@ class Ui_Form(object):
         spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem5)
         self.horizontalLayout.addWidget(self.widget)
-
+        self.usernameInput.returnPressed.connect(self.passwordInput.setFocus)
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 

@@ -15,7 +15,7 @@ from .canting_page import DateTimeInterface
 from .groom_page import DialogInterface
 from .layout_interface import LayoutInterface
 from .search_food import IconInterface
-from .material_interface import MaterialInterface
+from .food_item_page_holder import MaterialInterface
 from .menu_interface import MenuInterface
 from .navigation_view_interface import NavigationViewInterface
 from .scroll_interface import ScrollInterface
@@ -155,8 +155,8 @@ class MainWindow(FluentWindow):
             print(13)
 
     def initWindow(self):
-        self.resize(960, 800)
-        self.setMinimumWidth(760)
+        self.resize(1000, 900)
+        self.setMinimumWidth(660)
         self.setWindowIcon(QIcon('gallery/app/resource/images/logoo.png'))
         self.setWindowTitle('航味__吃在北航')
 
@@ -192,3 +192,11 @@ class MainWindow(FluentWindow):
                 print(dic[int(index)])
                 w.change(dic[int(index)])
                 # w.scrollToCard(index)
+
+    def switch_to_food(self, food_name, count_name, house_name):
+        interfaces = self.findChildren(GalleryInterface)
+        for w in interfaces:
+            if w.objectName() == "materialInterface":
+                self.stackedWidget.setCurrentWidget(w, False)
+                w.change(food_name, count_name, house_name)
+                #self.parent.switch_to_food(food_name, count_name, house_name)
