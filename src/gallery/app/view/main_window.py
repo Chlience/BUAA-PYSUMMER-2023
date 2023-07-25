@@ -11,10 +11,10 @@ from qfluentwidgets import FluentIcon as FIF
 from .gallery_interface import GalleryInterface
 from .home_page import HomeInterface
 from .must_eat_page_holder import BasicInputInterface
-from .canting_page import DateTimeInterface
+from .canting_page_holder import DateTimeInterface
 from .groom_page import DialogInterface
 from .layout_interface import LayoutInterface
-from .search_food import IconInterface
+from .search_food_holder import IconInterface
 from .food_item_page_holder import MaterialInterface
 from .menu_interface import MenuInterface
 from .navigation_view_interface import NavigationViewInterface
@@ -195,3 +195,10 @@ class MainWindow(FluentWindow):
                 self.stackedWidget.setCurrentWidget(w, False)
                 w.change(food_name, count_name, house_name)
                 #self.parent.switch_to_food(food_name, count_name, house_name)
+
+    def goto_sub(self, t):
+        interfaces = self.findChildren(GalleryInterface)
+        for w in interfaces:
+            if w.objectName() == "layoutInterface":
+                self.stackedWidget.setCurrentWidget(w, False)
+                w.set_t(t)
