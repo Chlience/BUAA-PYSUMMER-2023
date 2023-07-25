@@ -36,7 +36,6 @@ class Ui_Form(object):
         self.layou.addWidget(self.Widget_2, 0, 1, 1, 4)
         self.left = ListWidget()
         self.outLayou = QHBoxLayout(Form)
-        print(12345)
         self.outLayou.addWidget(self.left)
         self.outLayou.addLayout(self.layou)
         Form.setLayout(self.outLayou)
@@ -52,7 +51,6 @@ class counter_list_holder(QWidget, Ui_Form):
         self.setupUi(self, uname)
         for house_name in {'学二', '合一', '新北', 'wings', '美食苑'}:
             self.left.addItem(house_name)
-            print('y')
         self.setObjectName("选一个想吃的窗口")
         self.data = []
         self.left.itemClicked.connect(
@@ -65,13 +63,10 @@ class counter_list_holder(QWidget, Ui_Form):
         self.listWidget.clear()
         self.Widget_2.clear()
         self.fendang = {}
-        print(111111)
-        print(self.fendang)
         for dic in self.data:
             if str(dic["档口"]) not in self.fendang:
                 self.fendang[str(dic["档口"])] = []
             self.fendang[str(dic["档口"])].append(dic)
-        print(self.fendang)
         for item in self.fendang.keys():
             # 创建一个QListWidgetItem对象
             list_item = QListWidgetItem()
@@ -84,6 +79,4 @@ class counter_list_holder(QWidget, Ui_Form):
 
     def flush(self, dang):
         data = self.fendang[str(dang)]
-        print(type(data))
-        print('data='+str(data))
         self.Widget_2.reload(data, dang)

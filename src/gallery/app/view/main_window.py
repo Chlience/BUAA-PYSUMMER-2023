@@ -21,7 +21,7 @@ from .navigation_view_interface import NavigationViewInterface
 from .scroll_interface import ScrollInterface
 from .status_info_interface import StatusInfoInterface
 from .setting_interface import SettingInterface
-from .text_interface import TextInterface
+from .manager_page_holder import TextInterface
 from .self_center_holder import ViewInterface
 from ..common.config import SUPPORT_URL
 from ..common.icon import Icon
@@ -86,8 +86,6 @@ class MainWindow(FluentWindow):
         pixmap = QPixmap("gallery/app/resource/images/logoo.png")
         if pixmap.isNull():
             print("无法创建 QPixmap 对象")
-        else:
-            print("成功创建 QPixmap 对象")
         # add custom widget to bottom
         self.navigationInterface.addWidget(
             routeKey='avatar',
@@ -149,10 +147,8 @@ class MainWindow(FluentWindow):
 
     def refresh12(self, inter):
         self.switchTo(inter)
-        print(12)
         if hasattr(inter, 'refresh11') and callable(inter.refresh11):
             inter.refresh11()
-            print(13)
 
     def initWindow(self):
         self.resize(1000, 900)
@@ -189,7 +185,6 @@ class MainWindow(FluentWindow):
             if w.objectName() == "dateTimeInterface":
                 self.stackedWidget.setCurrentWidget(w, False)
                 dic = {1: '学二', 2: '合一', 3: '新北', 4: 'Wings', 5: '美食苑'}
-                print(dic[int(index)])
                 w.change(dic[int(index)])
                 # w.scrollToCard(index)
 

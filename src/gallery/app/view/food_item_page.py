@@ -7,17 +7,11 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QHBoxLayout,
-    QLabel, QListWidget, QListWidgetItem, QPushButton,
-    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
-from qfluentwidgets import PushButton, ComboBox, LineEdit
+from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt)
+from PySide6.QtGui import (QFont)
+from PySide6.QtWidgets import (QGridLayout, QHBoxLayout,
+                               QListWidgetItem, QSizePolicy, QSpacerItem, QVBoxLayout, QWidget, QDialog)
+from qfluentwidgets import PushButton, ComboBox, LineEdit, CaptionLabel, ListWidget
 
 
 class Ui_Form(object):
@@ -80,12 +74,12 @@ class Ui_Form(object):
 
         self.gridLayout.addItem(self.verticalSpacer_2, 1, 1, 1, 1)
 
-        self.comments_listWidget = QListWidget(Form)
+        self.comments_listWidget = ListWidget(Form)
         self.comments_listWidget.setObjectName(u"comments_listWidget")
 
         self.gridLayout.addWidget(self.comments_listWidget, 2, 4, 4, 1)
 
-        self.position_label = QLabel(Form)
+        self.position_label = CaptionLabel(Form)
         self.position_label.setObjectName(u"position_label")
         self.position_label.setFont(font)
         self.position_label.setAlignment(Qt.AlignLeft)
@@ -96,14 +90,14 @@ class Ui_Form(object):
 
         self.gridLayout.addItem(self.horizontalSpacer_2, 4, 2, 1, 1)
 
-        self.star_num_label = QLabel(Form)
+        self.star_num_label = CaptionLabel(Form)
         self.star_num_label.setObjectName(u"star_num_label")
         self.star_num_label.setFont(font)
         self.star_num_label.setAlignment(Qt.AlignLeft)
 
         self.gridLayout.addWidget(self.star_num_label, 5, 1, 1, 1)
 
-        self.cost_label = QLabel(Form)
+        self.cost_label = CaptionLabel(Form)
         self.cost_label.setObjectName(u"cost_label")
         self.cost_label.setFont(font)
         self.cost_label.setAlignment(Qt.AlignLeft)
@@ -123,13 +117,21 @@ class Ui_Form(object):
 
         self.gridLayout.addWidget(self.star_pushButton, 7, 1, 1, 1)
 
+        self.buy_pushButton = PushButton(Form)
+        self.buy_pushButton.setObjectName(u"star_pushButton")
+        self.buy_pushButton.setMinimumSize(QSize(0, 60))
+        self.buy_pushButton.setMaximumSize(QSize(90, 60))
+        self.buy_pushButton.setFont(font)
+
+        self.gridLayout.addWidget(self.buy_pushButton, 7, 2, 1, 1)
+
         self.widget_3 = QWidget(Form)
         self.widget_3.setObjectName(u"widget_3")
         self.widget_3.setMinimumSize(QSize(150, 0))
 
         self.gridLayout.addWidget(self.widget_3, 2, 5, 1, 1)
 
-        self.level_label = QLabel(Form)
+        self.level_label = CaptionLabel(Form)
         self.level_label.setObjectName(u"level_label")
         self.level_label.setMinimumSize(QSize(141, 0))
         self.level_label.setMaximumSize(QSize(16777215, 117))
@@ -142,7 +144,7 @@ class Ui_Form(object):
 
         self.gridLayout.addWidget(self.level_label, 2, 1, 1, 1)
 
-        self.label = QLabel(Form)
+        self.label = CaptionLabel(Form)
         self.label.setObjectName(u"label")
         font2 = QFont()
         font2.setFamilies([u"\u534e\u6587\u4e2d\u5b8b"])
@@ -177,6 +179,7 @@ class Ui_Form(object):
         self.star_pushButton.setText(QCoreApplication.translate("Form", u"\u6536\u85cf", None))
         self.level_label.setText(QCoreApplication.translate("Form", u"\u8bc4\u5206", None))
         self.label.setText(QCoreApplication.translate("Form", u"\u83dc\u540d", None))
+        self.buy_pushButton.setText('购买')
 
 
 
@@ -197,6 +200,8 @@ class food_item(Ui_Form, QWidget):
             self.hasSet = True
             self.star_pushButton.clicked.connect(self.star_move)  # 连接 clicked 信号与 star_move() 槽函数
             self.make_comment_pushButton.clicked.connect(self.cm_show)
+            self.buy_pushButton.clicked.connect(self.buyOne)
+            self.comboBox.currentIndexChanged.connect(self.handle_combo_box_changed)
         self.cost_label.setText('价格：'+str(info_dic['价格']))
         self.position_label.setText('位置：'+info_dic['食堂'])
         self.label.setText(info_dic['菜名']+'('+info_dic['档口']+'档口'+')')
@@ -205,12 +210,12 @@ class food_item(Ui_Form, QWidget):
         self.info = info_dic
         from dbconnect import getrank
         score = getrank(self.user, self.info['菜名'], self.info['档口'], self.info['食堂'])
-        self.comboBox.setCurrentIndex(score-1)
-        self.comboBox.currentIndexChanged.connect(self.handle_combo_box_changed)
+        if score!= -1:
+            self.comboBox.setCurrentIndex(score-1)
+        else:
+            self.comboBox.setPlaceholderText("评分")
         from dbconnect import getstar
         star_list = getstar(self.user)
-        print(star_list)
-        print(self.info['菜名'])
         if str(self.info['食堂']+'-'+self.info['档口']+'-'+self.info['菜名']) in star_list:
             print('已收藏'+self.info['菜名'])
             self.star_pushButton.setText('已收藏')
@@ -238,7 +243,7 @@ class food_item(Ui_Form, QWidget):
             self.subwindow = SubWindow(0,'', self.user, self,tip)
         else:
             self.subwindow = SubWindow(1,selected_item.text(), self.user, self,tip)
-        self.subwindow.show()
+        self.subwindow.exec_()
     def star_move(self):
         if self.star_pushButton.text() == '收藏':
             print('进行收藏')
@@ -262,8 +267,14 @@ class food_item(Ui_Form, QWidget):
         from dbconnect import addrank
         addrank(self.user, self.info['菜名'], self.info['档口'], self.info['食堂'], index+1)
 
+    def buyOne(self):
+        from dbconnect import eatchange, lastchange,addcost
+        eatchange(self.info['食堂'], self.info['档口'],self.info['菜名'])
+        lastchange(self.user, self.info['类别'])
+        addcost(self.user, self.info['价格'])
+
 from datetime import datetime
-class SubWindow(QWidget):
+class SubWindow(QDialog):
     def __init__(self, type, text, name, mother, tup):
         super().__init__()
         self.tup = tup
@@ -276,8 +287,10 @@ class SubWindow(QWidget):
         # 创建文本框和按钮
         self.text_edit = LineEdit()
         if type == 0:
+            self.setWindowTitle('提交评论页面')
             self.button = PushButton("提交")
         else:
+            self.setWindowTitle('回复评论页面')
             self.button = PushButton("回复")
         self.button.clicked.connect(self.button_clicked)
         layout = QVBoxLayout()
@@ -285,6 +298,7 @@ class SubWindow(QWidget):
         layout.addWidget(self.button)
         self.setLayout(layout)
         self.setWindowFlags(self.windowFlags() | Qt.Tool)
+        self.text_edit.setFocus()
 
 
     def button_clicked(self):
@@ -313,6 +327,5 @@ class SubWindow(QWidget):
         item.setFont(font)
         self.mother.comments_listWidget.addItem(item)
         from dbconnect import add_comment
-        print(full_comment)
         add_comment(full_comment, self.tup[0], self.tup[1], self.tup[2])
         self.close()
