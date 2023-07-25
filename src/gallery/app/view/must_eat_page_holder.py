@@ -13,6 +13,7 @@ class BasicInputInterface(GalleryInterface):
     """ Basic input interface """
 
     def __init__(self, parent=None):
+        self.mother = parent
         super().__init__(
             title='必吃菜',
             subtitle='must eat！',
@@ -22,7 +23,7 @@ class BasicInputInterface(GalleryInterface):
         layout = QGridLayout(self)
         from .must_eat_page import must_eat_form
         from global_ import name
-        self.bottom_widget = must_eat_form(name)
+        self.bottom_widget = must_eat_form(name, self)
         layout.addWidget(self.bottom_widget, 1, 0)  # 放置在第 1 行，第 0 列
 
         # 设置行的伸展因子，让下方部件占据2/3的高度
@@ -42,3 +43,6 @@ class BasicInputInterface(GalleryInterface):
             Action(self.tr('Sticky Fingers'), triggered=lambda b=button: b.setText(self.tr('Sticky Fingers'))),
         ])
         return menu
+
+    def switch_to_food(self, t,d,f):
+        self.mother.switch_to_food(f,d,t)

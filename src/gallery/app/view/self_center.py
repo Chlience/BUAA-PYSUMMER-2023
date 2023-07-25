@@ -107,6 +107,7 @@ class Ui_Form2(object):
 class self_manage_center(QWidget, Ui_Form2):
     def __init__(self, name, mother):
         super().__init__()
+        self.mother = mother
         self.name = name
         self.setupUi(self)
         self.pushButton.clicked.connect(self.change1)
@@ -114,6 +115,14 @@ class self_manage_center(QWidget, Ui_Form2):
         self.pushButton_3.clicked.connect(self.subshow)
         self.button_back2.clicked.connect(self.change3)
         self.button_back3.clicked.connect(self.change3)
+        self.list2.itemClicked.connect(
+            lambda item: self.mother.switch_to_food(item.text().split()[0].split('-')[0],
+                                                    item.text().split()[0].split('-')[1],
+                                                    item.text().split()[0].split('-')[2]))
+        self.list3.itemClicked.connect(
+            lambda item: self.mother.switch_to_food(item.text().split()[0].split('-')[0],
+                                                    item.text().split()[0].split('-')[1],
+                                                    item.text().split()[0].split('-')[2]))
 
     def change1(self):
         self.stacked_widget.setCurrentIndex(1)

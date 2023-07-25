@@ -82,9 +82,10 @@ class Ui_Form(object):
 
 class must_eat_form(Ui_Form, QWidget):
 
-    def __init__(self, name):
+    def __init__(self, name, mother):
         super().__init__()
         self.setupUi(self)
+        self.mother = mother
         font = QFont("宋体")
         font.setPointSize(18)
         self.label.setFont(font)
@@ -95,6 +96,15 @@ class must_eat_form(Ui_Form, QWidget):
         self.listWidget.clear()
         self.listWidget_2.clear()
         self.refresh()
+        self.listWidget.itemClicked.connect(
+            lambda item: self.mother.switch_to_food(item.text().split()[0].split('-')[0], item.text().split()[0].split('-')[1],
+                                                    item.text().split()[0].split('-')[2]))
+        self.listWidget_2.itemClicked.connect(
+            lambda item: self.mother.switch_to_food(item.text().split()[0].split('-')[0], item.text().split()[0].split('-')[1],
+                                                    item.text().split()[0].split('-')[2]))
+        self.listWidget_3.itemClicked.connect(
+            lambda item: self.mother.switch_to_food(item.text().split()[0].split('-')[0], item.text().split()[0].split('-')[1],
+                                                    item.text().split()[0].split('-')[2]))
 
     def refresh(self):
         self.listWidget.clear()
@@ -103,7 +113,7 @@ class must_eat_form(Ui_Form, QWidget):
         me = getstar(self.name)
         for entry in me:
             lm = QListWidgetItem(entry)
-            lm.setFont("宋体")
+            lm.setFont(QFont("宋体", 12))
             self.listWidget.addItem(lm)
         from dbconnect import findAllFood
         data = findAllFood()
@@ -112,16 +122,17 @@ class must_eat_form(Ui_Form, QWidget):
         star_data = sorted(star_data, key=lambda x: x[1], reverse=True)
         count = 0
         for i in star_data:
-            lm = QListWidgetItem(i[0]['菜名'] + "   被购买" + str(i[1]) + '次\n')
-            lm.setFont("宋体")
+            lm = QListWidgetItem(i[0]['食堂']+'-'+i[0]['档口']+'-'+i[0]['菜名'] + "   被购买" + str(i[1]) + '次\n')
+            lm.setFont(QFont("宋体", 12))
             self.listWidget_2.addItem(lm)
             count += 1
             if count > 30: return
         grade_data = [(item, item['评分']) for item in data]
         grade_data = sorted(grade_data, key=lambda x: x[1], reverse=True)
         for i in grade_data:
-            lm = QListWidgetItem(i[0]['菜名'] + "   评分" + str(round(i[1], 2)) + '\n')
-            lm.setFont("宋体")
+            lm = QListWidgetItem(i[0]['食堂']+'-'+i[0]['档口']+'-'+i[0]['菜名'] + "   评分" + str(round(i[1], 2)) + '\n')
+            lm.setFont(QFont("宋体", 12))
             self.listWidget_3.addItem(lm)
             count += 1
             if count > 30: return
+

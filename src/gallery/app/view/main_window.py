@@ -127,15 +127,21 @@ class MainWindow(FluentWindow):
 
         # add navigation item
         routeKey = interface.objectName()
-        item = self.navigationInterface.addItem(
-            routeKey=routeKey,
-            icon=icon,
-            text=text,
-            onClick=lambda: self.refresh12(interface),
-            position=position,
-            tooltip=text,
-            parentRouteKey=parent.objectName() if parent else None
-        )
+        item = None
+        if interface != self.materialInterface and interface != \
+                self.dateTimeInterface and self.menuInterface != interface and self.scrollInterface != interface and \
+                self.navigationViewInterface != interface and interface != self.statusInfoInterface:
+            from global_ import name
+            if not (interface == self.textInterface and name != 'admin'):
+                item = self.navigationInterface.addItem(
+                    routeKey=routeKey,
+                    icon=icon,
+                    text=text,
+                    onClick=lambda: self.refresh12(interface),
+                    position=position,
+                    tooltip=text,
+                    parentRouteKey=parent.objectName() if parent else None
+                )
 
         # initialize selected item
         if self.stackedWidget.count() == 1:
@@ -194,7 +200,7 @@ class MainWindow(FluentWindow):
             if w.objectName() == "materialInterface":
                 self.stackedWidget.setCurrentWidget(w, False)
                 w.change(food_name, count_name, house_name)
-                #self.parent.switch_to_food(food_name, count_name, house_name)
+                # self.parent.switch_to_food(food_name, count_name, house_name)
 
     def goto_sub(self, t):
         interfaces = self.findChildren(GalleryInterface)

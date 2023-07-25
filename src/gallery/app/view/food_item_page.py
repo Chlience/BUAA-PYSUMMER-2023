@@ -325,7 +325,7 @@ class SubWindow(QDialog):
         item = QListWidgetItem(full_comment)
         font = QFont("宋体", 12)
         item.setFont(font)
-        self.mother.comments_listWidget.addItem(item)
+        self.mother.comments_listWidget.insertItem(0, item)
         from dbconnect import add_comment
         add_comment(full_comment, self.tup[0], self.tup[1], self.tup[2])
         self.close()
