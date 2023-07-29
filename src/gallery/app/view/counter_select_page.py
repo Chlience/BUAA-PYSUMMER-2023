@@ -34,7 +34,7 @@ class Ui_Form(object):
         wid.setFixedHeight(262)
         lay.addWidget(wid)
         lay.addWidget(self.listWidget)
-        self.Widget_2 = count_list(self.uname, [], "未选择", Form)
+        self.Widget_2 = count_list(self.uname, [], "未选择", Form,self)
         self.Widget_2.setFixedWidth(700)
         self.layou.addLayout(lay, 0, 0, 1, 1)
         self.layou.addWidget(self.Widget_2, 0, 1, 1, 4)
