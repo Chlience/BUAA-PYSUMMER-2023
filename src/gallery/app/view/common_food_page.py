@@ -142,10 +142,11 @@ class simple_search_view(QWidget, Ui_eating):
 
 
 class food_list_view(QWidget, Ui_eating):
-    def __init__(self, user):
+    def __init__(self, user,father):
         super().__init__()
         self.setupUi(self)
         self.user = user
+        self.father = father
         self.stack = NewWindow('', '', 0, 0, 0, 0, 0)
         # self.stack.setGeometry(500, 0, 400, 250)
         self.food = []
@@ -171,7 +172,7 @@ class food_list_view(QWidget, Ui_eating):
         self.layout.addWidget(self.button2, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
         self.hLayout = QHBoxLayout()
         self.hLayout.addLayout(self.layout)
-        self.hLayout.addWidget(self.stack)
+        #self.hLayout.addWidget(self.stack)
         self.setLayout(self.hLayout)
         self.count_times = 0
 
@@ -253,8 +254,9 @@ class food_list_view(QWidget, Ui_eating):
 
         return max_length
 
-    def open_new_window(self, item, food, cost, kind, count, house):
-        self.stack.check(food, cost, self.user, kind, count, house)
+    def open_new_window(self, item, food, cost, kind, house, count):
+       # self.stack.check(food, cost, self.user, kind, count, house)
+        self.father.switch_to_food( food, count, house)
         print('check to' + food)
 
 
@@ -293,12 +295,13 @@ class food_list_view(QWidget, Ui_eating):
 
 '''
 class count_list(food_list_view):
-    def __init__(self, uname, data, count_name, mother):
+    def __init__(self, uname, data, count_name, mother,father):
         self.data = data
         self.uname = uname
         self.mother = mother
+        self.father = father
         self.font = QFont('宋体', 12)
-        super().__init__(uname)
+        super().__init__(uname,father)
         self.setWindowTitle(count_name)
         self.listWidget.setContextMenuPolicy(Qt.CustomContextMenu)
         self.listWidget.customContextMenuRequested.connect(self.show_menu)
