@@ -53,7 +53,7 @@ class ToolBar(QWidget):
         self.__initWidget()
 
     def changeTitle(self, name):
-        self.titleLabel.changeName(name)
+        self.titleLabel.setText(name)
     def __initWidget(self):
         self.setFixedHeight(138)
         self.vBoxLayout.setSpacing(0)

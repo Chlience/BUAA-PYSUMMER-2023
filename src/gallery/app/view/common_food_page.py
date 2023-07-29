@@ -258,7 +258,7 @@ class food_list_view(QWidget, Ui_eating):
         print('check to' + food)
 
 
-class canting_view(food_list_view):
+'''class canting_view(food_list_view):
     def __init__(self, uname, tName):
         ran = choice(['大酬宾', '促销', '正在营业'])
         if ran != '正在营业':
@@ -278,8 +278,9 @@ class canting_view(food_list_view):
             item.setFont(self.font)
             self.listWidget.addItem(item)
 
+'''
 
-class catagory_food(food_list_view):
+'''class catagory_food(food_list_view):
     def __init__(self, uname, category):
         self.uname = uname
         self.kind = category
@@ -290,7 +291,7 @@ class catagory_food(food_list_view):
         from dbconnect import getkindfood
         self.data = getkindfood(self.kind)
 
-
+'''
 class count_list(food_list_view):
     def __init__(self, uname, data, count_name, mother):
         self.data = data
