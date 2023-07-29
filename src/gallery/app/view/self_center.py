@@ -185,22 +185,40 @@ class subwind(QDialog):
         from dbconnect import getuserdata
         from global_ import name
         data = getuserdata(name)
-        if self.text_edit2.text()!=data['password']:
-            me = MessageBox('修改失败,原密码错误','' ,self)
+        if self.text_edit2.text() != data['password']:
+            me = MessageBox('修改失败,原密码错误', '', self)
             me.cancelButton.hide()
             me.exec_()
             self.close()
+            return
         from dbconnect import hasuser
-        if self.text_edit1.text()!='' and hasuser(self.text_edit1.text()):
+        if self.text_edit1.text() != '' and hasuser(self.text_edit1.text()):
             me = MessageBox('修改失败,该用户名已被他人注册', '', self)
             me.cancelButton.hide()
             me.exec_()
             self.close()
+            return
         if self.text_edit3.text() == '':
             me = MessageBox('修改失败,新密码不能为空', '', self)
             me.cancelButton.hide()
             me.exec_()
             self.close()
+            return
+
+        username = name
+
+        if user_check.username_check(username) is False:
+            me = MessageBox('修改失败,用户名不符合格式要求', '', self)
+            me.cancelButton.hide()
+            me.exec_()
+            self.close()
+            return
+        elif user_check.password_check(data['password']) is False:
+            me = MessageBox('修改失败,密码不符合格式要求', '', self)
+            me.cancelButton.hide()
+            me.exec_()
+            self.close()
+            return
         from dbconnect import changename, changemi
         from global_ import name
         if self.text_edit1.text() != '':
@@ -218,7 +236,6 @@ class subwind(QDialog):
             me.cancelButton.hide()
             me.exec_()
             self.close()
-
 
 
 

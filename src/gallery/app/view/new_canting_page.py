@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import PySide6.QtCore
 ################################################################################
 ## Form generated from reading UI file 'fanshitangshitangxFmZXZ.ui'
 ##
@@ -14,6 +14,8 @@ from PySide6.QtWidgets import (QGridLayout, QHBoxLayout,
                                QListWidget, QSizePolicy, QSpacerItem, QVBoxLayout,
                                QWidget, QListWidgetItem)
 from qfluentwidgets import CaptionLabel, ComboBox, PushButton, ListWidget, LineEdit
+
+
 
 
 class Ui_Form(object):
@@ -52,7 +54,22 @@ class Ui_Form(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.pushButton_2 = PushButton(Form)
         self.pushButton_2.setObjectName(u"pushButton_2")
-
+        self.combox = ComboBox(Form)
+        self.combox.setObjectName(u"combox")
+        self.combox.addItem("")
+        self.combox.addItem("")
+        self.combox.addItem("")
+        self.combox.addItem("")
+        self.combox.addItem("")
+        from PySide6.QtCore import QCoreApplication
+        Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
+        self.combox.setItemText(0, QCoreApplication.translate("Form", u"1", None))
+        self.combox.setItemText(1, QCoreApplication.translate("Form", u"2", None))
+        self.combox.setItemText(2, QCoreApplication.translate("Form", u"3", None))
+        self.combox.setItemText(3, QCoreApplication.translate("Form", u"4", None))
+        self.combox.setItemText(4, QCoreApplication.translate("Form", u"5", None))
+        self.combox.setPlaceholderText("评分")
+        self.combox.setMinimumSize(QSize(90, 60))
         self.horizontalLayout.addWidget(self.pushButton_2)
         self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Minimum, QSizePolicy.Minimum)
         self.horizontalLayout.addItem(self.horizontalSpacer_3)
@@ -62,6 +79,7 @@ class Ui_Form(object):
         self.verticalLayout_2.addLayout(self.horizontalLayout)
         self.gridLayout.addLayout(self.verticalLayout_2, 0, 3, 1, 1)
         self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.addWidget(self.combox)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label_2 = CaptionLabel(Form)
         self.label_2.setObjectName(u"label_2")
@@ -104,6 +122,8 @@ class Ui_Form(object):
         self.label_3.setText('位置')
         self.pushButton_2.setText('价格排序')
         self.pushButton_2.setFont(font)
+        self.combox.setText('评分')
+        self.combox.setFont(font)
         self.pushButton.setFont(font)
         self.comboBox.setFont(QFont('宋体', 14))
         self.comboBox.setText('进入分档口')
@@ -113,6 +133,8 @@ class Ui_Form(object):
 
 
 class canting_view(QListWidget, Ui_Form):
+    def hidecombox(self):
+        self.combox.hide()
     def __init__(self, t_name, mother):
         super().__init__()
         self.font = QFont("宋体", 12)
@@ -125,13 +147,45 @@ class canting_view(QListWidget, Ui_Form):
         self.count_times = 0
         self.food = []
         self.put_items()
+        self.hasSet=False
+        if t_name != '':
+            from dbconnect import findhouse
+            result=findhouse(t_name)
+            dic = result[0]
+            if dic['评分人数'] == 0:
+                dic['评分'] = 'Waiting'
+            self.info = dic
         if t_name!='':
             self.comboBox.clicked.connect(self.goto_sub)
+            print(type(self.info['评分']))
+            self.label_2.setText('评分：' + str(self.info['评分']))
+            from dbconnect import gethouserank
+            from global_ import name
+            self.user = name
+            score = gethouserank(self.user, self.info['食堂'])
+            if score!= -1:
+                self.combox.setCurrentIndex(score-1)
+            else:
+                self.combox.setPlaceholderText("评分")
+            if not self.hasSet:
+                self.hasSet = True
+                #self.comboBox.currentIndexChanged.connect(self.handle_combo_box_changed)
+                self.combox.currentIndexChanged.connect(self.handle_combo_box_changed)
         self.pushButton_2.clicked.connect(self.sortByCost)
         self.pushButton.clicked.connect(self.sortByKeyword)
         self.listWidget.itemClicked.connect(
             lambda item: self.mother.switch_to_food(item.text().split()[0], item.text().split()[8],
                                                     item.text().split()[6]))
+
+
+
+    def handle_combo_box_changed(self, index):
+        selected_text = self.combox.currentText()
+        selected_index = index
+        print(f"选择项改变：{selected_text} (索引：{selected_index})")
+        from dbconnect import addhouserank
+        addhouserank(self.user, self.info['食堂'], index+1)
+
 
     def goto_sub(self):
         self.mother.goto_sub(self.t_name)

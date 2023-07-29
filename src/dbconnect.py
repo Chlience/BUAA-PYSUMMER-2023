@@ -106,7 +106,9 @@ def getplacefood(place):
     # 获取查询结果
     result = []
     for row in rows:
-        result.append(dict(zip(columns, row)))
+        dic = dict(zip(columns, row))
+        if not (dic['档口'] == 'no' and dic['菜名'] == 'no'):
+            result.append(dict(zip(columns, row)))
     # 关闭数据库连接
     cursor.close()
     cnx.close()
@@ -433,6 +435,74 @@ def getstar(username):
         cnx.close()
         return []
 
+
+def addhouserank(username, house, score):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat', charset='utf8')
+    cursor = cnx.cursor()
+
+    # 查询记录
+    select_query = "SELECT 评分 FROM user WHERE username = %s"
+    cursor.execute(select_query, (username,))
+    result = cursor.fetchone()
+    info= house+'-'+'no'+'-'+'no'
+    score_dict = json.loads(result[0])
+    # print(type(score_dict))
+    # print(score_dict)
+    # print(info)
+    # last_score = score_dict.get(info, -1)
+    score_dict[info] = score
+    new_score_json = json.dumps(score_dict)
+    # 将查询结果转换为列表形式
+    update_query = "UPDATE user SET 评分=%s WHERE username=%s"
+    cursor.execute(update_query, (new_score_json, username))
+
+    select_query = "SELECT 评分人数, 评分 FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
+    cursor.execute(select_query, (house, 'no', 'no'))
+    result = cursor.fetchone()
+    if result:
+        num_ratings = result[0]
+        ave_score = result[1]
+        ave_score = (ave_score*num_ratings + score) / (num_ratings+1)
+        num_ratings += 1
+        ave_score = round(ave_score, 2)
+        update_query = "UPDATE 学二 SET 评分人数 = %s, 评分 = %s WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s"
+        cursor.execute(update_query, (num_ratings, ave_score, house, 'no', 'no'))
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+
+
+def gethouserank(user,house):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
+    cursor = cnx.cursor()
+    select_query = "SELECT 评分 FROM user WHERE username = %s"
+    cursor.execute(select_query, (user))
+    result = cursor.fetchone()
+    info = house + '-' + 'no' + '-' + 'no'
+    score_dict = json.loads(result[0])
+    result = score_dict.get(info, -1)
+    cursor.close()
+    cnx.close()
+    return result
+def findhouse(house_name):
+    cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
+                          host='chlience.cn', database='hangeat')
+    cursor = cnx.cursor()
+    # 执行 SQL 查询
+    query = "SELECT * FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s;"
+    params = (house_name,'no','no')
+    cursor.execute(query, params)
+    columns = [column[0] for column in cursor.description]
+    rows = cursor.fetchall()
+    # 获取查询结果
+    result = []
+    for row in rows:
+        result.append(dict(zip(columns, row)))
+    cursor.close()
+    cnx.close()
+    return result
 
 def changemi(user, newmi):
     cnx = pymysql.connect(user='hangeat', password='hangeat_mysql',
