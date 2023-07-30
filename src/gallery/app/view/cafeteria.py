@@ -17,8 +17,8 @@ class Cafeteria(GalleryInterface):
         self.title = ''
         t = Translator()
         super().__init__(
-            title='',
-            subtitle='',
+            title='A wasteland without knowledge',
+            subtitle='Is it your favorite?',
             parent=parent
         )
         self.setObjectName('dateTimeInterface')

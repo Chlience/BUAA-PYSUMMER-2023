@@ -15,8 +15,8 @@ class MustEat(GalleryInterface):
     def __init__(self, parent=None):
         self.mother = parent
         super().__init__(
-            title='必吃菜',
-            subtitle='must eat！',
+            title='Must eat',
+            subtitle='It would be a pity if we missed it',
             parent=parent
         )
         self.setObjectName('basicInputInterface')

@@ -29,7 +29,6 @@ class LoginWindow(AcrylicWindow, Ui_Form):
         self.setWindowIcon(QIcon(":/images/logo.png"))
         self.resize(1000, 650)
 
-        # self.windowEffect.setMicaEffect(self.winId(), isDarkMode=False)
         self.titleBar.titleLabel.setStyleSheet("""
             QLabel{
                 background: transparent;
@@ -90,9 +89,9 @@ class LoginWindow(AcrylicWindow, Ui_Form):
             data = getuserdata(username)
             if data['password'] == password:
                 from gallery import demo
+                self.close()
                 global_.name = username
                 demo.mainLogic(username, self.app)
-                self.close()
             else:
                 self.createErrorInfoBar("Login Error", "Username or password incorrect")
         else:
