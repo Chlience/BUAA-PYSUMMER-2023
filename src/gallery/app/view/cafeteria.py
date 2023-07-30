@@ -1,21 +1,43 @@
-# -*- coding: utf-8 -*-
-import PySide6.QtCore
-################################################################################
-## Form generated from reading UI file 'fanshitangshitangxFmZXZ.ui'
-##
-## Created by: Qt User Interface Compiler version 6.5.1
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
-
+# coding:utf-8
 from PySide6.QtCore import (QMetaObject, QSize, Qt)
 from PySide6.QtGui import (QFont)
 from PySide6.QtWidgets import (QGridLayout, QHBoxLayout,
                                QListWidget, QSizePolicy, QSpacerItem, QVBoxLayout,
                                QWidget, QListWidgetItem)
 from qfluentwidgets import CaptionLabel, ComboBox, PushButton, ListWidget, LineEdit
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QHBoxLayout, QGridLayout
+from gallery.app.view.gallery_interface import GalleryInterface, ToolBar
+from gallery.app.common.translator import Translator
 
 
+class Cafeteria(GalleryInterface):
+    def __init__(self, parent=None):
+        self.parent = parent
+        self.title = ''
+        t = Translator()
+        super().__init__(
+            title='',
+            subtitle='',
+            parent=parent
+        )
+        self.setObjectName('dateTimeInterface')
+        self.widget = canting_view('', self)
+        self.vBoxLayout.addWidget(self.widget)
+
+    def change(self, canting_name):
+        self.title = canting_name
+        self.toolBar.changeTitle(canting_name)
+        self.vBoxLayout.removeWidget(self.widget)
+        self.widget.deleteLater()
+        self.widget = canting_view(canting_name, self)
+        self.vBoxLayout.addWidget(self.widget)
+
+    def switch_to_food(self, food_name, count_name, house_name):
+        self.parent.switch_to_food(food_name, count_name, house_name)
+
+    def goto_sub(self, t):
+        self.parent.goto_sub(t)
 
 
 class Ui_Form(object):
@@ -26,65 +48,27 @@ class Ui_Form(object):
         self.gridLayout = QGridLayout(Form)
         self.gridLayout.setObjectName(u"gridLayout")
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Minimum, QSizePolicy.Minimum)
-
         self.gridLayout.addItem(self.horizontalSpacer_2, 0, 2, 1, 1)
-
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Minimum, QSizePolicy.Minimum)
-
         self.gridLayout.addItem(self.horizontalSpacer, 0, 0, 1, 1)
-
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.lineEdit = LineEdit(Form)
         self.lineEdit.setObjectName(u"lineEdit")
-        self.lineEdit.setMinimumSize(QSize(0, 80))
-
         self.verticalLayout_2.addWidget(self.lineEdit)
-
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Minimum)
-
         self.verticalLayout_2.addItem(self.verticalSpacer)
-
         self.listWidget = ListWidget(Form)
         self.listWidget.setObjectName(u"listWidget")
-
         self.verticalLayout_2.addWidget(self.listWidget)
-
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pushButton_2 = PushButton(Form)
-        self.pushButton_2.setObjectName(u"pushButton_2")
-        self.combox = ComboBox(Form)
-        self.combox.setObjectName(u"combox")
-        self.combox.addItem("")
-        self.combox.addItem("")
-        self.combox.addItem("")
-        self.combox.addItem("")
-        self.combox.addItem("")
-        from PySide6.QtCore import QCoreApplication
-        Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.combox.setItemText(0, QCoreApplication.translate("Form", u"1", None))
-        self.combox.setItemText(1, QCoreApplication.translate("Form", u"2", None))
-        self.combox.setItemText(2, QCoreApplication.translate("Form", u"3", None))
-        self.combox.setItemText(3, QCoreApplication.translate("Form", u"4", None))
-        self.combox.setItemText(4, QCoreApplication.translate("Form", u"5", None))
-        self.combox.setPlaceholderText("评分")
-        self.combox.setMinimumSize(QSize(90, 60))
-        self.horizontalLayout.addWidget(self.pushButton_2)
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Minimum, QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(self.horizontalSpacer_3)
         self.pushButton = PushButton(Form)
         self.pushButton.setObjectName(u"pushButton")
-        self.horizontalLayout.addWidget(self.pushButton)
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        self.verticalLayout_2.addWidget(self.pushButton)
         self.gridLayout.addLayout(self.verticalLayout_2, 0, 3, 1, 1)
         self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.addWidget(self.combox)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.label_2 = CaptionLabel(Form)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setMaximumSize(QSize(150, 16777215))
-        self.verticalLayout.addWidget(self.label_2)
         self.label = CaptionLabel(Form)
         self.label.setObjectName(u"label")
         self.label.setMinimumSize(QSize(150, 0))
@@ -94,97 +78,42 @@ class Ui_Form(object):
         self.label_3.setObjectName(u"label_3")
         self.label_3.setMaximumSize(QSize(150, 16777215))
         self.verticalLayout.addWidget(self.label_3)
-        self.comboBox = PushButton(Form)
-        self.comboBox.setObjectName(u"comboBox")
-        self.comboBox.setMaximumSize(QSize(150, 16777215))
-        self.verticalLayout.addWidget(self.comboBox)
         self.gridLayout.addLayout(self.verticalLayout, 0, 1, 1, 1)
-        self.widget = QWidget(Form)
-        self.widget.setObjectName(u"widget")
-        self.widget.setMinimumSize(QSize(0, 80))
-        self.gridLayout.addWidget(self.widget, 1, 2, 1, 1)
         self.retranslateUi(Form)
-
         QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
         font = QFont('宋体')
-        font.setPointSize(16)
-        self.lineEdit.setPlaceholderText("输入关键词就能查找啦\U0001F600")
-        self.label_2.setText('评分')
-        self.label_2.setFont(font)
+        font.setPointSize(12)
+        self.lineEdit.setPlaceholderText("Keyword for search")
         self.label_3.setFont(font)
         self.label.setFont(font)
-        self.label_2.setAlignment(Qt.AlignCenter)
         self.label_3.setAlignment(Qt.AlignCenter)
         self.label.setAlignment(Qt.AlignCenter)
-        self.label.setText('营业时间')
-        self.label_3.setText('位置')
-        self.pushButton_2.setText('价格排序')
-        self.pushButton_2.setFont(font)
-        self.combox.setText('评分')
-        self.combox.setFont(font)
+        self.label.setText('Business hours')
+        self.label_3.setText('Position')
         self.pushButton.setFont(font)
-        self.comboBox.setFont(QFont('宋体', 14))
-        self.comboBox.setText('进入分档口')
-        self.pushButton.setText('查找')
-
-    # retranslateUi
+        self.pushButton.setText('Search')
 
 
 class canting_view(QListWidget, Ui_Form):
-    def hidecombox(self):
-        self.combox.hide()
     def __init__(self, t_name, mother):
         super().__init__()
         self.font = QFont("宋体", 12)
         self.setupUi(self)
-        from global_ import dic_canting_time,dic_canting_position
-        self.label.setText('营业时间'+dic_canting_time.get(t_name,''))
-        self.label_3.setText('位置' + dic_canting_position.get(t_name,''))
+        from global_ import dic_canting_time, dic_canting_position
+        self.label.setText('Business hours:\n' + dic_canting_time.get(t_name, ''))
+        self.label_3.setText('Position:\n' + dic_canting_position.get(t_name, ''))
         self.mother = mother
         self.t_name = t_name
         self.count_times = 0
         self.food = []
         self.put_items()
-        self.hasSet=False
-        if t_name != '':
-            from dbconnect import findhouse
-            result=findhouse(t_name)
-            dic = result[0]
-            if dic['评分人数'] == 0:
-                dic['评分'] = 'Waiting'
-            self.info = dic
-        if t_name!='':
-            self.comboBox.clicked.connect(self.goto_sub)
-            print(type(self.info['评分']))
-            self.label_2.setText('评分：' + str(self.info['评分']))
-            from dbconnect import gethouserank
-            from global_ import name
-            self.user = name
-            score = gethouserank(self.user, self.info['食堂'])
-            if score!= -1:
-                self.combox.setCurrentIndex(score-1)
-            else:
-                self.combox.setPlaceholderText("评分")
-            if not self.hasSet:
-                self.hasSet = True
-                #self.comboBox.currentIndexChanged.connect(self.handle_combo_box_changed)
-                self.combox.currentIndexChanged.connect(self.handle_combo_box_changed)
-        self.pushButton_2.clicked.connect(self.sortByCost)
+        self.hasSet = False
         self.pushButton.clicked.connect(self.sortByKeyword)
         self.listWidget.itemClicked.connect(
             lambda item: self.mother.switch_to_food(item.text().split()[0], item.text().split()[8],
                                                     item.text().split()[6]))
-
-
-
-    def handle_combo_box_changed(self, index):
-        selected_text = self.combox.currentText()
-        selected_index = index
-        print(f"选择项改变：{selected_text} (索引：{selected_index})")
-        from dbconnect import addhouserank
-        addhouserank(self.user, self.info['食堂'], index+1)
 
 
     def goto_sub(self):
@@ -199,18 +128,6 @@ class canting_view(QListWidget, Ui_Form):
             )
             item.setFont(self.font)
             self.listWidget.addItem(item)
-
-    def sortByCost(self):
-        sorted_items = sorted(self.data, key=lambda x: float(x['价格']), reverse=bool(self.count_times & 1))
-        self.listWidget.clear()
-        # 根据排序结果重新创建标签
-        for da in sorted_items:
-            item = QListWidgetItem(
-                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口'])
-            )
-            item.setFont(self.font)
-            self.listWidget.addItem(item)
-        self.count_times += 1
 
     def sortByKeyword(self):
         keyword = self.lineEdit.text()

@@ -478,7 +478,7 @@ def gethouserank(user,house):
                           host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     select_query = "SELECT 评分 FROM user WHERE username = %s"
-    cursor.execute(select_query, (user))
+    cursor.execute(select_query, user)
     result = cursor.fetchone()
     info = house + '-' + 'no' + '-' + 'no'
     score_dict = json.loads(result[0])
@@ -491,8 +491,8 @@ def findhouse(house_name):
                           host='chlience.cn', database='hangeat')
     cursor = cnx.cursor()
     # 执行 SQL 查询
-    query = "SELECT * FROM 学二 WHERE 食堂 = %s AND 档口 = %s AND 菜名 = %s;"
-    params = (house_name,'no','no')
+    query = "SELECT * FROM 学二 WHERE 食堂 = %s"
+    params = house_name
     cursor.execute(query, params)
     columns = [column[0] for column in cursor.description]
     rows = cursor.fetchall()

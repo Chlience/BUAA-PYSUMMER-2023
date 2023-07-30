@@ -9,7 +9,7 @@ from .gallery_interface import GalleryInterface
 from ..common.translator import Translator
 
 
-class BasicInputInterface(GalleryInterface):
+class MustEat(GalleryInterface):
     """ Basic input interface """
 
     def __init__(self, parent=None):

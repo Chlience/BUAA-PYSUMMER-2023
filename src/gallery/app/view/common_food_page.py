@@ -35,7 +35,7 @@ class Ui_eating(object):
         QMetaObject.connectSlotsByName(eating)
 
 
-class simple_search_view(QWidget, Ui_eating):
+class SimpleSearchView(QWidget, Ui_eating):
     def __init__(self, user, mother):
         super().__init__()
         self.setupUi(self)
@@ -45,21 +45,17 @@ class simple_search_view(QWidget, Ui_eating):
         self.user = user
         self.layout = QVBoxLayout()
         self.input_edit = LineEdit(self)
-        self.input_edit.setPlaceholderText("输入关键词就能查找啦\U0001F600")
+        self.input_edit.setPlaceholderText("Keyword for search")
         self.listWidget.itemClicked.connect(
             lambda item: self.mother.switch_to_food(item.text().split()[0], item.text().split()[8],
                                                     item.text().split()[6]))
         self.layout.addWidget(self.input_edit)
         self.layout.addWidget(self.listWidget)
         # 创建按钮
-        self.button1 = PushButton("查找", self)
-        self.button1.clicked.connect(self.sortByKeyword)
-        self.layout.addWidget(self.button1, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
-        self.button2 = PushButton("价格排序", self)
-        self.button2.clicked.connect(self.sortByCost)
-        self.layout.addWidget(self.button2, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
-        self.count_times = 0
-        self.layout.setContentsMargins(200, 50, 200, 30)
+        self.search_button = PushButton("Search", self)
+        self.search_button.clicked.connect(self.sort_by_keyword)
+        self.layout.addWidget(self.search_button)
+        # self.layout.setContentsMargins(100, 50, 100, 30)
         self.setLayout(self.layout)
 
     def put_items(self):
@@ -72,24 +68,12 @@ class simple_search_view(QWidget, Ui_eating):
             item.setFont(self.font)
             self.listWidget.addItem(item)
 
-    def sortByCost(self):
-        sorted_items = sorted(self.data, key=lambda x: float(x['价格']), reverse=bool(self.count_times & 1))
-        self.listWidget.clear()
-        # 根据排序结果重新创建标签
-        for da in sorted_items:
-            item = QListWidgetItem(
-                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口'])
-            )
-            item.setFont(self.font)
-            self.listWidget.addItem(item)
-        self.count_times += 1
-
-    def sortByKeyword(self):
+    def sort_by_keyword(self):
         keyword = self.input_edit.text()
         # 计算关键词与每个条目的相关度
         scores = {}
         for item in self.data:
-            score = self.calculateScore(item, keyword)
+            score = self.calculate_score(item, keyword)
             scores[item['菜名']] = score
 
         # 根据相关度对条目排序
@@ -103,19 +87,20 @@ class simple_search_view(QWidget, Ui_eating):
             item.setFont(self.font)
             self.listWidget.addItem(item)
 
-    def calculateScore(self, item, keyword):
+    def calculate_score(self, item, keyword):
+        print(item)
         # 实现自定义的相关度计算逻辑
         # 这里可以使用各种方法来计算关键词和条目之间的相关度得分
         # 返回得分值，得分越高表示相关度越高
-        pric = float(item['价格'])
+        price = float(item['价格'])
         if keyword in item['档口'] or keyword in item['食堂']:
-            return 20 + pric
+            return 20 + price
         if keyword in item['菜名']:
-            return 15 + pric
+            return 15 + price
         elif keyword in item['类别']:
-            return 12 + pric
+            return 12 + price
         elif keyword in item['时间']:
-            return 20 + pric
+            return 20 + price
         elif keyword in str(item['价格']):
             return 10
         else:
@@ -141,14 +126,12 @@ class simple_search_view(QWidget, Ui_eating):
         return max_length
 
 
-class food_list_view(QWidget, Ui_eating):
-    def __init__(self, user,father):
+class FoodListView(QWidget, Ui_eating):
+    def __init__(self, user, father):
         super().__init__()
         self.setupUi(self)
         self.user = user
         self.father = father
-        self.stack = NewWindow('', '', 0, 0, 0, 0, 0)
-        # self.stack.setGeometry(500, 0, 400, 250)
         self.food = []
         self.put_items()
         self.listWidget.itemClicked.connect(
@@ -158,22 +141,13 @@ class food_list_view(QWidget, Ui_eating):
         self.layout = QVBoxLayout()
         self.input_edit = LineEdit(self)
         self.input_edit.setPlaceholderText("输入关键词就能查找啦\U0001F600")
-        wid = QWidget()
-        wid.setFixedHeight(22)
-        self.layout.addWidget(wid)
         self.layout.addWidget(self.input_edit)
         self.layout.addWidget(self.listWidget)
         # 创建按钮
         self.button1 = PushButton("查找", self)
         self.button1.clicked.connect(self.sortByKeyword)
-        self.layout.addWidget(self.button1, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
-        self.button2 = PushButton("价格排序", self)
-        self.button2.clicked.connect(self.sortByCost)
-        self.layout.addWidget(self.button2, alignment=Qt.Alignment(Qt.AlignRight | Qt.AlignBottom))
-        self.hLayout = QHBoxLayout()
-        self.hLayout.addLayout(self.layout)
-        #self.hLayout.addWidget(self.stack)
-        self.setLayout(self.hLayout)
+        self.layout.addWidget(self.button1)
+        self.setLayout(self.layout)
         self.count_times = 0
 
     def put_items(self):
@@ -255,59 +229,24 @@ class food_list_view(QWidget, Ui_eating):
         return max_length
 
     def open_new_window(self, item, food, cost, kind, house, count):
-       # self.stack.check(food, cost, self.user, kind, count, house)
-        self.father.switch_to_food( food, count, house)
+        self.father.switch_to_food(food, count, house)
         print('check to' + food)
 
 
-'''class canting_view(food_list_view):
-    def __init__(self, uname, tName):
-        ran = choice(['大酬宾', '促销', '正在营业'])
-        if ran != '正在营业':
-            self.count = True
-        self.uname = uname
-        self.tName = tName
-        super().__init__(uname)
-        self.resize(532, 780)
-
-    def put_items(self):
-        from dbconnect import getplacefood
-        self.data = getplacefood(self.tName)
-        for da in self.data:
-            item = QListWidgetItem(
-                "{} - ￥{} - {} - {} - {}".format(da['菜名'], da['价格'], da['类别'], da['食堂'], da['档口'])
-            )
-            item.setFont(self.font)
-            self.listWidget.addItem(item)
-
-'''
-
-'''class catagory_food(food_list_view):
-    def __init__(self, uname, category):
-        self.uname = uname
-        self.kind = category
-        super().__init__(uname)
-        self.setWindowTitle(uname + "想看看" + category + "种类的食物")
-
-    def put_items(self):
-        from dbconnect import getkindfood
-        self.data = getkindfood(self.kind)
-
-'''
-class count_list(food_list_view):
-    def __init__(self, uname, data, count_name, mother,father):
+class count_list(FoodListView):
+    def __init__(self, uname, data, count_name, mother, father):
         self.data = data
         self.uname = uname
         self.mother = mother
         self.father = father
         self.font = QFont('宋体', 12)
-        super().__init__(uname,father)
+        super().__init__(uname, father)
         self.setWindowTitle(count_name)
         self.listWidget.setContextMenuPolicy(Qt.CustomContextMenu)
         self.listWidget.customContextMenuRequested.connect(self.show_menu)
         self.create_actions()
         self.create_menu()
-        self.input_edit.setPlaceholderText("输入关键词就能查找啦\U0001F600 / 右键进入特定菜品")
+        self.input_edit.setPlaceholderText("Keyword for search")
 
     def create_actions(self):
         self.action_delete = QAction("", self)
@@ -315,7 +254,7 @@ class count_list(food_list_view):
             item_text = self.listWidget.currentItem().text()
             self.action_delete.triggered.connect(
                 self.mother.switch_to_food(item_text.split()[0], item_text.split()[8],
-                                                        item_text.split()[6]))
+                                           item_text.split()[6]))
 
     def create_menu(self):
         self.context_menu = DWMMenu(self)
@@ -326,8 +265,6 @@ class count_list(food_list_view):
         index = self.listWidget.indexAt(position)
         if index.isValid():
             self.create_actions()
-
-
 
     def put_items(self):
         self.listWidget.clear()
@@ -346,61 +283,3 @@ class count_list(food_list_view):
 
     def clear(self):
         self.listWidget.clear()
-
-
-class NewWindow(QWidget):
-    def __init__(self, item_text, foodname, cost, username, kind, housename, countname):
-        super().__init__()
-        self.kind = kind
-        self.username = username
-        self.food_name = foodname
-        self.count_name = countname
-        self.house_name = housename
-        self.cost = cost
-        font = QFont()
-        font.setBold(True)  # 设置字体为粗体
-        font.setPointSize(12)  # 设置字体大小
-        self.layout = QVBoxLayout()
-        label = QLabel(item_text)
-        self.layout.addWidget(label)
-        self.button = PushButton("进食", self)
-        self.button.setFont(font)  # 设置按钮字体
-        self.layout.addWidget(self.button)
-        self.button.clicked.connect(self.eat)
-        self.button = PushButton("收藏", self)
-        self.button.setFont(font)  # 设置按钮字体
-        self.button.clicked.connect(self.star)
-        self.layout.addWidget(self.button)
-        from .comment_page import comment_window
-        self.comment_window = comment_window(username, foodname, countname, housename)
-        self.comment_window.setFont(font)
-        self.layout.addWidget(self.comment_window)
-        self.setLayout(self.layout)
-
-    def check(self, food_name, cost, username, kind, house_name, count_name):
-        self.kind = kind
-        self.username = username
-        self.food_name = food_name
-        self.count_name = count_name
-        self.house_name = house_name
-        self.cost = cost
-        self.comment_window.checkout(username, food_name, count_name, house_name)
-
-    def star(self):
-        if self.food_name == '':
-            return
-        print('star' + self.food_name)
-        name = self.username
-        from dbconnect import addstar
-        addstar(name, self.food_name, self.count_name, self.house_name)
-
-    def eat(self):
-        if self.food_name == '':
-            return
-        print('eat' + self.food_name)
-        name = self.username
-        from dbconnect import eatchange, addcost
-        eatchange(self.house_name, self.count_name, self.food_name)
-        addcost(name, self.cost)
-        from dbconnect import lastchange
-        lastchange(name, self.kind)

@@ -6,14 +6,12 @@ from ..common.translator import Translator
 from ..common.config import cfg
 
 
-class MaterialInterface(GalleryInterface):
-    """ Material interface """
-
+class Food(GalleryInterface):
     def __init__(self, parent=None):
         t = Translator()
         super().__init__(
-            title=t.material,
-            subtitle='特定菜品详细信息',
+            title="Food",
+            subtitle='Do you like it?',
             parent=parent
         )
         self.setObjectName('materialInterface')
@@ -28,7 +26,3 @@ class MaterialInterface(GalleryInterface):
         from dbconnect import findFood
         result = findFood(house_name, count_name, food_name)
         self.food_page.set_food(result[0])
-
-
-
-

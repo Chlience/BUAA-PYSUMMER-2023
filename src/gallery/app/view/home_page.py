@@ -14,8 +14,6 @@ from ..common.style_sheet import StyleSheet
 
 
 class BannerWidget(QWidget):
-    """ Banner widget """
-
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.setFixedHeight(336)
@@ -23,45 +21,13 @@ class BannerWidget(QWidget):
         self.vBoxLayout = QVBoxLayout(self)
         self.galleryLabel = QLabel('HangEat', self)
         self.banner = QPixmap(':/gallery/images/header.png')
-        self.linkCardView = LinkCardView(self)
 
         self.galleryLabel.setObjectName('galleryLabel')
 
         self.vBoxLayout.setSpacing(0)
         self.vBoxLayout.setContentsMargins(0, 20, 0, 0)
         self.vBoxLayout.addWidget(self.galleryLabel)
-        self.vBoxLayout.addWidget(self.linkCardView, 1, Qt.AlignBottom)
         self.vBoxLayout.setAlignment(Qt.AlignLeft | Qt.AlignTop)
-
-        self.linkCardView.addCard(
-            ':/gallery/images/kunkun.png',
-            self.tr('造就完了！开造'),
-            self.tr("please eat in hang with this app's help"),
-            None
-        )
-
-        self.linkCardView.addCard(
-            FluentIcon.GITHUB,
-            self.tr('GitHub repo'),
-            self.tr(
-                'Get our source code and development process on this github site'),
-            REPO_URL
-        )
-
-        self.linkCardView.addCard(
-            ':/gallery/images/shoko.png',
-            self.tr('Food samples'),
-            self.tr(
-                'Find samples that you can eat more.'),
-            EXAMPLE_URL
-        )
-
-        self.linkCardView.addCard(
-            FluentIcon.FEEDBACK,
-            self.tr('Send feedback'),
-            self.tr('Help us improve HangEat by providing feedback.'),
-            FEEDBACK_URL
-        )
 
     def paintEvent(self, e):
         super().paintEvent(e)
@@ -92,19 +58,17 @@ class BannerWidget(QWidget):
         painter.fillPath(path, QBrush(pixmap))
 
 
-class HomeInterface(ScrollArea):
-    """ Home interface """
-
+class HomePage(ScrollArea):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.banner = BannerWidget(self)
         self.view = QWidget(self)
         self.vBoxLayout = QVBoxLayout(self.view)
 
-        self.__initWidget()
-        self.loadSamples()
+        self.__init_widget()
+        self.load_samples()
 
-    def __initWidget(self):
+    def __init_widget(self):
         self.view.setObjectName('view')
         self.setObjectName('homeInterface')
         StyleSheet.HOME_INTERFACE.apply(self)
@@ -118,11 +82,11 @@ class HomeInterface(ScrollArea):
         self.vBoxLayout.addWidget(self.banner)
         self.vBoxLayout.setAlignment(Qt.AlignTop)
 
-    def loadSamples(self):
+    def load_samples(self):
         """ load samples """
         # basic input samples
         basicInputView = SampleCardView(
-            self.tr("选择你喜欢的食堂"), self.view)
+            "Explore Cafeteria", self.view)
         b1 = basicInputView.addSampleCard(
             icon=":/gallery/images/controls/Button.png",
             title="学二",

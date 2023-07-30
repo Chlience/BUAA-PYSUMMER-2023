@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 
 from PySide6.QtCore import Qt
@@ -13,10 +14,10 @@ class comment_window(QWidget):
         self.food = food
         self.count = count
         self.house = house
-        self.focu = False
+        self.focused = False
         self.load_comments()  # 加载评论
         self.comment_textedit = TextEdit()
-        self.submit_button = PushButton("提交评论")
+        self.submit_button = PushButton("ADD COMMENT")
         font = QFont()
         font.setBold(True)  # 设置字体为粗体
         font.setPointSize(12)  # 设置字体大小
@@ -44,19 +45,21 @@ class comment_window(QWidget):
         comment = self.comment_textedit.toPlainText().replace("\t", " ")
         selected_item = self.comment_list.currentItem()
         if selected_item is not None:
-            selected_comment = selected_item.text()
-            index = selected_comment.index("\a")
-            andex = selected_comment.index(":")
-            username = selected_comment[andex:index]
-            current_time = datetime.now().strftime("(%m-%d)%Hh%Mm")  # 获取当前时间
-            trimmed_string = selected_comment.strip()
-            last_space_index = trimmed_string.rfind(":")
-            cas = trimmed_string[last_space_index + 1:]
-            cas = cas[:min(len(trimmed_string) - 1, 5)] + "..."
-            full_comment = f"{current_time}\a{self.name}回复{username} {cas}:{comment}"
+            selected_comment = self.text
+            reply_comment_pattern = re.compile("\[[0-9]*-[0-9]* [0-9]*:[0-9]*] (.*) 回复 (.*): (.*)")
+            single_comment_pattern = re.compile("\[[0-9]*-[0-9]* [0-9]*:[0-9]*] (.*): (.*)")
+
+            comment_match = re.match(reply_comment_pattern, selected_comment)
+            if comment_match is None:
+                comment_match = re.match(single_comment_pattern, selected_comment)
+                name = comment_match.group(1)
+            else:
+                name = comment_match.group(1)
+            current_time = datetime.now().strftime("%m-%d %H:%M")  # 获取当前时间
+            full_comment = f"[{current_time}] {self.name} 回复 {name}: {comment}"
         else:
-            comment.replace("\a", "")
-            full_comment = f"{datetime.now().strftime('(%m-%d)%Hh%Mm')}\a{self.name}:{comment}"  # 整体评论内容，包含时间
+            current_time = datetime.now().strftime("%m-%d %H:%M")  # 获取当前时间
+            full_comment = f"[{current_time}] {self.name}: {comment}"
         print("提交评论:", full_comment)
         self.comments.insert(0, full_comment)  # 在列表开头添加新评论
         self.comment_list.addItem(full_comment)
@@ -68,12 +71,12 @@ class comment_window(QWidget):
     def select_comment(self):
         if self.food == '':
             return
-        if self.focu == False:
+        if not self.focused:
             self.comment_textedit.setFocus()
-            self.focu = True
+            self.focused = True
         else:
             self.comment_list.setCurrentItem(None)
-            self.focu = False
+            self.focused = False
 
     def load_comments(self):
         if self.food == '':

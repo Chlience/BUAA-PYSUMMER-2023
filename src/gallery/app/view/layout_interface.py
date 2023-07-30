@@ -6,14 +6,14 @@ from .gallery_interface import GalleryInterface
 from ..common.translator import Translator
 
 
-class LayoutInterface(GalleryInterface):
+class Explore(GalleryInterface):
     """ Layout interface """
 
     def __init__(self, parent=None):
         t = Translator()
         super().__init__(
-            title='分档口食堂',
-            subtitle="更加细致的服务",
+            title='Explore',
+            subtitle="The wonderful is hidden in it.",
             parent=parent
         )
         self.parent = parent

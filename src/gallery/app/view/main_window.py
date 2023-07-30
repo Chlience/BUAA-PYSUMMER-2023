@@ -9,18 +9,12 @@ from qfluentwidgets import NavigationAvatarWidget, NavigationItemPosition, Messa
 from qfluentwidgets import FluentIcon as FIF
 
 from .gallery_interface import GalleryInterface
-from .home_page import HomeInterface
-from .must_eat_page_holder import BasicInputInterface
-from .canting_page_holder import DateTimeInterface
-from .groom_page import DialogInterface
-from .layout_interface import LayoutInterface
-from .search_food_holder import IconInterface
-from .food_item_page_holder import MaterialInterface
-from .menu_interface import MenuInterface
-from .navigation_view_interface import NavigationViewInterface
-from .scroll_interface import ScrollInterface
-from .status_info_interface import StatusInfoInterface
-from .setting_interface import SettingInterface
+from .home_page import HomePage
+from .must_eat_page_holder import MustEat
+from .recommend import Recommend
+from .layout_interface import Explore
+from .search_food_holder import Search
+from .food_item_page_holder import Food
 from .manager_page_holder import TextInterface
 from .self_center_holder import ViewInterface
 from ..common.config import SUPPORT_URL
@@ -28,31 +22,26 @@ from ..common.icon import Icon
 from ..common.signal_bus import signalBus
 from ..common.translator import Translator
 from ..common import resource
+from gallery.app.view.cafeteria import Cafeteria
 
 type(resource)
 
 
 class MainWindow(FluentWindow):
-
     def __init__(self, name):
         super().__init__()
         self.initWindow()
         self.user_name = name
         # create sub interface
-        self.homeInterface = HomeInterface(self)
-        self.iconInterface = IconInterface(self)
-        self.basicInputInterface = BasicInputInterface(self)
-        self.dateTimeInterface = DateTimeInterface(self)
-        self.dialogInterface = DialogInterface(self)
-        self.layoutInterface = LayoutInterface(self)
-        self.menuInterface = MenuInterface(self)
-        self.materialInterface = MaterialInterface(self)
-        self.navigationViewInterface = NavigationViewInterface(self)
-        self.scrollInterface = ScrollInterface(self)
-        self.statusInfoInterface = StatusInfoInterface(self)
-        self.settingInterface = SettingInterface(self)
-        self.textInterface = TextInterface(self)
-        self.viewInterface = ViewInterface(self)
+        self.home_page = HomePage(self)
+        self.search = Search(self)
+        self.must_eat = MustEat(self)
+        self.recommend = Recommend(self)
+        self.explore = Explore(self)
+        self.canteen = Cafeteria(self)
+        self.food = Food(self)
+        self.manage = TextInterface(self)
+        self.personal_home = ViewInterface(self)
 
         # initialize layout
         self.initLayout()
@@ -68,56 +57,23 @@ class MainWindow(FluentWindow):
     def initNavigation(self):
         # add navigation items
         t = Translator()
-        self.addSubInterface(self.homeInterface, FIF.HOME, self.tr('Home'))
-        self.addSubInterface(self.iconInterface, Icon.EMOJI_TAB_SYMBOLS, t.icons)
+        self.addSubInterface(self.home_page, FIF.HOME, "Home")
         self.navigationInterface.addSeparator()
-        pos = NavigationItemPosition.SCROLL
-        self.addSubInterface(self.basicInputInterface, FIF.CHECKBOX, t.basicInput, pos)
-        self.addSubInterface(self.dateTimeInterface, FIF.DATE_TIME, t.dateTime, pos)
-        self.addSubInterface(self.dialogInterface, FIF.MESSAGE, t.dialogs, pos)
-        self.addSubInterface(self.layoutInterface, FIF.LAYOUT, t.layout, pos)
-        self.addSubInterface(self.materialInterface, FIF.PALETTE, t.material, pos)
-        self.addSubInterface(self.menuInterface, Icon.MENU, t.menus, pos)
-        self.addSubInterface(self.navigationViewInterface, FIF.MENU, t.navigation, pos)
-        self.addSubInterface(self.scrollInterface, FIF.SCROLL, t.scroll, pos)
-        self.addSubInterface(self.statusInfoInterface, FIF.CHAT, t.statusInfo, pos)
-        self.addSubInterface(self.textInterface, Icon.TEXT, t.text, pos)
-        self.addSubInterface(self.viewInterface, Icon.GRID, t.view, pos)
-        pixmap = QPixmap("gallery/app/resource/images/logoo.png")
-        if pixmap.isNull():
-            print("无法创建 QPixmap 对象")
-        # add custom widget to bottom
-        self.navigationInterface.addWidget(
-            routeKey='avatar',
-            widget=NavigationAvatarWidget('', pixmap),
-            onClick=self.onSupport,
-            position=NavigationItemPosition.BOTTOM
-        )
-        self.addSubInterface(
-            self.settingInterface, FIF.SETTING, self.tr('Settings'), NavigationItemPosition.BOTTOM)
+        self.addSubInterface(self.search, Icon.EMOJI_TAB_SYMBOLS, "Search")
+        # pos = NavigationItemPosition.SCROLL
+        self.addSubInterface(self.must_eat, FIF.CHECKBOX, "MustEat")
+        self.addSubInterface(self.recommend, FIF.MESSAGE, "Recommend")
+        self.addSubInterface(self.explore, FIF.LAYOUT, "Explore")
+        # 目前应该是隐藏状态
+        self.addSubInterface(self.canteen, FIF.DATE_TIME, "Canteen")
+        self.addSubInterface(self.food, FIF.PALETTE, "Food")
+        self.addSubInterface(self.manage, Icon.TEXT, "manage", NavigationItemPosition.BOTTOM)
+        self.addSubInterface(self.personal_home, Icon.GRID, "Personal Home", NavigationItemPosition.BOTTOM)
+        # self.addSubInterface(
+        #     self.settingInterface, FIF.SETTING, self.tr('Settings'), NavigationItemPosition.BOTTOM)
 
     def addSubInterface(self, interface: QWidget, icon: Union[FluentIconBase, QIcon, str], text: str,
                         position=NavigationItemPosition.TOP, parent=None) -> NavigationTreeWidget:
-        """ add sub interface, the object name of `interface` should be set already
-        before calling this method
-
-        Parameters
-        ----------
-        interface: QWidget
-            the subinterface to be added
-
-        icon: FluentIconBase | QIcon | str
-            the icon of navigation item
-
-        text: str
-            the text of navigation item
-
-        position: NavigationItemPosition
-            the position of navigation item
-
-        parent: QWidget
-            the parent of navigation item
-        """
         if not interface.objectName():
             raise ValueError("The object name of `interface` can't be empty string.")
         if parent and not parent.objectName():
@@ -128,11 +84,9 @@ class MainWindow(FluentWindow):
         # add navigation item
         routeKey = interface.objectName()
         item = None
-        if interface != self.materialInterface and interface != \
-                self.dateTimeInterface and self.menuInterface != interface and self.scrollInterface != interface and \
-                self.navigationViewInterface != interface and interface != self.statusInfoInterface:
+        if interface != self.food:
             from global_ import name
-            if not (interface == self.textInterface and name != 'admin'):
+            if not (interface == self.manage and name != 'admin'):
                 item = self.navigationInterface.addItem(
                     routeKey=routeKey,
                     icon=icon,
@@ -159,8 +113,8 @@ class MainWindow(FluentWindow):
     def initWindow(self):
         self.resize(1000, 900)
         self.setMinimumWidth(660)
-        self.setWindowIcon(QIcon('gallery/app/resource/images/logoo.png'))
-        self.setWindowTitle('航味__吃在北航')
+        self.setWindowIcon(QIcon('gallery/app/resource/images/logo.png'))
+        self.setWindowTitle('Hangeat')
 
         # create splash screen
         self.splashScreen = SplashScreen(self.windowIcon(), self)

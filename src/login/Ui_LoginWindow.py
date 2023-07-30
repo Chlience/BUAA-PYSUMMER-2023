@@ -84,10 +84,10 @@ class Ui_Form(object):
         self.verticalLayout_2.addWidget(self.passwordInput)
         spacerItem2 = QtWidgets.QSpacerItem(20, 5, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout_2.addItem(spacerItem2)
-        self.checkBox = CheckBox(self.widget)
-        self.checkBox.setChecked(True)
-        self.checkBox.setObjectName("checkBox")
-        self.verticalLayout_2.addWidget(self.checkBox)
+        # self.checkBox = CheckBox(self.widget)
+        # self.checkBox.setChecked(True)
+        # self.checkBox.setObjectName("checkBox")
+        # self.verticalLayout_2.addWidget(self.checkBox)
         spacerItem3 = QtWidgets.QSpacerItem(20, 5, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout_2.addItem(spacerItem3)
         self.loginButton = PrimaryPushButton(self.widget)
@@ -108,13 +108,13 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.username.setText(_translate("Form", "用户名"))
+        self.username.setText(_translate("Form", "Username"))
         # self.usernameInput.setPlaceholderText(_translate("Form", ""))
-        self.password.setText(_translate("Form", "密码"))
+        self.password.setText(_translate("Form", "Password"))
         # self.passwordInput.setPlaceholderText(_translate("Form", ""))
-        self.checkBox.setText(_translate("Form", "记住密码"))
-        self.loginButton.setText(_translate("Form", "登录"))
-        self.registerButton.setText(_translate("Form", "注册"))
+        # self.checkBox.setText(_translate("Form", "记住密码"))
+        self.loginButton.setText(_translate("Form", "Login"))
+        self.registerButton.setText(_translate("Form", "Register"))
 
 
 from qfluentwidgets import BodyLabel, CheckBox, HyperlinkButton, LineEdit, PrimaryPushButton

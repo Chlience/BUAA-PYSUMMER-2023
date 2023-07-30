@@ -13,7 +13,7 @@ from PySide6.QtGui import (QFont)
 from PySide6.QtWidgets import (QGridLayout, QHBoxLayout,
                                QListWidgetItem, QSizePolicy, QSpacerItem, QVBoxLayout, QWidget, QDialog)
 from qfluentwidgets import PushButton, ComboBox, LineEdit, CaptionLabel, ListWidget
-
+from datetime import datetime
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -275,7 +275,6 @@ class food_item(Ui_Form, QWidget):
         addcost(self.user, self.info['价格'])
 
 
-from datetime import datetime
 
 
 class SubWindow(QDialog):

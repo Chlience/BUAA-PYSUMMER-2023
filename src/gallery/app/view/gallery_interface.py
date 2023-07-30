@@ -38,15 +38,6 @@ class ToolBar(QWidget):
         super().__init__(parent=parent)
         self.titleLabel = TitleLabel(title, self)
         self.subtitleLabel = CaptionLabel(subtitle, self)
-
-        # self.documentButton = PushButton(
-        #     self.tr('Documentation'), self, FluentIcon.DOCUMENT)
-        # self.sourceButton = PushButton(self.tr('Source'), self, FluentIcon.GITHUB)
-        # self.themeButton = ToolButton(FluentIcon.CONSTRACT, self)
-        # self.separator = SeparatorWidget(self)
-        # self.supportButton = ToolButton(FluentIcon.HEART, self)
-        # self.feedbackButton = ToolButton(FluentIcon.FEEDBACK, self)
-        #
         self.vBoxLayout = QVBoxLayout(self)
         self.buttonLayout = QHBoxLayout()
 

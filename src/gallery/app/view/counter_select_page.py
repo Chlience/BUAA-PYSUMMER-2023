@@ -18,10 +18,10 @@ from .common_food_page import count_list
 
 
 class Ui_Form(object):
-    def setupUi(self, Form, uname):
-        if not Form.objectName():
-            Form.setObjectName(u"Form")
-        Form.resize(735, 682)
+    def setupUi(self, form, uname):
+        if not form.objectName():
+            form.setObjectName(u"Form")
+        form.resize(735, 682)
         self.uname = uname
         self.layou = QGridLayout()
         font = QFont()
@@ -34,12 +34,12 @@ class Ui_Form(object):
         wid.setFixedHeight(262)
         lay.addWidget(wid)
         lay.addWidget(self.listWidget)
-        self.Widget_2 = count_list(self.uname, [], "未选择", Form,self)
-        self.Widget_2.setFixedWidth(700)
+        self.Widget_2 = count_list(self.uname, [], "未选择", form, self)
+        self.Widget_2.setFixedWidth(500)
         self.layou.addLayout(lay, 0, 0, 1, 1)
         self.layou.addWidget(self.Widget_2, 0, 1, 1, 4)
         self.left = ListWidget()
-        self.outLayou = QHBoxLayout(Form)
+        self.outLayou = QHBoxLayout(form)
         lay = QHBoxLayout()
         wid = QWidget()
         wid.setFixedHeight(262)
@@ -47,8 +47,8 @@ class Ui_Form(object):
         lay.addWidget(self.left)
         self.outLayou.addLayout(lay)
         self.outLayou.addLayout(self.layou)
-        Form.setLayout(self.outLayou)
-        QMetaObject.connectSlotsByName(Form)
+        form.setLayout(self.outLayou)
+        QMetaObject.connectSlotsByName(form)
 
     # setupUi
 
